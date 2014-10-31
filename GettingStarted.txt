@@ -1,0 +1,27 @@
+OOK guys here are some things you should know about the current setUP of the project.
+
+First of all this is a maven Spring MVC eclipse tomcat project with .gitignore file. I will explain what all of this means here and later when we meet. :D
+
+Maven - this is a dependency control system. It makes sure we have all of our dependencies in check and that the correct versions have been downloaded. Right now all of the needed dependencies are in there. We will add more later. The way Maven works is that it looks for pom.xml file in the main dir and downloadeds everything that is specified there. To run a maven project install Maven on your machine, go to the dir and type : mvn test -> this will tell you if everything is OK or not.
+
+Spring MVC is the current "configuration" of the Spring Framework. This means that Spring is configured to work with the MVC design model so we have Controllers, Models and Views and lots of RESTfull API entries. It's easy to put more and stuff i will elaborate on this. Basically the way to do it 
+1. Modify web.xml to register a new SERVLET
+2. Create NAME-servlet.xml file and use it to configure the new SERVLET
+3. Create a controller
+4. Create a view ... :) Easy, A?
+
+Eclipse -> since I was working in Eclipse and probably you will too. However there is a little thing you have to do in order to make it work in Eclipse. 
+1. Install the Spring STS ( Help->Eclipse Marketplace-> Spring ... ) 
+2. Install Maven ( Help->Eclipse Marketplace-> Maven ...)
+3. Go to the repository and run the following commands and fix problems before running the next one
+3.1 mvn test - > this will download the dependencies and test them
+3.2 mvn eclipse:eclipse -> that will create an "eclipse" project
+3.3 import the project in Eclipse
+3.4 Right click on the project -> Properties -> Deployment Assembly -> Add -> Java build path entries -> All of them 
+
+Tomcat -> this is our SERVER :D .... preeety cool. Almost no work is needed for this and you only do it once. 
+1. Go to eclipse New -> Other -> Server -> Select Tomcat v7.0 and Next -> if it allows you move "TeamBravo" resource to the right :D -> Finish
+2. Right click on the project name -> Properties -> Targeted Runtimes -> select Apache Tomcat v7 -> OK
+3. To run the project right click on it -> Run ass :D -> Run on server 
+
+
