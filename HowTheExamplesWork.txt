@@ -1,0 +1,32 @@
+Application entry point is the web.xml
+
+
+1. When a user (a browser) requests a page from our domain it is handled by the web.xml.
+
+2. In there the DispatcherServlet (the front controller in Spring MVC) takes the request and inspects the URL.
+
+2.1 The FrontController (DispatcherServlet) first reads the test-context.xml
+2.2 test-context.xml is the "configuration" file of the front controller
+2.3 the dispatchedServlet reads the .xml file and finds <context:component-scan base-package="glasgow.teamproject.teamB" />. This tells him that YOU have used Annotation based controllers in the specific package
+2.4 Therefore he now loads all of those controllers in his memory
+2.5 He now has to decide which controller he has to invoke 
+2.6 He looks at the @RequestMapping() annotation of each method in each controller
+2.7 He compares the patterns in the @RequestMapping annotation with the incoming request
+2.8 When he finds a match he makes a call to the method under it
+
+3. Now OUR controller is in charge
+3.1 The controller gets a call of the specific method under the matched by the frontController method
+3.2 Inside the method we create a ModelAndView obj by specifying the name of the view which will be used to render the response 
+3.3 We then add information to the object. We add it like we would add info in a dictionary by specifying a key-value pair and later get it as if we are getting data from a dictionary - with appropriate keys.
+3.4 The method sends this ModelAndView object back to the frontController
+
+4. The frontController will render the view
+4.1 He uses the viewResolver finds the exact path of the view specified in the ModelAndView object
+4.2 the VIEW does what it does how it does it :D (check out the view for more info)
+4.3 He then sends the rendered view(= HTML ) as a response to the user
+
+
+
+
+Q: What if the URL does not match any mapping?
+A: Spring will return a response saying that no resource is available that URL
