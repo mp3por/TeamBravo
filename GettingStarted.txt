@@ -16,7 +16,7 @@ Eclipse -> since I was working in Eclipse and probably you will too. However the
 3. Go to the repository and run the following commands and fix problems before running the next one
 3.1 mvn test - > this will download the dependencies and test them
 3.2 mvn eclipse:eclipse -> that will create an "eclipse" project
-3.3 import the project in Eclipse
+3.3 IMPORT the project in Eclipse
 3.4 Right click on the project -> Properties -> Deployment Assembly -> Add -> Java build path entries -> All of them 
 
 Tomcat -> this is our SERVER :D .... preeety cool. Almost no work is needed for this and you only do it once. 
