@@ -42,7 +42,7 @@ public class StudentAdmissionController {
 
 		// the names of the parameters are defined by the "name" value in the <input> of the form in the HTML
 		String name = reqPar.get("studentName"); // <input type="text" name="studentName" />
-		String hobby = reqPar.get("hobby"); // <input type="text" name="studentHobby" />
+		String hobby = reqPar.get("studentHobby"); // <input type="text" name="studentHobby" />
 
 		ModelAndView model = new ModelAndView("AdmissionSuccess");
 		model.addObject("msg", "Name: " + name + ", Hobby: " + hobby);

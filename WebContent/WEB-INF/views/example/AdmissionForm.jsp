@@ -2,7 +2,7 @@
 <body>
 	<h1> STUDENT ADMISSION FORM FOR ENGINEERING COURSES</h1>
 
-	<form action="/teamB/submitAdmissionForm.html" method="post">
+	<form action="/TeamBravo/submitAdmissionForm.html" method="post">
 		<p>
 			Student's Name : <input type="text" name="studentName" />
 		</p>
