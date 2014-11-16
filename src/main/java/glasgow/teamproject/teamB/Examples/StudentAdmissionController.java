@@ -3,6 +3,7 @@ package glasgow.teamproject.teamB.Examples;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +38,7 @@ public class StudentAdmissionController {
 	 * @RequestParam is used because now the parameters are not in the PATH (the
 	 *               URL) but in the request body.
 	 * */
-	@RequestMapping(value = "/submitAdmissionForm.html", method = RequestMethod.POST)
+	//@RequestMapping(value = "/submitAdmissionForm.html", method = RequestMethod.POST) 
 	public ModelAndView submitAdmissionForm(@RequestParam Map<String, String> reqPar) {
 
 		// the names of the parameters are defined by the "name" value in the <input> of the form in the HTML
@@ -49,6 +50,35 @@ public class StudentAdmissionController {
 
 		return model;
 	}
+	
+	/**
+	 * This method does the same as the submitAddmissionForm but makes use of
+	 * the Spring MVC @ModelAttribe annotation. This way we don't need to write code for binding with the student object.
+	 * 
+	 * Explanation 
+	 * @ModelAttribute("attribute name") type ID
+	 * */
+	@RequestMapping(value = "/submitAdmissionForm.html", method = RequestMethod.POST)
+	public ModelAndView submitAdmissionFormModel(@ModelAttribute("student1") Student student1) {
+
+		/**
+		 * Under the hood. Not needed now
+		 * */
+		//		String name = reqPar.get("studentName"); // <input type="text" name="studentName" />
+		//		String hobby = reqPar.get("studentHobby"); // <input type="text" name="studentHobby" />
+		//
+		//		Student student1 = new Student();
+		//		student1.setStudentName(name);
+		//		student1.setStudentHobby(hobby);
+
+		ModelAndView model = new ModelAndView("AdmissionSuccessModel");
+		model.addObject("headerMessage", "This is an example with models in Spring");
+		//model.addObject("student1", student1); // Not even this is needed
+
+		return model;
+	}
+
+	
 	
 	/**
 	 * This the method using normal parameter notation. There is even a way of specifying default par values.
