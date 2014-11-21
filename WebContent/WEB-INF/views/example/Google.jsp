@@ -11,14 +11,14 @@
     <script>
     	
     	// get local JS variable
-    	var long = ${longitude};
+    	var long1 = ${longitude};
         var lat = ${latitude};
         var zoom = ${zoom};
         
         // initialize the map
         function initialize(){
         	
-        	var myCenter = new google.maps.LatLng(lat,long);	
+        	var myCenter = new google.maps.LatLng(lat,long1);	
             
             var mapOptions = {
                 center: myCenter, //new google.maps.LatLng(lat, long),
