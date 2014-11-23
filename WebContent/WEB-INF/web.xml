@@ -43,8 +43,24 @@
 
 	<servlet-mapping>
 		<servlet-name>example</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/example/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Graphs</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/graphs/graphs-context.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Graphs</servlet-name>
+		<url-pattern>/graphs/*</url-pattern>
+	</servlet-mapping>
+	
 
 	<!--  
 	<servlet-mapping>

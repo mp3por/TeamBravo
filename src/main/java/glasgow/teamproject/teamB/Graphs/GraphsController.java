@@ -12,7 +12,7 @@ public class GraphsController {
 	@RequestMapping("/getAll")
 	public ModelAndView getGraphs(){
 		
-		ModelAndView model = new ModelAndView("graphs-all.jsp");
+		ModelAndView model = new ModelAndView("graphs-all");
 		
 		return model;
 	}

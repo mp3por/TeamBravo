@@ -1,6 +1,7 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-	<link rel="stylesheet" href="/TeamBravo/css/graphs/base.css" type="text/css">
+	<link href="<c:url value="/resources/css/base.css" />" rel="stylesheet">
 </head>
 <body>
 	<h1>First Spring MVC Application Demo</h1>

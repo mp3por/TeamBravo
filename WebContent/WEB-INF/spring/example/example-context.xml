@@ -28,11 +28,12 @@
 		/>
 -->
 	<!-- but you need this entry when using annotations -->
-	<context:component-scan base-package="glasgow.teamproject.teamB" />
+	<context:component-scan base-package="glasgow.teamproject.teamB.Examples" />
 
 	<!-- if you are using a MAP as a pathvariable -->
 	<mvc:annotation-driven/>
 
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
 
 	<!-- /WEB-INF/views/test/HelloPage.jsp 
