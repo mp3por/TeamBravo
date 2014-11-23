@@ -1,0 +1,15 @@
+Steven ...
+I added your code. Review what i have done.
+
+The basic structure is the same as previously:
+1.  Added a new package to the main dir which will contain the controllers - teamB.graphs
+2.  Added a new folder under the views to hold the .jsp files for this functionality
+3.  Added configuration file for this functionality (servlet) -> graphs-servlet.xml
+4.  Registered this functionality to the global context -> added stuff in web.xml
+
+Take a look at the files and ask me stuff if you don't understand something. I suggest to start by figuring out the URL to access your page.
+
+Take a look at WEB-INF/views/graphs/graphs-all.jsp ... this is your page transfer into the correct formating for spring to understand. Also this is the page for all of the graphs and it is just a demo page for now. We (me and you) will make it a little bit more interesting soon. Two main things to notice:
+
+1. How to add static resources -> there are some new controls there. Read the Spring Framework Templates documentation
+2. Where the static resources are added -> A convention is that you add all the static files links (.css,.js, ...) in the <head> and add custom JS at the bottom of the page.
