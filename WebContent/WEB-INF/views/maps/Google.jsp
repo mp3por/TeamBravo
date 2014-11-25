@@ -8,6 +8,7 @@
     </style>
     <title>GMaps Demo</title>
     <script src = "http://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+
     <script>
     	
     	// get local JS variable
