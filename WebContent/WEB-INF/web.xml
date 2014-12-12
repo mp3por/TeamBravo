@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	      version="3.0">
+	version="3.0">
 
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
+
+	<display-name>Spring MVC Application</display-name>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
@@ -18,19 +20,8 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-	<!-- Processes application requests -->
-	<!-- 
-	<servlet>
-		<servlet-name>appServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
- -->
- 
+	<!-- Servlets -->
+
 	<servlet>
 		<servlet-name>example</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -45,7 +36,7 @@
 		<servlet-name>example</servlet-name>
 		<url-pattern>/example/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Graphs</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -60,7 +51,7 @@
 		<servlet-name>Graphs</servlet-name>
 		<url-pattern>/graphs/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Maps</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -75,14 +66,5 @@
 		<servlet-name>Maps</servlet-name>
 		<url-pattern>/maps/*</url-pattern>
 	</servlet-mapping>
-	
 
-	<!--  
-	<servlet-mapping>
-		<servlet-name>appServlet</servlet-name>
-		<url-pattern>/appServlet/</url-pattern>
-	</servlet-mapping>
-	 -->
-
-	
 </web-app>

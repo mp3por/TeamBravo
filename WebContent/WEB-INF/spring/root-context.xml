@@ -13,4 +13,7 @@
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
+	
+	<bean id="twitterstreaming" class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService" scope="singleton" init-method="run"/>
+	
 </beans>
