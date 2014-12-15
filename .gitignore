@@ -3,3 +3,5 @@
 .springBeans
 .settings/
 target/
+.DS_Store
+.localized
