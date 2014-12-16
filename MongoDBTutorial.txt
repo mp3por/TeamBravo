@@ -1,1 +1,5 @@
-So first you have to install MongoDB on your computer
+1. Install mongoDB on your computer. There are tons of guides on how to do this.
+2. Open a terminal
+3. write:
+		mongod
+4. Do not close the terminal, because if you do it will stop the database connection.
