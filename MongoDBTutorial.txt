@@ -1,0 +1,1 @@
+So first you have to install MongoDB on your computer
