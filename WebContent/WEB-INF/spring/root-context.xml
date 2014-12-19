@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/mvc
  		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
 	
@@ -15,5 +16,6 @@
 	
 	
 	<bean id="twitterstreaming" class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService" scope="singleton" init-method="run"/>
+	
 	
 </beans>

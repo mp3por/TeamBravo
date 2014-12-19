@@ -13,6 +13,7 @@ public class TwitterStreamBuilderUtil {
 	
 	
 	public static TwitterStream getStream() {
+		System.out.println("getStream");
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true);
 		cb.setOAuthConsumerKey(consumerKey);
@@ -20,6 +21,8 @@ public class TwitterStreamBuilderUtil {
 		cb.setOAuthAccessToken(accessKey );
 		cb.setOAuthAccessTokenSecret(accessSecret);
 
-		return new TwitterStreamFactory(cb.build()).getInstance();
+		TwitterStream stream = new TwitterStreamFactory(cb.build()).getInstance();
+		System.out.println("stream OK");
+		return stream;
 	}
 }
