@@ -59,6 +59,7 @@ public class StreamReaderService {
 				String message = "Tweet:" + status.getText() + "\tLoc:"
 						+ status.getGeoLocation();
 				System.out.println(message);
+				
 			}
 
 			@Override

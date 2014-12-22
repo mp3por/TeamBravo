@@ -8,7 +8,6 @@
 		http://www.springframework.org/schema/mvc
  		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	
-	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
 	

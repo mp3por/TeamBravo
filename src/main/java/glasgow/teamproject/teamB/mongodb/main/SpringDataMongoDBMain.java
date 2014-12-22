@@ -1,4 +1,4 @@
-package glasgow.teamproject.teamB.mongodb.Main;
+package glasgow.teamproject.teamB.mongodb.main;
 
 import java.net.UnknownHostException;
 
