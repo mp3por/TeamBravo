@@ -5,6 +5,8 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.io.IOException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -57,7 +59,8 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
-				JSO
+				JSONParser parser = new JSONParser();
+				
 				tweetSaver.addTweet(rawString);
 			}
 		};
