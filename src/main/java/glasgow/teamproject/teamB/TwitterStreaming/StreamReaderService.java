@@ -57,6 +57,7 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
+				JSO
 				tweetSaver.addTweet(rawString);
 			}
 		};
