@@ -1,16 +1,11 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.io.IOException;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-
-import com.mongodb.MongoClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
@@ -59,8 +54,6 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
-				JSONParser parser = new JSONParser();
-				
 				tweetSaver.addTweet(rawString);
 			}
 		};
