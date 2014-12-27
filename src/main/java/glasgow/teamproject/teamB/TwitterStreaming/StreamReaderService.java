@@ -20,10 +20,14 @@ public class StreamReaderService {
 	public static final String MONGO_HOST = "localhost";
 	public static final int MONGO_PORT = 27017;
 	private final TweetDAO tweetSaver;
+	private final TwitterStreamBuilderUtil streamBuilder;
+	private final TwitterStream stream;
 	
 	
-	public StreamReaderService(TweetDAO tweetSaver) {
+	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
 		this.tweetSaver = tweetSaver;
+		this.streamBuilder = streamBuilder;
+		stream = this.streamBuilder.getStream();
 	}
 	
 	// @PostConstruct 	// same as init-method in .xml but with annotations
@@ -43,25 +47,16 @@ public class StreamReaderService {
 	}
 
 	public void readTwitterFeed() throws IOException {
-		TwitterStream stream = TwitterStreamBuilderUtil.getStream();
 		
-		/*MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-		MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
-		TweetDAOImpl tweetSaver = new TweetDAOImpl(mongoOps);
-		*/
 		RawStreamListener raw = new RawStreamListener() {
 
 			@Override
 			public void onException(Exception ex) {
-				// TODO Auto-generated method stub
 				System.out.println("error");
 			}
 
 			@Override
 			public void onMessage(String rawString) {
-				// TODO Auto-generated method stub
-				//System.out.println("RawTweet:" + rawString);
-				System.out.println("SAVE");
 				tweetSaver.addTweet(rawString);
 			}
 		};

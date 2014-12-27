@@ -14,6 +14,7 @@ public class TweetDAOImpl implements TweetDAO {
 	@Override
 	public void addTweet(String tweet) {
 		mongoOps.insert(tweet,TWEET_COLLECTION);
+		System.out.println("SAVE");
 	}
 
 }
