@@ -1,16 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.main;
 
-import java.net.UnknownHostException;
-
 import glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
-import glasgow.teamproject.teamB.mongodb.model.Person;
+
+import java.net.UnknownHostException;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
@@ -21,7 +18,8 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
-public class SpringDataMongoDBMain {
+public class InsertTest {
+
 	public static final String DB_NAME = "tweetsTest";
 	public static final String TWEETS_COLLECTION = "tweetsfrommainclass";
 	public static final String MONGO_HOST = "localhost";
@@ -33,8 +31,9 @@ public class SpringDataMongoDBMain {
 			MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
 			TwitterStream stream = TwitterStreamBuilderUtil.getStream();
 			TweetDAO tweetSaver = new TweetDAOImpl(mongoOps);
-			
+
 			RawStreamListener raw = new RawStreamListener() {
+				int p = 0;
 
 				@Override
 				public void onException(Exception ex) {
@@ -43,25 +42,23 @@ public class SpringDataMongoDBMain {
 
 				@Override
 				public void onMessage(String rawString) {
-					System.out.println(rawString);
-					DBObject ob = (DBObject) JSON.parse(rawString);
-					DBCollection dbCollection = mongoOps.getCollection(TWEETS_COLLECTION); // gets collection
-					dbCollection.insert(ob);
+					tweetSaver.addTweet(rawString, TWEETS_COLLECTION);
+					p++;
+					if (p == 2) {
+						stream.shutdown();
+						mongo.close();
+						System.out.println("CLOSED");
+					}
 				}
 			};
 			FilterQuery qry = new FilterQuery();
-			double[][] locations = new double[][] { { 55.812753d, -4.508147d }, { 55.965241d, -4.037108d } };
+			double[][] locations = new double[][] { { 55.812753d, -4.508147d },
+					{ 55.965241d, -4.037108d } };
 			qry.locations(locations);
 			stream.addListener(raw);
 			String[] keywordsArray = { "Glasgow" };
 			FilterQuery fq = new FilterQuery(0, null, keywordsArray, locations);
 			stream.filter(fq);
-
-			
-			
-			
-			mongo.close();
-
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

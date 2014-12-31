@@ -7,24 +7,25 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.mongodb.util.JSON;
+
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
 import twitter4j.TwitterStream;
 
 public class StreamReaderService {
 	
-	public static final String DB_NAME = "tweetsTest";
-	public static final String MONGO_HOST = "localhost";
-	public static final int MONGO_PORT = 27017;
 	private final TweetDAO tweetSaver;
 	private final TwitterStreamBuilderUtil streamBuilder;
 	private final TwitterStream stream;
+	private final String collectionName;
 	
 	
 	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
 		stream = this.streamBuilder.getStream();
+		this.collectionName = "tweets";
 	}
 	
 	// @PostConstruct 	// same as init-method in .xml but with annotations
@@ -54,7 +55,7 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
-				tweetSaver.addTweet(rawString);
+				tweetSaver.addTweet(rawString,collectionName);
 			}
 		};
 

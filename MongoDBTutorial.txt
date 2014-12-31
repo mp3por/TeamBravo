@@ -3,3 +3,8 @@
 3. write:
 		mongod
 4. Do not close the terminal, because if you do it will stop the database connection.
+
+
+If there is an error try running both:
+1. sudo service mongod stop
+2. mongod --repair

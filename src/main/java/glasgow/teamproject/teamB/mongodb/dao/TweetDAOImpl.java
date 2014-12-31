@@ -1,30 +1,40 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 public class TweetDAOImpl implements TweetDAO {
 	
 	private MongoOperations mongoOps;
-	private int omg = 1;
-    private static final String TWEET_COLLECTION = "tweets";
-    
+	
     public TweetDAOImpl(MongoOperations mongoOps) {
 		this.mongoOps = mongoOps;
 	}
     
 	@Override
-	public void addTweet(String tweet) {
-		// Done in order to save the JSON object efficiently
+	public void addTweet(String tweet, String collectionName) {
+		System.out.println(tweet);
+		//If we ever need to store it as JSON object
+		/*// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
-		DBCollection collection = mongoOps.getCollection(TWEET_COLLECTION); // gets collection
-		collection.insert(ob);
+		//System.out.println("OB:" + ob.toString());
+		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
+		dbCollection.insert(ob);*/
 		
-		//mongoOps.insert(tweet,TWEET_COLLECTION+"2");
+		mongoOps.insert(tweet,collectionName); // stores the tweet as string  
 		System.out.println("SAVE");
+	}
+
+	@Override
+	public String readByTime(String time, String collectionName) {
+		Query querry = new Query(Criteria.where("timestamp_ms").is(time));
+		String tweet = this.mongoOps.findOne(querry,String.class,collectionName);
+		return tweet;
 	}
 
 }
