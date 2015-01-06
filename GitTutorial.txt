@@ -1,0 +1,11 @@
+There is a very cool file Git-Windows.docs that i wrote a few weeks ago for another project that explains Git and its basics. Please read it to gain general knowledge on how stuff is done with Git ... :)
+
+I will post here more advanced work flows with Git in order to help me and you in the future.
+
+git branch -a : displays all branches (remotes and local)
+git branch -l : displays all LOCAL branches
+git branch -r : displays all REMOTE branches
+
+git remote show origin : displays information about the current origin
+git ls-remote : displays a detailed list of the remote branches and tags available
+
