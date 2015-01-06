@@ -30,9 +30,6 @@
 	</bean>
 
 	<!-- DAO Objects -->
-	<bean id="personDAO" class="glasgow.teamproject.teamB.mongodb.dao.PersonDAOImpl">
-		<constructor-arg name="mongoOps" ref="mongoTemplate" />
-	</bean>
 
 	<bean id="TweetDAOIMPL" class="glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl">
 		<constructor-arg name="mongoOps" ref="mongoTemplate" />
