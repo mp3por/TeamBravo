@@ -1,5 +1,7 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -35,6 +37,11 @@ public class TweetDAOImpl implements TweetDAO {
 		Query querry = new Query(Criteria.where("timestamp_ms").is(time));
 		String tweet = this.mongoOps.findOne(querry,String.class,collectionName);
 		return tweet;
+	}
+	
+	public List<String> getTweetsForMaps(String collectionName){
+		List<String> resutls = mongoOps.find(new Query(), String.class, collectionName);
+		return resutls;
 	}
 
 }

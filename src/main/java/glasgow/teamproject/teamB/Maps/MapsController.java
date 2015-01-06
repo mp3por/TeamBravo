@@ -1,11 +1,15 @@
 package glasgow.teamproject.teamB.Maps;
 
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -71,6 +75,12 @@ public class MapsController {
 		mv.addObject("tweets",tweets);
 		mv.addObject("numOfTweets", latitudes.size());
 		
+		return mv;
+	}
+	@RequestMapping("/googleMaps/loadTweets/{collection}")
+	public ModelAndView loadTweetsFromDB(@PathVariable("collection") String collection){
+		ModelAndView mv = new ModelAndView("Tweets");
+		TweetDAO tweetDAO = new TweetDAOImpl(mongoOps);
 		return mv;
 	}
 }
