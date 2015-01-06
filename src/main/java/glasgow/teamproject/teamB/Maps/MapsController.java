@@ -80,7 +80,7 @@ public class MapsController {
 	@RequestMapping("/googleMaps/loadTweets/{collection}")
 	public ModelAndView loadTweetsFromDB(@PathVariable("collection") String collection){
 		ModelAndView mv = new ModelAndView("Tweets");
-		TweetDAO tweetDAO = new TweetDAOImpl(mongoOps);
+		//TweetDAO tweetDAO = new TweetDAOImpl(mongoOps);
 		return mv;
 	}
 }
