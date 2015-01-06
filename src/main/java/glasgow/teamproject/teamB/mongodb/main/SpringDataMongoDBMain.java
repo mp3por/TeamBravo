@@ -1,16 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.main;
 
-import java.net.UnknownHostException;
-
 import glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
-import glasgow.teamproject.teamB.mongodb.model.Person;
+
+import java.net.UnknownHostException;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
