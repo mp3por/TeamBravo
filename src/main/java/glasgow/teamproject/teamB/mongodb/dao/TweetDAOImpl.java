@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import java.util.List;
 
-import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
