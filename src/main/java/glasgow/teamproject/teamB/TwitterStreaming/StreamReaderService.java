@@ -4,9 +4,6 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.IOException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.mongodb.util.JSON;
 
 import twitter4j.FilterQuery;
