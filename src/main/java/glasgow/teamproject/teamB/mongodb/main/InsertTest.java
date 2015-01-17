@@ -13,10 +13,7 @@ import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
 import twitter4j.TwitterStream;
 
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.util.JSON;
 
 public class InsertTest {
 
@@ -44,7 +41,7 @@ public class InsertTest {
 				public void onMessage(String rawString) {
 					tweetSaver.addTweet(rawString, TWEETS_COLLECTION);
 					p++;
-					if (p == 2) {
+					if (p == 1) {
 						stream.shutdown();
 						mongo.close();
 						System.out.println("CLOSED");

@@ -9,36 +9,41 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+
 public class TweetDAOImpl implements TweetDAO {
-	
+
 	private MongoOperations mongoOps;
-	
-    public TweetDAOImpl(MongoOperations mongoOps) {
+
+	public TweetDAOImpl(MongoOperations mongoOps) {
 		this.mongoOps = mongoOps;
 	}
-    
+
 	@Override
 	public void addTweet(String tweet, String collectionName) {
+		tweet = tweet.replace("\"id\":", "\"tweet_id\":");
 		System.out.println(tweet);
-		//If we ever need to store it as JSON object
-		/*// Done in order to save the JSON object efficiently
+		
+		
+		// If we ever need to store it as JSON object
+		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
 		//System.out.println("OB:" + ob.toString());
 		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
-		dbCollection.insert(ob);*/
+		dbCollection.insert(ob);// stores the JSON
 		
-		mongoOps.insert(tweet,collectionName); // stores the tweet as string  
+		// Simple store as String
+		mongoOps.insert(tweet, collectionName+"STRING"); // stores the tweet as string  
 		System.out.println("SAVE");
 	}
 
 	@Override
 	public String readByTime(String time, String collectionName) {
 		Query querry = new Query(Criteria.where("timestamp_ms").is(time));
-		String tweet = this.mongoOps.findOne(querry,String.class,collectionName);
+		String tweet = this.mongoOps.findOne(querry, String.class, collectionName);
 		return tweet;
 	}
-	
-	public List<String> getTweetsForMaps(String collectionName){
+
+	public List<String> getTweetsForMaps(String collectionName) {
 		List<String> resutls = mongoOps.find(new Query(), String.class, collectionName);
 		return resutls;
 	}

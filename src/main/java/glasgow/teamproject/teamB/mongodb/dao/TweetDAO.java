@@ -1,6 +1,5 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-
 public interface TweetDAO {
 	/**
 	 * Adds a tweet to the DB
