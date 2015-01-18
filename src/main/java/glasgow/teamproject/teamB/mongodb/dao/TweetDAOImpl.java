@@ -38,14 +38,14 @@ public class TweetDAOImpl implements TweetDAO {
 
 	@Override
 	public String readByTime(String time, String collectionName) {
-		Query querry = new Query(Criteria.where("timestamp_ms").is(time));
-		String tweet = this.mongoOps.findOne(querry, String.class, collectionName);
+		Query query = new Query(Criteria.where("timestamp_ms").is(time));
+		String tweet = this.mongoOps.findOne(query, String.class, collectionName);
 		return tweet;
 	}
 
 	public List<String> getTweetsForMaps(String collectionName) {
-		List<String> resutls = mongoOps.find(new Query(), String.class, collectionName);
-		return resutls;
+		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
+		return results;
 	}
 
 }
