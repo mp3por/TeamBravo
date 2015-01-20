@@ -1,5 +1,7 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import java.util.Map;
+
 public interface TweetDAO {
 	/**
 	 * Adds a tweet to the DB
@@ -8,4 +10,6 @@ public interface TweetDAO {
 	public void addTweet(String tweet, String collectionName);
 	
 	public String readByTime(String time, String collectionName);
+	
+	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities);
 }

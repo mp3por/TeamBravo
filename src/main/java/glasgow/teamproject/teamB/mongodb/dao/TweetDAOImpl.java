@@ -1,13 +1,22 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Observer;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.Update.PushOperatorBuilder;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 
 public class TweetDAOImpl implements TweetDAO {
@@ -48,4 +57,34 @@ public class TweetDAOImpl implements TweetDAO {
 		return results;
 	}
 
+	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities){
+		
+		// just for referance what is going on
+		/*// gets the collection in which is the entry you will modify
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+		
+		// used to get the specific tweet
+		DBObject query = new BasicDBObject("id_str",id);
+		
+		// to hold the named Entities
+		DBObject namedEntitiesList = new BasicDBObject(NamedEntities);
+		
+		// this will be added to the entry
+		DBObject updateObject = new BasicDBObject("named_entities",namedEntitiesList);
+		
+		
+		// the actual updates
+		WriteResult result = dbCollection.update(query,new BasicDBObject("$push",updateObject));
+		
+		// isUpdateOfExisting will return true if an existing entry was updated
+		return result.isUpdateOfExisting();*/
+		
+		Query query = new Query(Criteria.where("id_str").is(id));
+		Update update = new Update();
+		update.push("named_entities", NamedEntities);
+		
+		WriteResult result = mongoOps.updateFirst(query, update, collectionName);		
+	
+		return result.isUpdateOfExisting();
+	}
 }
