@@ -105,7 +105,7 @@ public class StreamReaderService {
 
 		FilterQuery qry = new FilterQuery();
 
-		double[][] locations = new double[][] { { 55.812753d, -4.508147d }, { 55.965241d, -4.037108d } };
+		double[][] locations = new double[][] { {  -4.508147d, 55.812753d }, {  -4.037108d,55.965241d} };
 
 		qry.locations(locations);
 
@@ -114,8 +114,9 @@ public class StreamReaderService {
 		stream.addListener(raw);
 		String[] keywordsArray = { "Glasgow" };
 
-		FilterQuery fq = new FilterQuery(0, null, keywordsArray, locations);
-
+		FilterQuery fq = new FilterQuery();
+		fq.locations(locations);
+		
 		stream.filter(fq);
 	}
 }
