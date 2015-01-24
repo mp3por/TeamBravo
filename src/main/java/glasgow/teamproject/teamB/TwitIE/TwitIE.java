@@ -35,11 +35,10 @@ public class TwitIE implements NamedEntityExtractor {
 		interestedNE.add(s);
 	}
 	public HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
-		while (counter.get() > 0) {
+		while (counter.getAndIncrement() > 0) {
 			System.out.println("Busy waiting");
 			Thread.sleep(100);
 		}
-		counter.incrementAndGet();
 		if (pipeline == null) init(); 
 
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
