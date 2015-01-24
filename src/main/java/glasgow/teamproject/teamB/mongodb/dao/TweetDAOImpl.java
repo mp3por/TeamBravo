@@ -1,24 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.TwitIE.Tweet;
-import glasgow.teamproject.teamB.TwitIE.TwitIE;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observer;
-
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.core.query.Update.PushOperatorBuilder;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
