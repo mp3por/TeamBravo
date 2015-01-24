@@ -14,13 +14,17 @@ import gate.util.persistence.PersistenceManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import junit.framework.Test;
 
-public class TwitIE extends NamedEntityExtractor<Tweet> {
+
+public class TwitIE extends NamedEntityExtractor {
 	private ArrayList<Tweet> tweets = new ArrayList<>();
 	private HashSet<String> interestedNE = new HashSet<String>(); 
 	private ArrayList<String> types = new ArrayList<>();
@@ -43,11 +47,7 @@ public class TwitIE extends NamedEntityExtractor<Tweet> {
 	
 	public HashMap<String, ArrayList<String>> processString (String s) {
 		if (pipeline == null) init(); 
-		
-		if (interestedNE.isEmpty()) {
-			interestedNE.addAll(defaultNE);
-		}
-
+	
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
 		if (s.isEmpty()) return null;
 		Document doc = null;
@@ -126,11 +126,7 @@ public class TwitIE extends NamedEntityExtractor<Tweet> {
 	@Override
 	public void processTweets() {
 		if (pipeline == null) init(); 
-		
-		if (interestedNE.isEmpty()) {
-			interestedNE.addAll(defaultNE);
-		}
-		
+				
 		for (int i = 0; i < tweets.size(); i++) {
 			processTweet(tweets.get(i));
 		}
@@ -144,12 +140,20 @@ public class TwitIE extends NamedEntityExtractor<Tweet> {
 	@Override
 	public void init() {
 		try {
-			//File f = new File("/home/ppp/TP3/Main/TeamBravo");
-			// This is meant to be your main directory, where your git is initialized. For some reasons, it crashed today, so I had to hardcode the file folder
-			File f = new File(".");
-			System.out.println(f.getCanonicalPath());
-			Gate.setGateHome(f);			
+			if (interestedNE.isEmpty()) {
+				interestedNE.addAll(defaultNE);
+			}
+
+			// Only god knows how it works
+			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();	
+			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
+			System.out.println(currentDir);
+			
+			File f = new File(currentDir);
+			Gate.setGateHome(f);
+			
 			Gate.init();
+			
 			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File("applicationState.xgapp"));
 			corpus = Factory.newCorpus("Tweet corpus");
 		} catch (GateException e) {
