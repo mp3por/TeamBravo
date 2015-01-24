@@ -1,5 +1,10 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.TwitIE.Tweet;
+import glasgow.teamproject.teamB.TwitIE.TwitIE;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
@@ -36,12 +41,14 @@ public class TweetDAOImpl implements TweetDAO {
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
+		 
+		
 		//System.out.println("OB:" + ob.toString());
 		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
 		dbCollection.insert(ob);// stores the JSON
-		
 		// Simple store as String
-		mongoOps.insert(tweet, collectionName+"STRING"); // stores the tweet as string  
+		mongoOps.insert(tweet, collectionName+"STRING"); // stores the tweet as string
+		
 		System.out.println("SAVE");
 	}
 

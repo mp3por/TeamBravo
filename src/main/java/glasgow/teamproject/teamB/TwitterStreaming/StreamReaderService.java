@@ -1,32 +1,42 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
+import glasgow.teamproject.teamB.TwitIE.TwitIE;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 import twitter4j.FilterQuery;
+import twitter4j.JSONException;
+import twitter4j.JSONObject;
 import twitter4j.RawStreamListener;
 import twitter4j.TwitterStream;
 
 public class StreamReaderService {
-	
+
 	private final TweetDAO tweetSaver;
 	private final TwitterStreamBuilderUtil streamBuilder;
 	private final TwitterStream stream;
 	private final String collectionName;
-	
-	
+	private TwitIE t;
+
 	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
 		stream = this.streamBuilder.getStream();
 		this.collectionName = "tweets";
 	}
-	
+
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		System.out.println("\n\n\n");
 
+		System.out.println("\n\n\n");
+		t = new TwitIE();
+		t.init();
 		readTwitterFeed();
 
 		System.out.println("\n\n\n");
@@ -40,7 +50,7 @@ public class StreamReaderService {
 	}
 
 	public void readTwitterFeed() throws IOException {
-		
+
 		RawStreamListener raw = new RawStreamListener() {
 
 			@Override
@@ -50,14 +60,22 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
+				DBObject ob = (DBObject) JSON.parse(rawString);
+				HashMap<String, ArrayList<String>> NEs = t.processString((String)ob.get("text"));
+				for (String s: NEs.keySet()) {
+					ob.put(s, NEs.get(s));
+					rawString = ob.toString();
+				}
 				tweetSaver.addTweet(rawString,collectionName);
+
+				//System.out.println(rawString);
 			}
 		};
 
 		/*
 		 * Unneeded. Kept just for reference 
 		 * */
-/*		StatusListener listener = new StatusListener() {
+		/*		StatusListener listener = new StatusListener() {
 
 			@Override
 			public void onException(Exception ex) {
@@ -108,13 +126,13 @@ public class StreamReaderService {
 		qry.locations(locations);
 
 		//stream.addListener(listener);
-		
+
 		stream.addListener(raw);
 		String[] keywordsArray = { "Glasgow" };
 
 		FilterQuery fq = new FilterQuery();
 		fq.locations(locations);
-		
+
 		stream.filter(fq);
 	}
 }
