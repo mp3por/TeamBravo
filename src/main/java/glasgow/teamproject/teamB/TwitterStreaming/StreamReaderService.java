@@ -23,7 +23,6 @@ public class StreamReaderService {
 	private final TwitterStream stream;
 	private final String collectionName;
 	private TwitIE t;
-
 	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
@@ -33,10 +32,10 @@ public class StreamReaderService {
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-
-		System.out.println("\n\n\n");
 		t = new TwitIE();
 		t.init();
+
+		System.out.println("\n\n\n");
 		readTwitterFeed();
 
 		System.out.println("\n\n\n");
@@ -60,11 +59,20 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
+
 				DBObject ob = (DBObject) JSON.parse(rawString);
-				HashMap<String, ArrayList<String>> NEs = t.processString((String)ob.get("text"));
+				HashMap<String, ArrayList<String>> NEs = null;
+				try {
+					NEs = t.processString((String)ob.get("text"));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (!NEs.isEmpty()) {
 				for (String s: NEs.keySet()) {
 					ob.put(s, NEs.get(s));
 					rawString = ob.toString();
+				}
 				}
 				tweetSaver.addTweet(rawString,collectionName);
 

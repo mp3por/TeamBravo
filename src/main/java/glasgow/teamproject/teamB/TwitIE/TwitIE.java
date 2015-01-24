@@ -14,14 +14,11 @@ import gate.util.persistence.PersistenceManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import junit.framework.Test;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class TwitIE extends NamedEntityExtractor {
@@ -31,6 +28,8 @@ public class TwitIE extends NamedEntityExtractor {
 
 	private Corpus corpus;
 	private CorpusController pipeline;
+	
+	private static AtomicInteger counter = new AtomicInteger(0);
 
 	@Override
 	public void addTweet(Tweet tweet) {
@@ -45,7 +44,12 @@ public class TwitIE extends NamedEntityExtractor {
 	}
 
 	
-	public HashMap<String, ArrayList<String>> processString (String s) {
+	public HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
+		while (counter.get() > 0) {
+			System.out.println("Busy waiting");
+			Thread.sleep(100);
+		}
+		counter.incrementAndGet();
 		if (pipeline == null) init(); 
 	
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
@@ -83,6 +87,7 @@ public class TwitIE extends NamedEntityExtractor {
 			types.addAll(annotations.getAllTypes());
 
 		}
+		counter.decrementAndGet();
 		return NEs;
 	}
 	
