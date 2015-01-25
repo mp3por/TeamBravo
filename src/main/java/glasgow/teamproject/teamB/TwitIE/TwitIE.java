@@ -23,24 +23,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class TwitIE implements NamedEntityExtractor {
-	private HashSet<String> interestedNE = new HashSet<String>(); 
-	public HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));
+	private static HashSet<String> interestedNE = new HashSet<String>(); 
+	public static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));
 
-	private Corpus corpus;
-	private CorpusController pipeline;
+	private static Corpus corpus;
+	private static CorpusController pipeline;
 
 	private static AtomicInteger counter = new AtomicInteger();
 
 	public void addNE (String s) {
 		interestedNE.add(s);
 	}
-	public HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
+	public static synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
 		while (counter.get() > 0) {
 			System.out.println("Busy waiting");
 			Thread.sleep(100);
 		}
 		counter.incrementAndGet();
-		if (pipeline == null) init(); 
+		//if (pipeline == null) init(); 
 
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
 		if (s.isEmpty()) return null;
@@ -80,7 +80,6 @@ public class TwitIE implements NamedEntityExtractor {
 		counter.decrementAndGet();
 		return NEs;
 	}
-
 
 
 	public void init() {
