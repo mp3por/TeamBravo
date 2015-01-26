@@ -48,7 +48,7 @@
 		scope="singleton" init-method="run">
 		<constructor-arg name="tweetSaver" ref="TweetDAOIMPL" />
 		<constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" />
-		 <constructor-arg name="twitie" ref="TwitIE" />
+		 <constructor-arg name="twitie" ref="twitie" />
 		
 	</bean>
 
