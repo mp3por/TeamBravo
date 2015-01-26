@@ -84,7 +84,7 @@ public class TwitIE implements NamedEntityExtractor {
 			}
 
 			// Only god knows how it works
-			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();	
+			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
 			System.out.println(currentDir);
 
@@ -92,8 +92,8 @@ public class TwitIE implements NamedEntityExtractor {
 			Gate.setGateHome(f);
 
 			Gate.init();
-
-			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File("applicationState.xgapp"));
+			String pathToApplication =currentDir+"/"+"applicationState.xgapp";
+			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File(pathToApplication));
 			corpus = Factory.newCorpus("Tweet corpus");
 		} catch (GateException e) {
 			// TODO Auto-generated catch block
