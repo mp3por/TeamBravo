@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,30 +49,26 @@ public class TweetDAOImpl implements TweetDAO {
 		return tweet;
 	}
 
+	@Override
 	public List<String> getTweetsForMaps(String collectionName) {
 		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
 		return results;
 	}
 
+	@Override
 	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities){
 		
 		// just for referance what is going on
 		/*// gets the collection in which is the entry you will modify
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		
 		// used to get the specific tweet
 		DBObject query = new BasicDBObject("id_str",id);
-		
 		// to hold the named Entities
 		DBObject namedEntitiesList = new BasicDBObject(NamedEntities);
-		
 		// this will be added to the entry
 		DBObject updateObject = new BasicDBObject("named_entities",namedEntitiesList);
-		
-		
 		// the actual updates
 		WriteResult result = dbCollection.update(query,new BasicDBObject("$push",updateObject));
-		
 		// isUpdateOfExisting will return true if an existing entry was updated
 		return result.isUpdateOfExisting();*/
 		
@@ -82,5 +79,17 @@ public class TweetDAOImpl implements TweetDAO {
 		WriteResult result = mongoOps.updateFirst(query, update, collectionName);		
 	
 		return result.isUpdateOfExisting();
+	}
+
+	@Override
+	public List<String> getLastTweets(int count, String collectionName) {
+		//db.foo.find().sort({_id:1}).limit(50);
+		long collectionSize = mongoOps.getCollection(collectionName).count();
+		int fromIndex = 0;
+		int toIndex = count;
+		if(collectionSize < Integer.MAX_VALUE && count>collectionSize){
+			toIndex = (int) collectionSize; // not very save :D
+		}
+		return mongoOps.find(new Query(), String.class, collectionName).subList(fromIndex, toIndex);
 	}
 }

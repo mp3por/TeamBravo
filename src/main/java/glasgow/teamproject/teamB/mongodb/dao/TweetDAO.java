@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import java.util.List;
 import java.util.Map;
 
 public interface TweetDAO {
@@ -12,4 +13,8 @@ public interface TweetDAO {
 	public String readByTime(String time, String collectionName);
 	
 	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities);
+	
+	public List<String> getLastTweets(int count, String collectionName);
+	
+	public List<String> getTweetsForMaps(String collectionName);
 }
