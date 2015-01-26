@@ -30,11 +30,11 @@ public class TweetDAOImpl implements TweetDAO {
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
-		 
-		
 		//System.out.println("OB:" + ob.toString());
 		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
 		dbCollection.insert(ob);// stores the JSON
+		
+		
 		// Simple store as String
 		mongoOps.insert(tweet, collectionName+"STRING"); // stores the tweet as string
 		

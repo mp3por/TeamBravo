@@ -60,6 +60,7 @@ public class StreamReaderService {
 			@Override
 			public void onMessage(String rawString) {
 
+				//TODO: extract this 
 				DBObject ob = (DBObject) JSON.parse(rawString);
 				HashMap<String, ArrayList<String>> NEs = null;
 				try {
