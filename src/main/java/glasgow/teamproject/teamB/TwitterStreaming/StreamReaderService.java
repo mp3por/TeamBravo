@@ -21,16 +21,17 @@ public class StreamReaderService {
 	private final TwitterStream stream;
 	private final String collectionName;
 	private TwitIE twitIE;
-	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
+	
+	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder, TwitIE twitie) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
 		stream = this.streamBuilder.getStream();
 		this.collectionName = "tweets";
+		this.twitIE = twitie;
 	}
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		twitIE = new TwitIE();
 		twitIE.init();
 
 		System.out.println("\n\n\n");

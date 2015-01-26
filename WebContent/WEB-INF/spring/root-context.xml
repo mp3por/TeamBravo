@@ -40,11 +40,16 @@
 	<bean id="TwitterStreamBuilder" class="glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil">
 	</bean>
 	
+	<bean id="twitie" class="glasgow.teamproject.teamB.TwitIE.TwitIE">
+	</bean>
+	
 	<bean id="twitterstreaming"
 		class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService"
 		scope="singleton" init-method="run">
 		<constructor-arg name="tweetSaver" ref="TweetDAOIMPL" />
 		<constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" />
+		 <constructor-arg name="twitie" ref="TwitIE" />
+		
 	</bean>
 
 
