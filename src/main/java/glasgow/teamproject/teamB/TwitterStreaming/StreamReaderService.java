@@ -7,14 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-
 import twitter4j.FilterQuery;
-import twitter4j.JSONException;
-import twitter4j.JSONObject;
 import twitter4j.RawStreamListener;
 import twitter4j.TwitterStream;
+
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 public class StreamReaderService {
 
@@ -22,7 +20,7 @@ public class StreamReaderService {
 	private final TwitterStreamBuilderUtil streamBuilder;
 	private final TwitterStream stream;
 	private final String collectionName;
-	private TwitIE t;
+	private TwitIE twitIE;
 	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
@@ -32,8 +30,8 @@ public class StreamReaderService {
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		t = new TwitIE();
-		t.init();
+		twitIE = new TwitIE();
+		twitIE.init();
 
 		System.out.println("\n\n\n");
 		readTwitterFeed();
@@ -57,13 +55,15 @@ public class StreamReaderService {
 				System.out.println("error");
 			}
 
+			@SuppressWarnings("static-access")
 			@Override
 			public void onMessage(String rawString) {
 
 				DBObject ob = (DBObject) JSON.parse(rawString);
 				HashMap<String, ArrayList<String>> NEs = null;
 				try {
-					NEs = t.processString((String)ob.get("text"));
+					
+					NEs = twitIE.processString((String)ob.get("text"));
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -76,7 +76,6 @@ public class StreamReaderService {
 				}
 				tweetSaver.addTweet(rawString,collectionName);
 
-				//System.out.println(rawString);
 			}
 		};
 
@@ -127,16 +126,9 @@ public class StreamReaderService {
 			}
 		};*/
 
-		FilterQuery qry = new FilterQuery();
-
 		double[][] locations = new double[][] { {  -4.508147d, 55.812753d }, {  -4.037108d,55.965241d} };
 
-		qry.locations(locations);
-
-		//stream.addListener(listener);
-
 		stream.addListener(raw);
-		String[] keywordsArray = { "Glasgow" };
 
 		FilterQuery fq = new FilterQuery();
 		fq.locations(locations);

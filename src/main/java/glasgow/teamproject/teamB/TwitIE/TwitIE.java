@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class TwitIE implements NamedEntityExtractor {
@@ -29,19 +28,12 @@ public class TwitIE implements NamedEntityExtractor {
 	private static Corpus corpus;
 	private static CorpusController pipeline;
 
-	private static AtomicInteger counter = new AtomicInteger();
-
 	public void addNE (String s) {
 		interestedNE.add(s);
 	}
-	public static synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
-		while (counter.get() > 0) {
-			System.out.println("Busy waiting");
-			Thread.sleep(100);
-		}
-		counter.incrementAndGet();
-		//if (pipeline == null) init(); 
 
+	public static synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
+		
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
 		if (s.isEmpty()) return null;
 		Document doc = null;
@@ -51,13 +43,17 @@ public class TwitIE implements NamedEntityExtractor {
 
 			pipeline.setCorpus(corpus);
 			pipeline.execute();
-			corpus.remove(doc);
 		} catch (ResourceInstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally {
+			corpus.remove(doc);
+			corpus.clear();
+			corpus.cleanup();
 		}
 
 		if (doc != null) {
@@ -77,7 +73,6 @@ public class TwitIE implements NamedEntityExtractor {
 				NEs.put(a.getType(), NEsArray);
 			}
 		}
-		counter.decrementAndGet();
 		return NEs;
 	}
 
