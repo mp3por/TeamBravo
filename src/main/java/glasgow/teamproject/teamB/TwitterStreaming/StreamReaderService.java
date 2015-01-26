@@ -62,7 +62,7 @@ public class StreamReaderService {
 				DBObject ob = (DBObject) JSON.parse(rawString);
 				HashMap<String, ArrayList<String>> NEs = null;
 				try {
-					
+
 					NEs = twitIE.processString((String)ob.get("text"));
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -80,7 +80,7 @@ public class StreamReaderService {
 		};
 
 		/*
-		 * Unneeded. Kept just for reference 
+		 * Unneeded. Kept just for reference
 		 * */
 		/*		StatusListener listener = new StatusListener() {
 
