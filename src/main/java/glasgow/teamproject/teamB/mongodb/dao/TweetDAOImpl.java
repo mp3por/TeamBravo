@@ -92,4 +92,28 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return mongoOps.find(new Query(), String.class, collectionName).subList(fromIndex, toIndex);
 	}
+	
+	//Tweets for Graphs
+	@Override
+	public List<String> getTweetsForGraphLine(){
+		return null;
+	}
+	
+	@Override
+	public List<String> getTweetsForGraphPie(){
+		return null;
+	}
+	
+	@Override
+	public List<String> getTweetsForGraphWordcloud(){
+		return null;
+	}
+	
+	@Override
+	public List<String> getTweetsForGraphBarchart(){
+		return null;
+	}
+	
+	
+	
 }

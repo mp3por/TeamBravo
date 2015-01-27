@@ -17,4 +17,12 @@ public interface TweetDAO {
 	public List<String> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
+	
+	public List<String> getTweetsForGraphLine();
+	
+	public List<String> getTweetsForGraphPie();
+	
+	public List<String> getTweetsForGraphWordcloud();
+	
+	public List<String> getTweetsForGraphBarchart();
 }
