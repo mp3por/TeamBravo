@@ -32,10 +32,10 @@ public class StreamReaderService {
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		twitIE.init();
+		//twitIE.init();
 
 		System.out.println("\n\n\n");
-		readTwitterFeed();
+		//readTwitterFeed();
 
 		System.out.println("\n\n\n");
 	}

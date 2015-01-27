@@ -9,9 +9,9 @@
 
 	<display-name>Spring MVC Application</display-name>
 
-	<welcome-file-list>
-		<welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list>
+<!-- 	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list> -->
 
 	<error-page>
 		<error-code>404</error-code>
@@ -103,6 +103,21 @@
 	<servlet-mapping>
 		<servlet-name>Tweets</servlet-name>
 		<url-pattern>/tweets/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>main</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/main-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>main</servlet-name>
+		<url-pattern>/main/*</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

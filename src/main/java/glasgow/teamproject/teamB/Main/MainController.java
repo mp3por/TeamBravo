@@ -12,25 +12,9 @@ import org.springframework.web.servlet.view.RedirectView;
 //@RequestMapping("/main")
 public class MainController {
 	
-	@RequestMapping("/")
-	public ModelAndView index(){
-		System.out.println("OMGMGOMGOMGOGMOMGOMG");
-		ModelAndView mv = new ModelAndView("home");
-		return mv;
-	}
-	
-	@RequestMapping("/home")
-	public ModelAndView getHome(){
-		System.out.println("OMGMGOMGOMGOGMOMGOMG");
-		ModelAndView mv = new ModelAndView("home");	
-		return mv;
-	}
-	
-	@RequestMapping("/example/*")
-	public RedirectView example(Model model){
-		RedirectView omg = new RedirectView("", true);
-		String url = omg.getUrl();
-		System.out.println("URL:"+url);
-		return omg;
+	@RequestMapping("/hello")
+	public String getHome(){
+		System.out.println("OMGMGOMGOMGOGMOMGOMG");	
+		return "home";
 	}
 }
