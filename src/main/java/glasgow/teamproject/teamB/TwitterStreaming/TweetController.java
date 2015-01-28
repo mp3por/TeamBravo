@@ -19,7 +19,7 @@ public class TweetController {
 	
 	@RequestMapping("/all")
 	public ModelAndView allTweets(){
-		ModelAndView mv = new ModelAndView("alltweets2");
+		ModelAndView mv = new ModelAndView("betterAllTweets");
 		
 		List<HashMap<String,String>> tweets = getTweets();
 		
