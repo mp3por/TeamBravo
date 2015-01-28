@@ -88,31 +88,18 @@ public class TweetDAOImpl implements TweetDAO {
 		
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		System.out.println(dbCollection.count());
-		//dbCollection.find();
+		
 		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("id", -1));
-		System.out.println(dbCursor.count());
-		System.out.println(dbCursor.next());
+		
 		ArrayList<DBObject> tweets = new ArrayList<DBObject>();
+		
 		for (int i = 0; i < count; i++) {
 			if (dbCursor.curr() == null) continue;
 			tweets.add(dbCursor.curr());
-			System.out.println("curr:" + dbCursor.curr());
-			System.out.println("curr:" + dbCursor.curr().get("id"));
-			System.out.println("curr:" + dbCursor.curr().get("created_at"));
-			//System.out.println(dbCursor.curr());
-			//System.out.println(dbCursor.hasNext());
 			if (dbCursor.hasNext())
 				dbCursor.next();
 		}
 		return tweets;
-		//db.foo.find().sort({_id:1}).limit(50);
-		/*long collectionSize = mongoOps.getCollection(collectionName).count();
-		int fromIndex = 0;
-		int toIndex = count;
-		if(collectionSize < Integer.MAX_VALUE && count>collectionSize){
-			toIndex = (int) collectionSize; // not very save :D
-		}
-		return mongoOps.find(new Query(), String.class, collectionName).subList(fromIndex, toIndex);*/
 	}
 	
 }
