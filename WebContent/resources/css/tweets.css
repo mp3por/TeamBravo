@@ -17,17 +17,43 @@ li img {
   float: left;
   margin: 0 15px 0 0;
 }
+
+.icon_img {
+	width: 20px;
+	height: auto;
+	padding-left: 10px;
+}
  
-li p {
+ .tooltip {
+	display:none;
+	position:absolute;
+	border:1px solid #333;
+	background-color:#161616;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+}
+
+.avatar {
+	width: 100px;
+}
+ 
+ 
+li .tweet {
   font: 200 12px/1.5 Georgia, Times New Roman, serif;
 }
  
-li {
+.tweet {
   padding: 10px;
   overflow: auto;
+  border: dashed 1px blue;
+  margin: 15px;
+  
+}
+
+.tweet:hover {
+	background: #eee;
+	cursor: pointer;
 }
  
-li:hover {
-  background: #eee;
-  cursor: pointer;
-}

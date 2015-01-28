@@ -1,7 +1,10 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.mongodb.DBObject;
 
 public interface TweetDAO {
 	/**
@@ -14,7 +17,7 @@ public interface TweetDAO {
 	
 	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities);
 	
-	public List<String> getLastTweets(int count, String collectionName);
+	public ArrayList<DBObject> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
 }
