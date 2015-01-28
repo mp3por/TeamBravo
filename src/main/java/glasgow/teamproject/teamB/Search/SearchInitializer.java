@@ -4,8 +4,10 @@ import java.net.UnknownHostException;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.terrier.matching.ResultSet;
 import org.terrier.utility.ApplicationSetup;
 
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 
 /**
@@ -37,10 +39,27 @@ public class SearchInitializer {
 			
 			TweetsIndexer indexer = new TweetsIndexer(mongoOps);
 			indexer.indexTweets();
+			
 			TweetsRetriver retriver = new TweetsRetriver(indexer.getIndex(), query);
 			retriver.runQuery();
-
-			System.out.println("Returned " + retriver.getResult().getDocids().length + " tweets");
+			ResultSet result = retriver.getResult();
+			result.sort();
+			int[] resultDocnos = result.getDocids();
+			System.out.println("Returned " + resultDocnos.length + " tweets");
+			
+			/* Print out the result */
+			DBCursor cursor = mongoOps.getCollection("tweets").find();
+			cursor.next();
+			int j = 0;
+			for(int i = 0; i < resultDocnos.length; i++){
+				while(j != resultDocnos[i]){
+					cursor.next();
+					j++;
+				}
+				System.out.print(cursor.curr().get("text").toString());
+			}
+			
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
