@@ -1,5 +1,7 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Graphs.TopicWrapper;
+
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,7 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForGraphPie();
 	
-	public List<String> getTweetsForGraphWordcloud();
+	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
 	
 	public List<String> getTweetsForGraphBarchart();
 }

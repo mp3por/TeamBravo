@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import twitter4j.JSONArray;
+import twitter4j.JSONException;
+import twitter4j.JSONObject;
+
 import com.mongodb.MongoClient;
 
 
@@ -41,24 +45,35 @@ public class GraphsController {
 		}
 	}
 	
-	private void setUpGraphObjects(){
-		//call tweetDAOImpl methods to get back objects for each graph
-		//Format the objects how you want them
-		//Store them in an appropriate data structure and return them to be passed to the view
+	private JSONArray getTopicsForWordCloud(){
+		//Get list of top 8 topics from the "Topics_Week" table
+		List<TopicWrapper> topics = tweetdao.getHotTopics(8, "Name", "Tweets", "Topics_Week");
+		
+		//Build a frequency list of the top eight topics
+		//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
+		JSONArray frequencyList = new JSONArray();
+		//For every topic in topic list
+		for(TopicWrapper topic : topics){
+			//Create a new JSON Object
+			JSONObject hotTopic = new JSONObject();
+			try {
+				//Put the topic's values into the JSON Object
+				hotTopic.put("Name", topic.getTopic());
+				hotTopic.put("Tweets", topic.getNoOfTweets());
+				//Add the object to the frequency list
+				frequencyList.put(hotTopic);
+			} catch (JSONException e) {
+				System.err.print("Exception: GraphsController.getTopicsForWordCloud - JSONObject.put()");
+			}
+		}
+		JSONArray hashedFrequencyList = WordCloudHash.gethashedFrequencies(frequencyList);
+		return hashedFrequencyList;
 	}
 	
-	private List<String> getHotTopics(){
-		ArrayList<String> hotTopics = new ArrayList<String>();
-		//Query topicsQuery = new Query();
-		List<String> allResults = mongoOps.find(new Query(), String.class, "Topics_Week");
-		
-		return hotTopics;
-	}
 	
 	@RequestMapping("/getAll")
 	public ModelAndView getGraphs(){
 		setUpDBInfo();
-		setUpGraphObjects();
 		ModelAndView model = new ModelAndView("graphs-all");
 		return model;
 	}
@@ -66,41 +81,30 @@ public class GraphsController {
 	@RequestMapping("/lineGraph")
 	public ModelAndView getLineGraph(){
 		setUpDBInfo();
-		
-		setUpGraphObjects();
 		ModelAndView model = new ModelAndView("LineGraph");
-		//model.addObject to add stuff to the model to pass to the view
-		
 		return model;
 	}
 	
 	@RequestMapping("/pieChart")
 	public ModelAndView getPieChart(){
 		setUpDBInfo();
-		setUpGraphObjects();
 		ModelAndView model = new ModelAndView("PieChart");
-		//model.addObject to add stuff to the model to pass to the view
-		
 		return model;
 	}
 	
 	@RequestMapping("/wordCloud")
 	public ModelAndView getWordCloud(){
 		setUpDBInfo();
-		setUpGraphObjects();
+		JSONArray frequencyList = getTopicsForWordCloud();
 		ModelAndView model = new ModelAndView("WordCloud");
-		//model.addObject to add stuff to the model to pass to the view
-		
+		model.addObject("frequencyList", frequencyList);
 		return model;
 	}
 	
 	@RequestMapping("/barChart")
 	public ModelAndView getBarChart(){
 		setUpDBInfo();
-		setUpGraphObjects();
 		ModelAndView model = new ModelAndView("BarChart");
-		//model.addObject to add stuff to the model to pass to the view
-		
 		return model;
 	}
 	
