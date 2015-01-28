@@ -17,4 +17,10 @@ public class GraphsController {
 		return model;
 	}
 	
+	@RequestMapping("/ajax")
+	public ModelAndView ajax(){
+		ModelAndView mv = new ModelAndView("ajax-graphs");
+		return mv;
+	}
+	
 }

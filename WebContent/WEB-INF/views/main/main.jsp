@@ -38,25 +38,25 @@
 
 	<!-- MAIN OUTLOOK TABLE  -->
 	
-	<div class="main left">
+	<div class="main">
 		<div class="bordered">
 			<h3>Search</h3>
 			<div id="search"></div>
 		</div>
 	</div>
-	<div class="main right">
+	<div class="main">
 		<div class="bordered">
 			<h3>TweetWall</h3>
 			<div id="tweetwall"></div>
 		</div>
 	</div>
-	<div class="main left">
+	<div class="main">
 		<div class="bordered">
 			<h3>Map</h3>
 			<div id="map"></div>
 		</div>
 	</div>
-	<div class="main right">
+	<div class="main">
 		<div class="bordered">
 			<h3>Graphs</h3>
 			<div id="graphs"></div>
@@ -79,8 +79,8 @@
 			getTweetWall();
 			getMaps();
 			getSearchBox();
-		}
-		;
+			getGraphs();
+		};
 
 		function getTweetWall() {
 			$.ajax({
@@ -96,6 +96,15 @@
 				url : '/TeamBravo/maps/ajaxAll',
 				success : function(data) {
 					$("#map").html(data);
+				}
+			});
+		}
+		
+		function getGraphs() {
+			$.ajax({
+				url : '/TeamBravo/graphs/ajax',
+				success : function(data) {
+					$("#graphs").html(data);
 				}
 			});
 		}
