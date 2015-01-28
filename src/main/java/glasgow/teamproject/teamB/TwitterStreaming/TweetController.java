@@ -19,8 +19,18 @@ public class TweetController {
 	
 	@RequestMapping("/all")
 	public ModelAndView allTweets(){
-		System.out.println("getting all tweets");
 		ModelAndView mv = new ModelAndView("alltweets2");
+		
+		List<HashMap<String,String>> tweets = getTweets();
+		
+		mv.addObject("tweets",tweets);
+		
+		return mv;
+	}
+	
+	@RequestMapping("allJustTweets")
+	public ModelAndView justTweets(){
+		ModelAndView mv = new ModelAndView("allJustTweets");
 		
 		List<HashMap<String,String>> tweets = getTweets();
 		

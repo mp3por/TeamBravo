@@ -8,13 +8,30 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-//@RequestMapping("/main")
 public class MainController {
 	
 	@RequestMapping("/hello")
-	public ModelAndView getHome(){
+	public ModelAndView Hello(){
 		String now = (new Date()).toString();
 		String viewName = "home";
+		ModelAndView mv = new ModelAndView(viewName);
+		mv.addObject("serverTime", now);
+		return mv;
+	}
+	
+	@RequestMapping("/home")
+	public ModelAndView Main(){
+		String now = (new Date()).toString();
+		String viewName = "main";
+		ModelAndView mv = new ModelAndView(viewName);
+		mv.addObject("serverTime", now);
+		return mv;
+	}
+	
+	@RequestMapping("/searchBox")
+	public ModelAndView searchBox(){
+		String now = (new Date()).toString();
+		String viewName = "search_box";
 		ModelAndView mv = new ModelAndView(viewName);
 		mv.addObject("serverTime", now);
 		return mv;

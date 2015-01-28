@@ -79,4 +79,12 @@ public class MapsController {
 		//TweetDAO tweetDAO = new TweetDAOImpl(mongoOps);
 		return mv;
 	}
+	
+	@RequestMapping("/ajaxAll")
+	public ModelAndView ajaxMaps(){
+		
+		ModelAndView model = new ModelAndView("only-maps-all");
+		
+		return model;
+	}
 }
