@@ -31,45 +31,19 @@ public class TweetController {
 	@RequestMapping("/all")
 	public ModelAndView allTweets() throws UnknownHostException{
 		ModelAndView mv = new ModelAndView("betterAllTweets");
-		
 		List<DBObject> tweets = getTweets();
-		
-		System.out.println(tweets.size());
-		
-		for (DBObject dbobj: tweets) {
-			//System.out.println(dbobj.get("created_at"));
-			System.out.println(dbobj.keySet());
-		}
-		
 		mv.addObject("tweets",tweets);
-		
 		return mv;
 	}
-	
-	@RequestMapping("allJustTweets")
-	public ModelAndView justTweets() throws UnknownHostException{
-		ModelAndView mv = new ModelAndView("allJustTweets");
-		
-		List<DBObject> tweets = getTweets();
-		
-		mv.addObject("tweets",tweets);
-		
-		return mv;
-	}
-
 	/**
 	 * This method will handle the connection to the db later
 	 * @throws UnknownHostException 
 	 * */
 	private ArrayList<DBObject> getTweets() throws UnknownHostException {
-		MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-		MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
-		TweetDAO tweetSaver = new TweetDAOImpl(mongoOps);
-
-		System.out.println(mongoOps.collectionExists("tweets"));
-		
-		ArrayList<DBObject> t = tweetSaver.getLastTweets(10, "tweets");
-		
+		MongoClient mongoClient = new MongoClient(MONGO_HOST, MONGO_PORT);
+		MongoOperations mongoOperations = new MongoTemplate(mongoClient, DB_NAME);
+		TweetDAO tweetDB = new TweetDAOImpl(mongoOperations);		
+		ArrayList<DBObject> t = tweetDB.getLastTweets(10, "tweets");		
 		return t;
 	
 	}

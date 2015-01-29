@@ -87,10 +87,9 @@ public class TweetDAOImpl implements TweetDAO {
 	public ArrayList<DBObject> getLastTweets(int count, String collectionName) {
 		
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		System.out.println(dbCollection.count());
 		
 		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("id", -1));
-		
+		dbCursor.next();
 		ArrayList<DBObject> tweets = new ArrayList<DBObject>();
 		
 		for (int i = 0; i < count; i++) {
