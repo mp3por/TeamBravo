@@ -32,6 +32,7 @@ $('.masterTooltip').hover(function(){
 </head>
 <body>
 	<h1>Tweets Wall [Current]</h1>
+<button type="button" onClick="window.location.reload();">Reload</button>
 
 		<ul>
 			<!-- Loop over the tweets  -->

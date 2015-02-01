@@ -84,7 +84,7 @@
 
 		function getTweetWall() {
 			$.ajax({
-				url : '/TeamBravo/tweets/allJustTweets',
+				url : '/TeamBravo/tweets/all',
 				success : function(data) {
 					$("#tweetwall").html(data);
 				}

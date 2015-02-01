@@ -43,7 +43,7 @@ public class TweetController {
 		MongoClient mongoClient = new MongoClient(MONGO_HOST, MONGO_PORT);
 		MongoOperations mongoOperations = new MongoTemplate(mongoClient, DB_NAME);
 		TweetDAO tweetDB = new TweetDAOImpl(mongoOperations);		
-		ArrayList<DBObject> t = tweetDB.getLastTweets(10, "tweets");		
+		ArrayList<DBObject> t = tweetDB.getLastTweets(6, "tweets");		
 		return t;
 	
 	}
