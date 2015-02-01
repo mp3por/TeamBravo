@@ -49,7 +49,7 @@
 			            })
 			            .text(function(d) { return d.Name; })
 						.on("click", function (d, i){
-							//window.open(d.URL, "_blank");
+							window.open("/TeamBravo/topic/specific/", "_blank");
 						});
 			}
 		</script>
