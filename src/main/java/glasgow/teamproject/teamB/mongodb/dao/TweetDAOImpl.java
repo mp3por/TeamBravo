@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,27 +25,25 @@ public class TweetDAOImpl implements TweetDAO {
 	@Autowired
 	private MongoOperations mongoOps;
 
-//	public TweetDAOImpl(MongoOperations mongoOps) {
-//		this.mongoOps = mongoOps;
-//	}
+	//	public TweetDAOImpl(MongoOperations mongoOps) {
+	//		this.mongoOps = mongoOps;
+	//	}
 
 	@Override
 	public void addTweet(String tweet, String collectionName) {
 		tweet = tweet.replace("\"id\":", "\"tweet_id\":");
 		System.out.println(tweet);
-		
-		
+
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
 		//System.out.println("OB:" + ob.toString());
 		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
 		dbCollection.insert(ob);// stores the JSON
-		
-		
+
 		// Simple store as String
-		mongoOps.insert(tweet, collectionName+"STRING"); // stores the tweet as string
-		
+		mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet as string
+
 		System.out.println("SAVE");
 	}
 
@@ -62,8 +61,8 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 
 	@Override
-	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities){
-		
+	public boolean addNamedEntitiesById(String id, String collectionName, Map<String, String> NamedEntities) {
+
 		// just for referance what is going on
 		/*// gets the collection in which is the entry you will modify
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
@@ -77,32 +76,38 @@ public class TweetDAOImpl implements TweetDAO {
 		WriteResult result = dbCollection.update(query,new BasicDBObject("$push",updateObject));
 		// isUpdateOfExisting will return true if an existing entry was updated
 		return result.isUpdateOfExisting();*/
-		
+
 		Query query = new Query(Criteria.where("id_str").is(id));
 		Update update = new Update();
 		update.push("named_entities", NamedEntities);
-		
-		WriteResult result = mongoOps.updateFirst(query, update, collectionName);		
-	
+
+		WriteResult result = mongoOps.updateFirst(query, update, collectionName);
+
 		return result.isUpdateOfExisting();
 	}
 
 	@Override
-	public ArrayList<DBObject> getLastTweets(int count, String collectionName) {
-		
+	public ArrayList<JSONObject> getLastTweets(int count, String collectionName) {
+
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		
+
 		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("id", -1));
-		dbCursor.next();
-		ArrayList<DBObject> tweets = new ArrayList<DBObject>();
-		
-		for (int i = 0; i < count; i++) {
-			if (dbCursor.curr() == null) continue;
-			tweets.add(dbCursor.curr());
-			if (dbCursor.hasNext())
-				dbCursor.next();
+		//dbCursor.next(); ? why do you do this 
+		ArrayList<JSONObject> tweets = new ArrayList<JSONObject>(); 
+		int i = 0;
+		while(dbCursor.hasNext() && i<count){
+			tweets.add(new JSONObject(dbCursor.next()));
 		}
+		
+		// WTF:D:D:D
+//		for (int i = 0; i < count; i++) {
+//			if (dbCursor.curr() == null)
+//				continue; ??? i think it should be break ? why would you continue 
+//			tweets.add(new JSONObject(source).curr());
+//			if (dbCursor.hasNext())
+//				dbCursor.next();
+//		}
 		return tweets;
 	}
-	
+
 }

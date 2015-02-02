@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,7 +33,7 @@ public class TweetController {
 	@RequestMapping("/all")
 	public ModelAndView allTweets() throws UnknownHostException{
 		ModelAndView mv = new ModelAndView("betterAllTweets");
-		List<DBObject> tweets = getTweets();
+		List<JSONObject> tweets = getTweets();
 		mv.addObject("tweets",tweets);
 		return mv;
 	}
@@ -40,9 +41,9 @@ public class TweetController {
 	 * This method will handle the connection to the db later
 	 * @throws UnknownHostException 
 	 * */
-	private ArrayList<DBObject> getTweets() throws UnknownHostException {
+	private ArrayList<JSONObject> getTweets() throws UnknownHostException {
 				
-		ArrayList<DBObject> t = tweetSaver.getLastTweets(6, "tweets");		
+		ArrayList<JSONObject> t = tweetSaver.getLastTweets(6, "tweets");		
 		return t;
 	
 	}
