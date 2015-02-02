@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,11 +19,12 @@ import com.mongodb.util.JSON;
 
 public class TweetDAOImpl implements TweetDAO {
 
+	@Autowired
 	private MongoOperations mongoOps;
 
-	public TweetDAOImpl(MongoOperations mongoOps) {
-		this.mongoOps = mongoOps;
-	}
+//	public TweetDAOImpl(MongoOperations mongoOps) {
+//		this.mongoOps = mongoOps;
+//	}
 
 	@Override
 	public void addTweet(String tweet, String collectionName) {

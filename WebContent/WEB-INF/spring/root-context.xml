@@ -28,19 +28,19 @@
 	<mongo:db-factory id="mongoDbFactory" dbname="tweetsTest"
 		mongo-ref="mongo" />
 
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+	<bean id="mongoTemplate" name="mongoOps" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 	</bean>
 
 	<!-- DAO Objects -->
 
-	<bean id="TweetDAOIMPL" class="glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl">
-		<constructor-arg name="mongoOps" ref="mongoTemplate" />
+	<bean id="TweetDAOIMPL" name="tweetSaver" class="glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl">
+		<!-- <constructor-arg name="mongoOps" ref="mongoTemplate" /> -->
 	</bean>
 
 	<!-- TwitterStreaming component -->
 	
-	<bean id="TwitterStreamBuilder" class="glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil">
+	<bean id="TwitterStreamBuilder" name="twitterStreamBuilder" class="glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil">
 	</bean>
 	
 	<bean id="twitie" class="glasgow.teamproject.teamB.TwitIE.TwitIE">
@@ -49,9 +49,9 @@
 	<bean id="twitterstreaming"
 		class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService"
 		scope="singleton" init-method="run">
-		<constructor-arg name="tweetSaver" ref="TweetDAOIMPL" />
-		<constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" />
-		 <constructor-arg name="twitie" ref="twitie" />
+		<!-- <constructor-arg name="tweetSaver" ref="TweetDAOIMPL" /> -->
+		<!-- <constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" /> -->
+		<!-- <constructor-arg name="twitie" ref="twitie" /> -->
 		
 	</bean>
 

@@ -18,20 +18,21 @@ import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 public class StreamReaderService {
-
-	private final TweetDAO tweetSaver;
-	private final TwitterStreamBuilderUtil streamBuilder;
-	private TwitterStream stream;
+	
+	
+	@Autowired
+	private TwitterStreamBuilderUtil twitterStreamBuilder;
+	
+	@Autowired
 	private TwitIE twitIE;
 
 	@Autowired
+	private TweetDAO tweetSaver;
+	
+	@Autowired
 	private ProjectProperties projectProperties;
 
-	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder, TwitIE twitie) {
-		this.tweetSaver = tweetSaver;
-		this.streamBuilder = streamBuilder;
-		this.twitIE = twitie;
-	}
+	private TwitterStream stream;
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
@@ -51,7 +52,7 @@ public class StreamReaderService {
 	}
 
 	public void readTwitterFeed() throws IOException {
-		stream = this.streamBuilder.getStream();
+		stream = this.twitterStreamBuilder.getStream();
 
 		RawStreamListener raw = new RawStreamListener() {
 

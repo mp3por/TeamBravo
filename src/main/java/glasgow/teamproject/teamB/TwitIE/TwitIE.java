@@ -32,7 +32,7 @@ public class TwitIE implements NamedEntityExtractor {
 		interestedNE.add(s);
 	}
 
-	public static synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
+	public synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
 		
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
 		if (s.isEmpty()) return null;
