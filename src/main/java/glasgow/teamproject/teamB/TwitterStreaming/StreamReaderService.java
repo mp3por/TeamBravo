@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
+import glasgow.teamproject.teamB.TwitIE.NamedEntityParser;
 import glasgow.teamproject.teamB.TwitIE.TwitIE;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
@@ -31,6 +32,9 @@ public class StreamReaderService {
 	
 	@Autowired
 	private ProjectProperties projectProperties;
+	
+	@Autowired
+	private NamedEntityParser namedEntityParser;
 
 	private TwitterStream stream;
 
@@ -63,23 +67,16 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
-
-				//extracted(rawString);
-				tweetSaver.addTweet(rawString, projectProperties.TWEET_COLLECTION);
+				
+				String tweet = manupulateTweetBeforeSaving(rawString);
+				tweetSaver.addTweet(tweet, projectProperties.TWEET_COLLECTION);
 
 			}
 
-			private String extracted(String rawString) {
+			private String manupulateTweetBeforeSaving(String rawString) {
 				//TODO: extract this 
 				DBObject ob = (DBObject) JSON.parse(rawString);
-				HashMap<String, ArrayList<String>> NEs = null;
-				try {
-
-					NEs = twitIE.processString((String) ob.get("text"));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				HashMap<String, ArrayList<String>> NEs = namedEntityParser.getNamedEntites(rawString);
 				if (!NEs.isEmpty()) {
 					for (String s : NEs.keySet()) {
 						ob.put(s, NEs.get(s));
