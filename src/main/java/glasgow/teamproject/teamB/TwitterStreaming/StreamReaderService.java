@@ -81,10 +81,8 @@ public class StreamReaderService {
 					StringBuilder sb = new StringBuilder(rawString);
 					sb.setLength(Math.max(sb.length() - 1, 0));
 					for (String s : NEs.keySet()) {
-						System.out.println(s + ":" + NEs.get(s) );
-							sb.append(",");
-							sb.append("\"" + s + "\":\"" + NEs.get(s) + "\"");
-						
+						sb.append(",");
+						sb.append("\"" + s + "\":\"" + NEs.get(s) + "\"");
 					}
 					sb.append("}");
 					rawString = sb.toString();
