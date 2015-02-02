@@ -1,11 +1,14 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
 import glasgow.teamproject.teamB.TwitIE.TwitIE;
+import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
@@ -18,21 +21,21 @@ public class StreamReaderService {
 
 	private final TweetDAO tweetSaver;
 	private final TwitterStreamBuilderUtil streamBuilder;
-	private final TwitterStream stream;
-	private final String collectionName;
+	private TwitterStream stream;
 	private TwitIE twitIE;
-	
+
+	@Autowired
+	private ProjectProperties projectProperties;
+
 	public StreamReaderService(TweetDAO tweetSaver, TwitterStreamBuilderUtil streamBuilder, TwitIE twitie) {
 		this.tweetSaver = tweetSaver;
 		this.streamBuilder = streamBuilder;
-		stream = this.streamBuilder.getStream();
-		this.collectionName = "tweets";
 		this.twitIE = twitie;
 	}
 
 	// @PostConstruct 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		twitIE.init();
+		//twitIE.init();
 
 		System.out.println("\n\n\n");
 		readTwitterFeed();
@@ -48,6 +51,7 @@ public class StreamReaderService {
 	}
 
 	public void readTwitterFeed() throws IOException {
+		stream = this.streamBuilder.getStream();
 
 		RawStreamListener raw = new RawStreamListener() {
 
@@ -56,28 +60,32 @@ public class StreamReaderService {
 				System.out.println("error");
 			}
 
-			@SuppressWarnings("static-access")
 			@Override
 			public void onMessage(String rawString) {
 
+				//extracted(rawString);
+				tweetSaver.addTweet(rawString, projectProperties.TWEET_COLLECTION);
+
+			}
+
+			private String extracted(String rawString) {
 				//TODO: extract this 
 				DBObject ob = (DBObject) JSON.parse(rawString);
 				HashMap<String, ArrayList<String>> NEs = null;
 				try {
 
-					NEs = twitIE.processString((String)ob.get("text"));
+					NEs = twitIE.processString((String) ob.get("text"));
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (!NEs.isEmpty()) {
-				for (String s: NEs.keySet()) {
-					ob.put(s, NEs.get(s));
-					rawString = ob.toString();
+					for (String s : NEs.keySet()) {
+						ob.put(s, NEs.get(s));
+						rawString = ob.toString();
+					}
 				}
-				}
-				tweetSaver.addTweet(rawString,collectionName);
-
+				return rawString;
 			}
 		};
 
@@ -128,7 +136,7 @@ public class StreamReaderService {
 			}
 		};*/
 
-		double[][] locations = new double[][] { {  -4.508147d, 55.812753d }, {  -4.037108d,55.965241d} };
+		double[][] locations = new double[][] { { -4.508147d, 55.812753d }, { -4.037108d, 55.965241d } };
 
 		stream.addListener(raw);
 

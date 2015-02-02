@@ -17,6 +17,9 @@
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
+	<!-- Project Properties -->
+	<bean id="ProjectProperties" name="projectProperties" class="glasgow.teamproject.teamB.Util.ProjectProperties">
+	</bean>
 
 	<!-- MongoDB Set-up -->
 	<context:component-scan base-package="glasgow.teamproject.teamB.mongodb.dao" />

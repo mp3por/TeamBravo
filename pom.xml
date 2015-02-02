@@ -86,6 +86,14 @@
 			<version>8.0</version>
 		</dependency>
 
+		<!-- JSON -->
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20141113</version>
+		</dependency>
+
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
