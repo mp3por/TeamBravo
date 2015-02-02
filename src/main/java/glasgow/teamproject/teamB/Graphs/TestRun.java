@@ -86,27 +86,9 @@ public class TestRun {
 			mongoOps.insert(hotTopic10, "Topics_Week");*/
 
 			//mongoOps.dropCollection("Topics_Week");
-
-			/*
-			//Set up list of db objects
-			List<DBObject> topicDBObjects = mongoOps.find(new Query(), DBObject.class, "Topics_Week");
-			//Set up list for db objects wrappers
-			List<TopicWrapper> hotTopics = new ArrayList<TopicWrapper>();
-			//For every db object, wrap it in topic wrapper and add to list
-			for (DBObject dbobj: topicDBObjects){
-				TopicWrapper topic = new TopicWrapper(dbobj, "Name", "Tweets");
-				hotTopics.add(topic);
-			}
-			//Sort the list of topics in descending order
-			Collections.sort(hotTopics, new TopicComparator());
-			
-			for (TopicWrapper topic: hotTopics) {
-				System.out.println(topic.getTopic() + " " + topic.getNoOfTweets());
-			}*/
-			
 			
 			//Get list of top 8 topics from the "Topics_Week" table
-			List<TopicWrapper> topics = tweetdao.getHotTopics(8, "Name", "Tweets", "Topics_Week");
+			List<TopicWrapper> topics = tweetdao.getHotTopics(3, "Name", "Tweets", "Topics_Week");
 			
 			//Build a frequency list of the top eight topics
 			//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
@@ -126,31 +108,9 @@ public class TestRun {
 				}
 			}
 			
-			JSONArray arr = WordCloudHash.gethashedFrequencies(frequencyList);
-			System.out.println(arr.toString());
-			
-			/*
-			ArrayList<Float> nums = new ArrayList<Float>();
-			
-			nums.add((float) 50000);
-			nums.add((float) 20000);
-			nums.add((float) 15000);
-			nums.add((float) 750);
-			nums.add((float) 750000);
-			
-			float n = 0;
-			for(float num : nums){
-				//System.out.println(num);
-				n += num;
-				System.out.println(n);
-			}
-			
-			float sum = 100/n;
-			System.out.println("750 is " + (750 * sum) + "% of " + n);
-			*/
-			
-		
-			
+			//JSONArray arr = WordCloudHash.gethashedFrequencies(frequencyList);
+			//System.out.println(arr.toString());
+			System.out.println(frequencyList.toString());
 			
 
 			

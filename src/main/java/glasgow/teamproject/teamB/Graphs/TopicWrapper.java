@@ -30,6 +30,8 @@ public class TopicWrapper {
 
 	public TopicWrapper(DBObject hotTopic, String topicField, String tweetField){
 		
+		//topicField is the column name in the table for topics
+		//tweetField is the column name in the table for the number of tweets
 		try {
 			setTopic((String) ((DBObject) hotTopic.get("map")).get(topicField));
 			setNoOfTweets((int) ((DBObject) hotTopic.get("map")).get(tweetField));

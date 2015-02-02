@@ -36,9 +36,9 @@ public class WordCloudHash {
 				Double value = new Double((double) intTweet);
 				value *= sum; //Get percentage
 				if(value > 99.0){
-					value = (double) Math.round(value);
+					value = (double) Math.floor(value); //Rounds down to nearest whole
 				}else{
-					value = Math.ceil(value); //Rounds UP to nearest int
+					value = (double) Math.round(value); //Rounds to nearest whole
 				}
 				int intVal = value.intValue();
 				
@@ -58,45 +58,6 @@ public class WordCloudHash {
 	}
 	
 	private static int hashValue(int value){
-		
-		int hashedValue;
-		if(value == 1 || value == 2){
-			hashedValue = 6;
-		}else if(value == 3){
-			hashedValue = 7;
-		}else if(value == 4){
-			hashedValue = 8;
-		}else if(value >= 5 && value <= 8){
-			hashedValue = 9;
-		}else if(value >= 9 && value <= 12){
-			hashedValue = 16;
-		}else if(value >= 13 && value <= 15){
-			hashedValue = 20;
-		}else if(value >= 16 && value <= 18){
-			hashedValue = 26;
-		}else if(value >= 19 && value <= 21){
-			hashedValue = 28;
-		}else if(value >= 22 && value <= 25){
-			hashedValue = 32;
-		}else if(value >= 26 && value <= 30){
-			hashedValue = 36;
-		}else if(value >= 31 && value <= 35){
-			hashedValue = 42;
-		}else if(value >= 36 && value <= 42){
-			hashedValue = 50;
-		}else if(value >= 43 && value <= 60){
-			hashedValue = 60;
-		}else if(value >= 61 && value <= 70){
-			hashedValue = 70;
-		}else if(value >= 71 && value <= 80){
-			hashedValue = 80;
-		}else if(value >= 81 && value <= 90){
-			hashedValue = 100;
-		}else{
-			hashedValue = 120;
-		}
-		
-		
-		return hashedValue;
+		return value + 10;
 	}
 }

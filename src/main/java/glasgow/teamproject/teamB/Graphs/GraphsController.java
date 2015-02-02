@@ -70,6 +70,33 @@ public class GraphsController {
 		return hashedFrequencyList;
 	}
 	
+	private JSONArray getTopicsForPieChart(){
+		//This also works by calling getTopicsForWordCloud()
+		//As the javascript in PieChart.jsp selects first 3 positions of frequency array
+		
+		//Get list of top 3 topics from the "Topics_Week" table
+		List<TopicWrapper> topics = tweetdao.getHotTopics(3, "Name", "Tweets", "Topics_Week");
+		
+		//Build a frequency list of the top 3 topics
+		//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
+		JSONArray frequencyList = new JSONArray();
+		//For every topic in topic list
+		for(TopicWrapper topic : topics){
+			//Create a new JSON Object
+			JSONObject hotTopic = new JSONObject();
+			try {
+				//Put the topic's values into the JSON Object
+				hotTopic.put("Name", topic.getTopic());
+				hotTopic.put("Tweets", topic.getNoOfTweets());
+				//Add the object to the frequency list
+				frequencyList.put(hotTopic);
+			} catch (JSONException e) {
+				System.err.print("Exception: GraphsController.getTopicsForPieChart - JSONObject.put()");
+			}
+		}
+		return frequencyList;
+	}
+	
 	
 	@RequestMapping("/getAll")
 	public ModelAndView getGraphs(){
@@ -88,7 +115,9 @@ public class GraphsController {
 	@RequestMapping("/pieChart")
 	public ModelAndView getPieChart(){
 		setUpDBInfo();
+		JSONArray frequencyList = getTopicsForPieChart();
 		ModelAndView model = new ModelAndView("PieChart");
+		model.addObject("frequencyList", frequencyList);
 		return model;
 	}
 	
