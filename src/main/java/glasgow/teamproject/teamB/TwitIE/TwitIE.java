@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.springframework.stereotype.Component;
 
+@Component
 public class TwitIE implements NamedEntityExtractor {
 	private static HashSet<String> interestedNE = new HashSet<String>(); 
 	public static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));

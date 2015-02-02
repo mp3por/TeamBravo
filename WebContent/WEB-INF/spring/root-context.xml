@@ -18,8 +18,9 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Project Properties -->
-	<bean id="ProjectProperties" name="projectProperties" class="glasgow.teamproject.teamB.Util.ProjectProperties">
-	</bean>
+	<!-- <bean id="ProjectProperties" name="projectProperties" class="glasgow.teamproject.teamB.Util.ProjectProperties">
+	</bean> -->
+	<context:component-scan base-package="glasgow.teamproject.teamB.Util" />
 
 	<!-- MongoDB Set-up -->
 	<context:component-scan base-package="glasgow.teamproject.teamB.mongodb.dao" />
@@ -33,27 +34,14 @@
 	</bean>
 
 	<!-- DAO Objects -->
-
-	<bean id="TweetDAOIMPL" name="tweetSaver" class="glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl">
-		<!-- <constructor-arg name="mongoOps" ref="mongoTemplate" /> -->
-	</bean>
-
-	<!-- TwitterStreaming component -->
+	<context:component-scan base-package="glasgow.teamproject.teamB.mongodb.dao" />
+	<!-- <bean id="TweetDAOIMPL" name="tweetSaver" class="glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl">
+		<constructor-arg name="mongoOps" ref="mongoTemplate" />
+	</bean> -->
 	
-	<bean id="TwitterStreamBuilder" name="twitterStreamBuilder" class="glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil">
-	</bean>
-	
-	<bean id="twitie" class="glasgow.teamproject.teamB.TwitIE.TwitIE">
-	</bean>
-	
-	<bean id="twitterstreaming"
-		class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService"
-		scope="singleton" init-method="run">
-		<!-- <constructor-arg name="tweetSaver" ref="TweetDAOIMPL" /> -->
-		<!-- <constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" /> -->
-		<!-- <constructor-arg name="twitie" ref="twitie" /> -->
-		
-	</bean>
-
+	<!-- TwitIE -->
+	<context:component-scan base-package="glasgow.teamproject.teamB.TwitIE" />
+	<!-- <bean id="twitie" class="glasgow.teamproject.teamB.TwitIE.TwitIE">
+	</bean> -->
 
 </beans>

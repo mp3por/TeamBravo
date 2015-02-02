@@ -1,9 +1,13 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
+import org.springframework.stereotype.Component;
+
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+
+@Component
 public class TwitterStreamBuilderUtil {
 	
 // SpringMVCTP3

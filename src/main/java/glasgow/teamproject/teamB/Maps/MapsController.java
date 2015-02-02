@@ -1,8 +1,11 @@
 package glasgow.teamproject.teamB.Maps;
 
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
+
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MapsController {
+	
+	@Autowired
+	private TweetDAO tweetSaver;
+	
 	/**
 	 * just a simple googleMaps controller method that sets the display to Glasgow
 	 * */
@@ -76,7 +83,7 @@ public class MapsController {
 	@RequestMapping("/googleMaps/loadTweets/{collection}")
 	public ModelAndView loadTweetsFromDB(@PathVariable("collection") String collection){
 		ModelAndView mv = new ModelAndView("Tweets");
-		//TweetDAO tweetDAO = new TweetDAOImpl(mongoOps);
+		tweetSaver.getTweetsForMaps(collection);
 		return mv;
 	}
 	

@@ -9,40 +9,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import twitter4j.FilterQuery;
 import twitter4j.RawStreamListener;
 import twitter4j.TwitterStream;
 
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-
+@Component
 public class StreamReaderService {
-	
-	
+
 	@Autowired
 	private TwitterStreamBuilderUtil twitterStreamBuilder;
-	
+
 	@Autowired
 	private TwitIE twitIE;
 
 	@Autowired
 	private TweetDAO tweetSaver;
-	
+
 	@Autowired
 	private ProjectProperties projectProperties;
-	
+
 	@Autowired
 	private NamedEntityParser namedEntityParser;
 
 	private TwitterStream stream;
 
-	// @PostConstruct 	// same as init-method in .xml but with annotations
+	@PostConstruct
+	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		//twitIE.init();
-
 		System.out.println("\n\n\n");
+		System.out.println("RUNNIIINNGGGGG");
+		twitIE.init();
+
 		readTwitterFeed();
 
 		System.out.println("\n\n\n");
@@ -67,21 +69,25 @@ public class StreamReaderService {
 
 			@Override
 			public void onMessage(String rawString) {
-				
+
 				String tweet = manupulateTweetBeforeSaving(rawString);
 				tweetSaver.addTweet(tweet, projectProperties.TWEET_COLLECTION);
 
 			}
 
 			private String manupulateTweetBeforeSaving(String rawString) {
-				//TODO: extract this 
-				DBObject ob = (DBObject) JSON.parse(rawString);
 				HashMap<String, ArrayList<String>> NEs = namedEntityParser.getNamedEntites(rawString);
 				if (!NEs.isEmpty()) {
+					StringBuilder sb = new StringBuilder(rawString);
+					sb.setLength(Math.max(sb.length() - 1, 0));
 					for (String s : NEs.keySet()) {
-						ob.put(s, NEs.get(s));
-						rawString = ob.toString();
+						System.out.println(s + ":" + NEs.get(s) );
+							sb.append(",");
+							sb.append("\"" + s + "\":\"" + NEs.get(s) + "\"");
+						
 					}
+					sb.append("}");
+					rawString = sb.toString();
 				}
 				return rawString;
 			}

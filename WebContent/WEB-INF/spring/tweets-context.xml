@@ -18,6 +18,18 @@
 	<mvc:annotation-driven/>
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+    <!-- <bean id="TwitterStreamBuilder" name="twitterStreamBuilder" class="glasgow.teamproject.teamB.TwitterStreaming.TwitterStreamBuilderUtil">
+	</bean> -->
+	
+	<!-- <bean id="twitterstreaming"
+		class="glasgow.teamproject.teamB.TwitterStreaming.StreamReaderService"
+		scope="singleton" init-method="run">
+		<constructor-arg name="tweetSaver" ref="TweetDAOIMPL" />
+		<constructor-arg name="streamBuilder" ref="TwitterStreamBuilder" />
+		<constructor-arg name="twitie" ref="twitie" />
+		
+	</bean> -->
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
