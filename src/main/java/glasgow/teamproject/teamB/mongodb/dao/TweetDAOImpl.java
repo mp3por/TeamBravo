@@ -1,10 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Util.ProjectProperties;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -87,26 +90,45 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 
 	@Override
-	public ArrayList<JSONObject> getLastTweets(int count, String collectionName) {
+	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
-		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("id", -1));
-		//dbCursor.next(); ? why do you do this 
-		ArrayList<JSONObject> tweets = new ArrayList<JSONObject>(); 
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1));
+		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again. 
+		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
+		// parsing gets complicated!
 		while(dbCursor.hasNext() && i<count){
-			tweets.add(new JSONObject(dbCursor.next()));
+			BasicDBObject currentObj = (BasicDBObject) dbCursor.next();
+			HashMap<String, Object> tweet = new HashMap<>();
+			for (String key: currentObj.keySet()) {
+				if (ProjectProperties.defaultNE.contains(key)) {
+					String s = currentObj.getString(key);
+					// if s contains only "[]", return null - no need to parse an empty array
+					if (s.length() == 2) {
+						tweet.put(key, null);
+						continue;
+					}
+
+					s = s.replace("[", "");
+					s = s.replace("]", "");
+
+					HashSet<String> NEs = new HashSet<String>();
+
+					for (String NE: s.split(",")) {
+						NEs.add(NE);
+					}
+					tweet.put(key, NEs);
+				}
+				else {
+					tweet.put(key, currentObj.get(key));
+				}
+			}
+			tweets.add(tweet);
+			i++;
+			dbCursor.next();
 		}
-		
-		// WTF:D:D:D
-//		for (int i = 0; i < count; i++) {
-//			if (dbCursor.curr() == null)
-//				continue; ??? i think it should be break ? why would you continue 
-//			tweets.add(new JSONObject(source).curr());
-//			if (dbCursor.hasNext())
-//				dbCursor.next();
-//		}
 		return tweets;
 	}
 

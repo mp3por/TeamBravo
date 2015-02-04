@@ -11,6 +11,7 @@ import gate.creole.ExecutionException;
 import gate.creole.ResourceInstantiationException;
 import gate.util.GateException;
 import gate.util.persistence.PersistenceManager;
+import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TwitIE implements NamedEntityExtractor {
 	private static HashSet<String> interestedNE = new HashSet<String>(); 
-	public static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));
+	public final HashSet<String> defaultNE = ProjectProperties.defaultNE;
 
 	private static Corpus corpus;
 	private static CorpusController pipeline;

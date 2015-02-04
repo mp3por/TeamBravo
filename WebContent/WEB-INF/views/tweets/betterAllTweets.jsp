@@ -52,12 +52,14 @@ $('.masterTooltip').hover(function(){
 						<p>${tweet.text}</p>
 					</c:if>					
 					
+					<c:if test="${not empty tweet.Person}">
 					<c:forEach var="NE" items="${tweet.Person}">
 						<p>
 							<img src=<c:url value="resources/img/user91.png"/> class="icon_img"/>
 							<p title='${NE} is a person' class="masterTooltip">${NE}</p><br>
 						
 					</c:forEach>
+					</c:if>
 					
 					<c:forEach var="NE" items="${tweet.Location}">
 					<p>

@@ -1,12 +1,9 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONObject;
-
-import com.mongodb.DBObject;
 
 public interface TweetDAO {
 	/**
@@ -19,7 +16,7 @@ public interface TweetDAO {
 	
 	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities);
 	
-	public ArrayList<JSONObject> getLastTweets(int count, String collectionName);
+	public ArrayList<HashMap<String, Object>> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
 }
