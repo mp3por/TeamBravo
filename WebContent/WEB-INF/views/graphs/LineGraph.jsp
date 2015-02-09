@@ -14,9 +14,10 @@
 		<h1>Hot Topics Line</h1>
 		<script>    
 			var svg1 = dimple.newSvg("#chartContainer", 590, 400);
-			var src1 ="${pageContext.request.contextPath}/resources/tempData/tweet_example.tsv";
-			d3.tsv(src1, function (data) {
-			  var myChart = new dimple.chart(svg1, data);
+
+			var topData = ${topicData};
+			
+			  var myChart = new dimple.chart(svg1, topData);
 			  myChart.setBounds(60, 30, 505, 305);
 			  
 			  var x = myChart.addCategoryAxis("x", "Month");
@@ -29,7 +30,7 @@
 			  
 			  myChart.addLegend(60, 10, 500, 20, "right");
 			  myChart.draw();
-			});
+			
 		</script>
 	</div>
 </body>
