@@ -97,6 +97,32 @@ public class GraphsController {
 		return frequencyList;
 	}
 	
+	private JSONArray getTopicsForLineGraph(){
+		
+		//Get list of top hot topics from the "Topics_Year" table
+		List<TopicWrapper> topics = tweetdao.getTweetsForGraphLine("Date", "Month", "Tweets", "Topic", "Topics_Year");
+		
+		//Create a data Json array
+		JSONArray topicData = new JSONArray();
+		//For every topic in topic list
+		for(TopicWrapper topic : topics){
+			//Create a new JSON Object
+			JSONObject hotTopic = new JSONObject();
+			try {
+				//Put the topic's values into the JSON Object
+				hotTopic.put("Date", topic.getDate());
+				hotTopic.put("Month", topic.getMonth());
+				hotTopic.put("Tweets", topic.getNoOfTweets());
+				hotTopic.put("Topic", topic.getTopic());
+				//Add the object to the frequency list
+				topicData.put(hotTopic);
+			} catch (JSONException e) {
+				System.err.print("Exception: GraphsController.getTopicsForLineGraph - JSONObject.put()");
+			}
+		}
+		return topicData;
+	}
+	
 	
 	@RequestMapping("/getAll")
 	public ModelAndView getGraphs(){
@@ -108,7 +134,9 @@ public class GraphsController {
 	@RequestMapping("/lineGraph")
 	public ModelAndView getLineGraph(){
 		setUpDBInfo();
+		JSONArray topicData = getTopicsForLineGraph();
 		ModelAndView model = new ModelAndView("LineGraph");
+		model.addObject("topicData", topicData);
 		return model;
 	}
 	

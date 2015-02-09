@@ -20,9 +20,7 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
-	public List<String> getTweetsForGraphLine();
-	
-	public List<String> getTweetsForGraphPie();
+	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName);
 	
 	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
 	

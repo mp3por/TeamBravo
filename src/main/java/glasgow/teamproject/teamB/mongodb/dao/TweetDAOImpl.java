@@ -100,13 +100,24 @@ public class TweetDAOImpl implements TweetDAO {
 	
 	//Tweets for Graphs
 	@Override
-	public List<String> getTweetsForGraphLine(){
-		return null;
-	}
-	
-	@Override
-	public List<String> getTweetsForGraphPie(){
-		return null;
+	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName){
+		
+		List<TopicWrapper> hotTopics = null;
+		List<DBObject> topicDBObjects;
+		try{
+			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
+			//Set up list for db objects wrappers
+			hotTopics = new ArrayList<TopicWrapper>();
+			//For every db object, wrap it in topic wrapper and add to list
+			for (DBObject dbobj: topicDBObjects){
+				TopicWrapper topic = new TopicWrapper(dbobj, topicCol, tweetCol, dateCol, monthCol);
+				hotTopics.add(topic);
+			}
+		} catch (Exception e){
+			System.err.println(collectionName + " does not exist");
+		}
+		
+		return hotTopics;
 	}
 	
 	//Return a List of wrapped db objects
