@@ -4,6 +4,6 @@
   <title>Terrier Search</title>
 </head>
 <body>
-<h2>Please enter your query.<h2>
+<h2>Please enter your query.</h2>
 </body>
 </html>
