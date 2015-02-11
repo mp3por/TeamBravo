@@ -1,5 +1,7 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Graphs.TopicWrapper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,4 +21,7 @@ public interface TweetDAO {
 	public ArrayList<HashMap<String, Object>> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
+	
+	//For word cloud
+	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
 }

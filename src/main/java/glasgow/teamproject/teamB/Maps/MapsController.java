@@ -34,6 +34,18 @@ public class MapsController {
 	}
 	
 	/**
+	 * Plain default map for front page
+	 * */
+	@RequestMapping("/defaultMap/")
+	public ModelAndView getDefault() {
+		ModelAndView modelandview = new ModelAndView("DefaultMap");
+		modelandview.addObject("longitude", "-4.287393");
+		modelandview.addObject("latitude", "55.873714");
+		modelandview.addObject("zoom", 10);
+		return modelandview;
+	}
+	
+	/**
 	 * A controller for Google Maps with optional latitude and longitude
 	 * */
 	@RequestMapping("/googleMaps/{lat}/{long}/")
