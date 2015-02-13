@@ -10,13 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 //@RequestMapping("/search")
 public class SearchController {
 	
-	@RequestMapping("/Search")
+	@RequestMapping("/terrier")
 	public ModelAndView Search(){
 		ModelAndView modelandview = new ModelAndView("Terrier");	
 		return modelandview;
 	}
 	
-	@RequestMapping("/Search/{query}")
+	@RequestMapping("/terrier/{query}")
 	public ModelAndView Search(@PathVariable("query") String query){	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
 		modelandview.addObject("query", query);	
