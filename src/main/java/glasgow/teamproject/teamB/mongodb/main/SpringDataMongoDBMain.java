@@ -28,7 +28,7 @@ public class SpringDataMongoDBMain {
 		try {
 			MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
 			MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
-			TwitterStream stream = TwitterStreamBuilderUtil.getStream();
+			TwitterStream stream = new TwitterStreamBuilderUtil().getStream();
 			TweetDAO tweetSaver = new TweetDAOImpl(mongoOps);
 			
 			RawStreamListener raw = new RawStreamListener() {

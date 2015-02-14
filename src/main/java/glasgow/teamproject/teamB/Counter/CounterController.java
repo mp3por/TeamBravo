@@ -2,8 +2,6 @@ package glasgow.teamproject.teamB.Counter;
 
 import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -17,11 +15,10 @@ public class CounterController {
 	@RequestMapping("/test")
 	public ModelAndView getCount(){
 		
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		Date date = new Date();
 		
 		Counter c = new Counter();
-		c.dailyMapReduce(date, "CNT_" + dateFormat.format(date));
+		c.dailyMapReduce(date);
 		
 		StringBuilder sb = new StringBuilder();
 		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTDAY, 10);
