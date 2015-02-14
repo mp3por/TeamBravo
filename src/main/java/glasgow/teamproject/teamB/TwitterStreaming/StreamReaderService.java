@@ -70,12 +70,12 @@ public class StreamReaderService {
 			@Override
 			public void onMessage(String rawString) {
 
-				String tweet = manupulateTweetBeforeSaving(rawString);
+				String tweet = manipulateTweetBeforeSaving(rawString);
 				tweetSaver.addTweet(tweet, projectProperties.TWEET_COLLECTION);
 
 			}
 
-			private String manupulateTweetBeforeSaving(String rawString) {
+			private String manipulateTweetBeforeSaving(String rawString) {
 				HashMap<String, ArrayList<String>> NEs = namedEntityParser.getNamedEntites(rawString);
 				if (!NEs.isEmpty()) {
 					StringBuilder sb = new StringBuilder(rawString);

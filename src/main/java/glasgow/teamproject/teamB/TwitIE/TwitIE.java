@@ -50,8 +50,11 @@ public class TwitIE implements NamedEntityExtractor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
+			// That usually happens with cyrillic sentences or tweets containing only other (weird) characters, like one char, etc.  
+			System.out.println("GATE was unable to execute this tweet:");
+			System.out.println(s);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		finally {
 			corpus.remove(doc);
