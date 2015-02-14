@@ -5,7 +5,6 @@
 </head>
 <body>
 
-/* Import all the packages needed */
 <%@ page import="org.terrier.utility.ApplicationSetup, org.springframework.data.mongodb.core.MongoOperations,
 				org.springframework.data.mongodb.core.MongoTemplate, org.terrier.matching.ResultSet, com.mongodb.DBCursor, 
 				com.mongodb.MongoClient, glasgow.teamproject.teamB.Search.TweetsIndexer, glasgow.teamproject.teamB.Search.TweetsRetriver, 
@@ -41,7 +40,7 @@
 		result.sort();
 		int[] resultDocnos = result.getDocids();
 		
-		out.println("Returned " + resultDocnos.length + " tweets shown as follow: ");
+		out.println("Returned " + resultDocnos.length + " tweets: ");
 		
 		DBCursor cursor = mongoOps.getCollection("tweets").find();
 		cursor.next();
@@ -51,7 +50,7 @@
 				cursor.next();
 				j++;
 			}
-			out.print(cursor.curr().get("text").toString());
+			out.println(cursor.curr().get("text").toString());
 		}
 	}
 	catch (UnknownHostException e) {

@@ -106,13 +106,28 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>Search</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/search-context.xml</param-value>
+		</init-param>
+		<load-on-startup>6</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Search</servlet-name>
+		<url-pattern>/search/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>main</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/main-context.xml</param-value>
 		</init-param>
-		<load-on-startup>6</load-on-startup>
+		<load-on-startup>7</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>

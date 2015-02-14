@@ -28,9 +28,7 @@ public class SearchInitializer {
 	public static void main(String[] args) {
 		String query = "Taylor Swift";
 		// To be configured
-		ApplicationSetup.setProperty("terrier.home", "/Users/vincentfung13/Development/TP3/terrier-4.0-win");
-		ApplicationSetup.setProperty("terrier.etc", "/Users/vincentfung13/Development/TP3/terrier-4.0-win/etc");
-		ApplicationSetup.setProperty("stopwords.filename", "/Users/vincentfung13/Development/TP3/terrier-4.0-win/share/stopword-list.txt");
+//		ApplicationSetup.setProperty("stopwords.filename", "/Users/vincentfung13/Development/TP3/terrier-4.0-win/share/stopword-list.txt");
 		
 		MongoClient mongo;
 		try {
