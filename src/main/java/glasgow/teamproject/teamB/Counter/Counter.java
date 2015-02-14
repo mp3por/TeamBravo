@@ -130,8 +130,8 @@ public class Counter {
 	 * 
 	 * @param field: the type of entity
 	 * @param timePeriod: period specifying number of daily generated collection to be merged
-	 * 					  PASTWEEK = 7 collections from today
-	 * 					  PASTMONTH = 30 collections from today
+	 * 					  PASTWEEK = documents with date within the past week from today
+	 * 					  PASTMONTH = documents with date within the past month collections from today
 	 * @param outCollection: name of output file
 	 */
 	public void mergingMapReduce(TimePeriod timePeriod) {
