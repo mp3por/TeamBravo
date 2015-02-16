@@ -1,0 +1,33 @@
+WARNING: The file terrier.properties was not found at location /etc/terrier.properties
+Please ensure that the property terrier.home
+is specified in the file terrier.properties,
+or as a system property in the command line.
+ Assuming the value of terrier.home from the corresponding system property.
+ERROR: org.terrier.terms.Stopwords - Errror: Input/Output Exception while reading stopword list (/share/stopword-list.txt) :  Stack trace follows.
+java.io.FileNotFoundException: /share/stopword-list.txt (No such file or directory)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:93)
+	at org.terrier.utility.io.LocalFileSystem.openFileStream(LocalFileSystem.java:110)
+	at org.terrier.utility.Files.openFile(Files.java:308)
+	at org.terrier.utility.Files.openFileReader(Files.java:621)
+	at org.terrier.utility.Files.openFileReader(Files.java:607)
+	at org.terrier.terms.Stopwords.loadStopwordsList(Stopwords.java:130)
+	at org.terrier.terms.Stopwords.<init>(Stopwords.java:86)
+	at org.terrier.terms.Stopwords.<init>(Stopwords.java:69)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:408)
+	at org.terrier.realtime.memory.MemoryIndex.load_pipeline(MemoryIndex.java:631)
+	at org.terrier.realtime.memory.MemoryIndex.<init>(MemoryIndex.java:141)
+	at glasgow.teamproject.teamB.Search.TweetsIndexer.<init>(TweetsIndexer.java:32)
+	at glasgow.teamproject.teamB.Search.SearchInitializer.main(SearchInitializer.java:42)
+ERROR: org.terrier.terms.Stopwords - Error: Empty stopwords file was used (/share/stopword-list.txt)
+INFO : org.terrier.realtime.memory.MemoryIndex - ***REALTIME*** MemoryIndex (NEW)
+Exception in thread "main" org.springframework.dao.InvalidDataAccessApiUsageException: No Persitent Entity information found for the class java.lang.String
+	at org.springframework.data.mongodb.core.MongoTemplate.determineCollectionName(MongoTemplate.java:1878)
+	at org.springframework.data.mongodb.core.MongoTemplate.find(MongoTemplate.java:526)
+	at glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.getCollection(TweetDAOImpl.java:181)
+	at glasgow.teamproject.teamB.Search.TweetsIndexer.<init>(TweetsIndexer.java:34)
+	at glasgow.teamproject.teamB.Search.SearchInitializer.main(SearchInitializer.java:42)
