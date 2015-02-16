@@ -47,65 +47,64 @@
 					        return data;
 					});
 				}			
-			function getWiki (title) {
+			
+			function getIntro (data) {
+				var t;
+			    for (text in data.parse.text) {
+    			    
+			        var text = data.parse.text[text].split("<p>");
+			        var pText = "";
+			        for (p in text) {
+			            //Remove html comment
+			            text[p] = text[p].split("<!--");
+			            if (text[p].length > 1) {
+			                text[p][0] = text[p][0].split(/\r\n|\r|\n/);
+			                text[p][0] = text[p][0][0];
+			                text[p][0] += "</p> ";
+			            }
+			            text[p] = text[p][0];
+			            //Construct a string from paragraphs
+			            if (text[p].indexOf("</p>") == text[p].length - 5) {
+			                var htmlStrip = text[p].replace(/<(?:.|\n)*?>/gm, '') //Remove HTML
+			                var splitNewline = htmlStrip.split(/\r\n|\r|\n/); //Split on newlines
+			                for (newline in splitNewline) {
+			                    if (splitNewline[newline].substring(0, 11) != "Cite error:") {
+			                        pText += splitNewline[newline];
+			                        pText += "\n";
+			                    }
+			                }
+			            }
+			        }
+			        pText = pText.substring(0, pText.length - 2); //Remove extra newline
+			        pText = pText.replace(/\[\d+\]/g, ""); //Remove reference tags (e.x. [1], [4], etc)
+			        console.log("Returning \n" + pText);
+			        t = pText;
+			        
+			    }
+			    return t;
+			}
+			
+			function getWiki (callback, title) {
 				//Get Leading paragraphs (section 0)
 				var t = "";
 				
-				$.ajax({
-					url: "http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?",
-					contentType: "application/json; charset=utf-8",
-					success: function(result){
-						//console.log("VILIIII " + result);
-			    	},
-			    	error: function(xhr,status,error){
-			    		//console.log("ERROOOR");
-			    	},
-			    	complete: function(xhr,status){
-			    		//console.log("STATUS: " + status);
-			    	}
-				});
 				$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?", 
 				function (data, error) {
 					console.log(title);
 					console.log(data);
 					if (!data.parse) {
 						console.log("Not found - returning std message");
-				        return "No additional information was found for "+title;
-				        
-			    	};
-				    for (text in data.parse.text) {
-				    			    
-				        var text = data.parse.text[text].split("<p>");
-				        var pText = "";
-				        for (p in text) {
-				            //Remove html comment
-				            text[p] = text[p].split("<!--");
-				            if (text[p].length > 1) {
-				                text[p][0] = text[p][0].split(/\r\n|\r|\n/);
-				                text[p][0] = text[p][0][0];
-				                text[p][0] += "</p> ";
-				            }
-				            text[p] = text[p][0];
-				            //Construct a string from paragraphs
-				            if (text[p].indexOf("</p>") == text[p].length - 5) {
-				                var htmlStrip = text[p].replace(/<(?:.|\n)*?>/gm, '') //Remove HTML
-				                var splitNewline = htmlStrip.split(/\r\n|\r|\n/); //Split on newlines
-				                for (newline in splitNewline) {
-				                    if (splitNewline[newline].substring(0, 11) != "Cite error:") {
-				                        pText += splitNewline[newline];
-				                        pText += "\n";
-				                    }
-				                }
-				            }
-				        }
-				        pText = pText.substring(0, pText.length - 2); //Remove extra newline
-				        pText = pText.replace(/\[\d+\]/g, ""); //Remove reference tags (e.x. [1], [4], etc)
-				        console.log("Returning \n" + pText);
-				        t = pText;
-				       	return pText;
-				        
-				    }
+				        t = "No additional information was found for "+title; 
+			    	} else {
+			    		t = getIntro(data);
+			    	}
+
 				});
+			    onAjaxSuccess: function() {
+			        callback();
+			    };
+			    console.log('Pass1');    
+
 				console.log ("TTTTTTTT: " + t);
 				console.log(t);
 				return t;
