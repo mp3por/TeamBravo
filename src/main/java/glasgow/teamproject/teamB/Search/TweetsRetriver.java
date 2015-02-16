@@ -52,7 +52,7 @@ public class TweetsRetriver {
 		}
 	}
 	
-	public ResultSet getResult(){
+	public ResultSet getResultSet(){
 		return this.result;
 	}
 	
