@@ -1,15 +1,13 @@
-* {margin: 0; padding: 0;}
- 
-ul {
+.asdasd {
   list-style-type: none;
   width: 500px;
 }
  
-h3 {
+.TweetWallheader {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
 }
  
-li img {
+.TweetAvatar {
   float: left;
   margin: 0 15px 0 0;
 }
@@ -36,9 +34,6 @@ li img {
 }
  
  
-li .tweet {
-  font: 200 12px/1.5 Georgia, Times New Roman, serif;
-}
  
 .tweet {
   padding: 10px;
