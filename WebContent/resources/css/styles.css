@@ -195,7 +195,8 @@ header {
     width:45%;
     background-color:#656565;
     float:left;
-    
+    margin-left: 2.5%;
+	margin-right: 2.5%;
     /*Add height in here if you want to keep all the heights of the columns the same*/
     /*height:300px;*/
     
@@ -215,14 +216,14 @@ header {
 }
 
 /*------------------Map-----------------*/
-#map, #map>div, #map>div>img {
+/* #map, #map>div, #map>div>img {
     
-    /*
+    
     The targets above: Thery are targeting 3 things at once
     1. the #map
     2. The div inside #map
     3. The image inside the div thats inside #map
-    */
+   
     
     width:100% !important;
 	height: 400px !important;
@@ -261,7 +262,7 @@ header {
     margin-bottom: 0px !important;
     padding: 0px !important;
 }
-
+ */
 /*------------------Clearfix---------*/
 .cf:before,
 .cf:after {

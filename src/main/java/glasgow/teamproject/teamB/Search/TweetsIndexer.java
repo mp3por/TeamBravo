@@ -2,8 +2,8 @@ package glasgow.teamproject.teamB.Search;
 
 import java.io.IOException;
 
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.terrier.indexing.Document;
+import org.terrier.indexing.TwitterJSONDocument;
 import org.terrier.realtime.memory.MemoryIndex;
 /**
  * A TweetsIndexer object will take a Terrier collection object, then produce index for the given collection.
@@ -15,16 +15,16 @@ import org.terrier.realtime.memory.MemoryIndex;
 public class TweetsIndexer {
 	/* Shall be changed to TwitterMongoDBCollection shortly */
 //	private TwitterJSONCollection tweets;
-	private TwitterMongoDBCollection tweets;
+	private TwitterMongoDAOCollection tweets;
 	/* Shall be changed to incremental index shortly */
 	private MemoryIndex index;
 	
-	public TweetsIndexer(MongoOperations mongoOps){
-		index = new MemoryIndex();
-		tweets = new TwitterMongoDBCollection(mongoOps);
+	public TweetsIndexer(){
+		this.index = new MemoryIndex();
+		this.tweets = new TwitterMongoDAOCollection();
 	}
 	
-	public TwitterMongoDBCollection getTweets(){
+	public TwitterMongoDAOCollection getTweets(){
 		return this.tweets;
 	}
 	
@@ -32,6 +32,14 @@ public class TweetsIndexer {
 		return this.index;
 	}
 	
+	public void indexTweet(String tweet){
+		try {
+			index.indexDocument(new TwitterJSONDocument(tweet));
+		} catch (Exception e) {
+			System.err.println("Failed to index tweet:" + tweet);
+		}
+	}
+		
 	public void indexTweets(){
 		System.out.println("Start indexing the tweets");
 		while(tweets.nextDocument()){
@@ -42,7 +50,6 @@ public class TweetsIndexer {
 				System.err.println("Failed to index tweets");
 			}
 		}
-//		System.out.println(tweets.getNumberOfTweets());
 		try {
 			tweets.close();
 		} catch (IOException e) {
