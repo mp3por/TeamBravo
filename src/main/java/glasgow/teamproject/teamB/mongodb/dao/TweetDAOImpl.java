@@ -10,7 +10,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import java.util.concurrent.ArrayBlockingQueue;
+
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -230,5 +235,17 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return tweets;
 	}	
+
+	@Override
+	public Queue<String> getCollection(String string) {
+		List<String> o = this.mongoOps.find(new Query(), String.class);
+		
+		System.out.println("OMGOMGOMGOM: " + o.size());
+		Queue<String> j = new PriorityQueue<String>();
+		for (String p : o){
+			j.add(p);
+		}
+		return j;
+	}
 
 }

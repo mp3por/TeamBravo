@@ -10,6 +10,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
 
+import java.util.Queue;
+
+
 public interface TweetDAO {
 	/**
 	 * Adds a tweet to the DB
@@ -27,6 +30,7 @@ public interface TweetDAO {
 	
 	//For word cloud
 	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
+
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
@@ -34,4 +38,12 @@ public interface TweetDAO {
 	public BasicDBObject getNthEntry(String collectionName, int n);
 	
 	public ArrayList<HashMap<String, Object>> getTerrierResults(int[] resultsDocids);
+
+
+	
+	
+	
+	
+	//For Terrier
+	public Queue<String> getCollection(String string);
 }
