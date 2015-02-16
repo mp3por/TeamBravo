@@ -11,30 +11,20 @@
 	width: 20px;
 	height: auto;
 	padding-left: 10px;
+	padding-right: 10px;
+	float: left;
 }
  
- .tooltip {
-	display:none;
-	position:absolute;
-	border:1px solid #333;
-	background-color:#161616;
-	border-radius:5px;
-	padding:10px;
-	color:#fff;
-	font-size:12px Arial;
-}
-
 .avatar {
 	width: 100px;
 }
  
- 
- 
 .tweet {
-  padding: 10px;
+  width: 60%;
   overflow: auto;
   border: dashed 1px blue;
-  margin: 15px;
+  margin-left: 5px;
+  margin-bottom: 15px;
   
 }
 

@@ -21,11 +21,22 @@
 				console.log(data);
 			})}*/
 			
+			function getWikiBox (title) {
+				text = getWiki(title);
+				console.log("This is returned:" +text);
+				return text;
+			}
+			
 			function getImages (title, count) {
 				images = getAllImages(title);
 				for (i = 0; i < images.length; i++) { 
 				 	console.log(images[i]);   
 				}
+			}
+			
+			function getWikiText (title) {
+				console.log(title);
+				return (title+"Blah");
 			}
 			
 			function getAllImages (title) {
@@ -38,8 +49,32 @@
 				}			
 			function getWiki (title) {
 				//Get Leading paragraphs (section 0)
-				$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?", function (data, error) {
+				var t = "";
+				
+				$.ajax({
+					url: "http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?",
+					contentType: "application/json; charset=utf-8",
+					success: function(result){
+						//console.log("VILIIII " + result);
+			    	},
+			    	error: function(xhr,status,error){
+			    		//console.log("ERROOOR");
+			    	},
+			    	complete: function(xhr,status){
+			    		//console.log("STATUS: " + status);
+			    	}
+				});
+				$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?", 
+				function (data, error) {
+					console.log(title);
+					console.log(data);
+					if (!data.parse) {
+						console.log("Not found - returning std message");
+				        return "No additional information was found for "+title;
+				        
+			    	};
 				    for (text in data.parse.text) {
+				    			    
 				        var text = data.parse.text[text].split("<p>");
 				        var pText = "";
 				        for (p in text) {
@@ -65,12 +100,16 @@
 				        }
 				        pText = pText.substring(0, pText.length - 2); //Remove extra newline
 				        pText = pText.replace(/\[\d+\]/g, ""); //Remove reference tags (e.x. [1], [4], etc)
-				        console.log("Return for " + title);
-				        console.log(pText);
-				        document.getElementById(0).innerHTML = pText;
-				        return pText;
+				        console.log("Returning \n" + pText);
+				        t = pText;
+				       	return pText;
+				        
 				    }
 				});
+				console.log ("TTTTTTTT: " + t);
+				console.log(t);
+				return t;
+				
 			}
 			//x = getWiki("Glasgow");
 			//console.log(x);
@@ -80,10 +119,10 @@
 			</script>
 
 <script type="text/javascript">
-
 //Create the tooltips only when document ready
 $(document).ready(function()
 {
+	
 	
 
 	$('.NETooltip').each(function (){
@@ -130,20 +169,24 @@ $(document).ready(function()
 	// Grab all elements with the class "hasTooltip"
 	$('.xTooltip').each(function() { // Notice the .each() loop, discussed below
 	    $(this).qtip({
+	    	prerender: true,
 	        content: {
 	            text: $(this).next('div') // Use the "div" element next to this for the content
 	        },
-		    position: {
-	    	    my: 'right center',  // Position my top left...
-	        	at: 'right center', // at the bottom right of...
-	        	target: $('.xTooltip') // my target
-	        	
-		    },
-		    style: 'qtip-wiki'
+	        style: {
+	        	width: 250,
+	        }
 
 	    });
 	});
-	
+	$(document).ready(function() {
+
+	$('.NETest').each(function () {
+		text = getWikiBox($(this).attr("title"));
+		console.log("For each: " + $(this).attr("title"));
+	    $(this).html("blah");
+	});
+	});	
 });
 </script>
 </head>
@@ -151,10 +194,9 @@ $(document).ready(function()
 
 
 <div class="xTooltip">Hover me to see a tooltip</div>
-<div class="hidden" id=0 style="display: none; display:inline-block; text-align:center;"> 
-<!-- This class should hide the element, change it if needed -->
-    <script>getWiki("Glasgow");</script>
-</div>
+<div class="NETest" style="visibility: hidden; display:inline;" title="Edinburgh"> </div>
+
+
 
 
 
@@ -185,45 +227,46 @@ $(document).ready(function()
 							<img src=<c:url value="resources/img/user91.png"/> class="icon_img"/>
 							<div class="xTooltip">${NE}</div>
 							
-							<div class="hidden" style="display: none;"> <!-- This class should hide the element, change it if needed -->
-    						<p>Stuff</p>
+							<div class="NETest" title=${NE} style="visibility: hidden; display:inline;"> <!-- This class should hide the element, change it if needed -->
+    						
 							</div>
-							
 						
 					</c:forEach>
 					
+					
 					<c:forEach var="NE" items="${tweet.Location}">
-					<p>
+					
 							<img src=<c:url value="resources/img/world90.png"/> class="icon_img"/>
 							<div class="xTooltip">${NE}</div>
 							
-							<div class="hidden" style="display: none;"> <!-- This class should hide the element, change it if needed -->
-    						<p>Stuff</p>
+							<div class="hidden" style="visibility: hidden; display:inline;"> <!-- This class should hide the element, change it if needed -->
 							</div>
 					</c:forEach>
+					
 					
 					<c:forEach var="NE" items="${tweet.Organization}">
 					<p>
 							<img src=<c:url value="resources/img/factory6.png"/> class="icon_img"/>
 							<div class="xTooltip">${NE}</div>
 							
-							<div class="hidden" style="display: none;"> <!-- This class should hide the element, change it if needed -->
-    						<p>Stuff</p>
+							<div class="hidden" style="visibility: hidden; display:inline;"> <!-- This class should hide the element, change it if needed -->
 							</div>
 					</c:forEach>
 					
 					
 					<c:forEach var="NE" items="${tweet.UserID}">
-						<p>
+						
 							<img src=<c:url value="resources/img/at2.png"/> class="icon_img"/>
-							<p class="UserIDTooltip">${NE}</p><br>
+							<div class="UserIDTooltip">${NE}</div><br>
 					</c:forEach>
+					
 					
 					<c:forEach var="NE" items="${tweet.URL}">
 						<p>
 							<img src=<c:url value="resources/img/external1.png"/> class="icon_img"/>
 							<p class="URLTooltip">${NE}</p><br>
 					</c:forEach>
+					
 					
 					<c:forEach var="NE" items="${tweet.Hashtag}">
 					<p>
@@ -232,6 +275,8 @@ $(document).ready(function()
 					</c:forEach>
 					
 	
+					<div class="xTooltip">Hover me to see a tooltip</div>
+					<div class="NETest" title="Edinburgh"> aaaa </div>
 					
 
 				</li>
