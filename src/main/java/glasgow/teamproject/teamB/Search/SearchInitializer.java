@@ -1,6 +1,5 @@
 package glasgow.teamproject.teamB.Search;
 
-import java.util.ArrayList;
 import org.terrier.utility.ApplicationSetup;
 /**
  * This class provides a main method to configure Terrier and initialize the
