@@ -20,22 +20,10 @@ public class SearchController {
 	
 	@Autowired
 	private TweetDAO tweetSaver;
-	MemoryIndex indexForTweets;
 	
-	private void indexTweets(){
-		TweetsIndexer indexer = new TweetsIndexer();
-		indexer.indexTweets();
-		this.indexForTweets = indexer.getIndex();
-	}
-	
-	private void indexTweets(String tweet){
-		try {
-			indexForTweets.indexDocument(new TwitterJSONDocument(tweet));
-		} catch (Exception e) {
-			System.err.println("Failed to index tweet:" + tweet);
-		}
-	}
-	
+	@Autowired
+	private TweetsIndexer indexer;
+		
 	@RequestMapping("/terrier")
 	public ModelAndView Search(){
 		ModelAndView modelandview = new ModelAndView("Terrier");	
@@ -45,8 +33,8 @@ public class SearchController {
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView Search(@PathVariable("query") String query){
 		
-		indexTweets();
-		TweetsRetriver retriver = new TweetsRetriver(this.indexForTweets, query);
+//		indexerindexTweets();
+		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
 		retriver.runQuery();
 		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(retriver.getResultSet().getDocids());
 		

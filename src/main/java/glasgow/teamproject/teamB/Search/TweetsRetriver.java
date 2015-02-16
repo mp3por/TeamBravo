@@ -34,7 +34,6 @@ public class TweetsRetriver {
 	private String query;
 	private Manager queryManager;
 	private ResultSet result;
-	@Autowired
 	private TweetDAO tweetSaver;
 	
 	public TweetsRetriver(MemoryIndex index, String query){
