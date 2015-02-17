@@ -1,8 +1,11 @@
 package glasgow.teamproject.teamB.Graphs;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.List;
 
+import glasgow.teamproject.teamB.Counter.Counter;
+import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
@@ -22,8 +25,8 @@ import com.mongodb.MongoClient;
 public class GraphsController {
 	
 	/*
-	 * Database info
-	 */
+	 * Database info - This code may need moved to DAO
+	 
 	private final String DB_NAME = "tweetsTest";
 	private final String TWEETS_COLLECTION = "tweets"; //table
 	private final String MONGO_HOST = "localhost";
@@ -40,8 +43,11 @@ public class GraphsController {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
+	/*
+	 * Wordcloud for main/Home
+	 * 
 	private JSONArray getTopicsForWordCloud(){
 		//Get list of top 8 topics from the "Topics_Week" table
 		List<TopicWrapper> topics = tweetdao.getHotTopics(10, "Name", "Tweets", "Topics_Week");
@@ -66,32 +72,98 @@ public class GraphsController {
 		JSONArray hashedFrequencyList = WordCloudHash.gethashedFrequencies(frequencyList);
 		System.out.println("JSON ARRAY of hashed frequency list in graphs controller: " + hashedFrequencyList.toString());
 		return hashedFrequencyList;
-	}
-	
-	
-	
-	@RequestMapping("/getAll")
-	public ModelAndView getGraphs(){
-		
-		ModelAndView model = new ModelAndView("graphs-all");
-		
-		return model;
-	}
-	
-	@RequestMapping("/ajax")
-	public ModelAndView ajax(){
-		ModelAndView mv = new ModelAndView("ajax-graphs");
-		return mv;
-	}
+	}*/
 	
 	//Get Word Cloud JSP
 	@RequestMapping("/wordCloud")
 	public ModelAndView getWordCloud(){
-		setUpDBInfo();
-		JSONArray frequencyList = getTopicsForWordCloud();
+		//setUpDBInfo();
+		//JSONArray frequencyList = getTopicsForWordCloud();
+		
+		//Instantiate Counter and call getTopicsForWordPie(10);////////////////////////
 		ModelAndView model = new ModelAndView("WordCloud");
-		model.addObject("frequencyList", frequencyList);
+		//model.addObject("frequencyList", frequencyList);
 		return model;
 	}
+	
+	/**
+	 * Graph for main/SpecificTopic showing topic volume over
+	 * past week
+	 * */
+	public JSONArray getGraphWeekData(){
+		//Instantiate counter and call getTopicWeekMonth(String topic, int noOfDays)////////////////
+		JSONArray tweetsForweek = new JSONArray();
+		return tweetsForweek;
+	}
+	
+	//Get graphWeek graph
+	@RequestMapping("/graphWeek")
+	public ModelAndView getGraphWeek(){
+		//setUpDBInfo();
+		JSONArray tweetsForWeek = getGraphWeekData();
+		ModelAndView mv = new ModelAndView("graphWeek");
+		mv.addObject("tweetsForweek", tweetsForWeek);
+		return mv;
+	}
+	
+	/**
+	 * Graph for main/SpecificTopic showing topic volume over
+	 * past year
+	 * */
+	public JSONArray getGraphMonthData(){
+		//Instantiate counter and call getTopicWeekMonth(String topic, int noOfDays)////////////////
+		JSONArray tweetsForMonth = new JSONArray();
+		return tweetsForMonth;
+	}
+	
+	//Get graphYear graph
+	@RequestMapping("/graphMonth")
+	public ModelAndView getGraphYear(){
+		//setUpDBInfo();
+		JSONArray tweetsForMonth = getGraphMonthData();
+		ModelAndView mv = new ModelAndView("graphMonth");
+		mv.addObject("tweetsForMonth", tweetsForMonth);
+		return mv;
+	}
+	
+	
+	
+	//Get Pie Chart
+	@RequestMapping("/pieChart")
+	public ModelAndView getPieChart(){
+		//setUpDBInfo();
+		//Instantiate Counter and call getTopicsForWordPie(3);////////////////////////
+		ModelAndView mv = new ModelAndView("pieChart");
+		//mv.addObject("tweetsForMonth", tweetsForMonth);
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

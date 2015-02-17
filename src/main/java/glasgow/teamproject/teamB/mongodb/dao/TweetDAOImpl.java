@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -96,6 +97,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return result.isUpdateOfExisting();
 	}
 
+	
 	@Override
 	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 
@@ -139,6 +141,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return tweets;
 	}
 
+	/*
 	//For word cloud
 	@Override
 	public List<TopicWrapper> getHotTopics(int noOfTopics,
@@ -172,6 +175,24 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		
 		return hotTopics;
-	}
+	}*/
+	
+	/*
+	//For graphWeek on main/specificTopic
+	//Return a Json array for the amount of tweets made about a specific topic
+	//By each day - Mon, Tues, Wed etc
+	public JSONArray getSpecificTopicWeek (String collectionName){
+		
+		JSONArray tweetsForWeek = new JSONArray();
 
+		return tweetsForWeek;
+	}
+	
+	public JSONArray getSpecificTopicYear(String collectionName){
+		
+		JSONArray tweetsForYear = new JSONArray();
+		return tweetsForYear;
+	}*/
+	
+	
 }

@@ -135,4 +135,19 @@
 		<url-pattern>/main/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>Counter</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/counter-context.xml</param-value>
+		</init-param>
+		<load-on-startup>8</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Counter</servlet-name>
+		<url-pattern>/counter/*</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

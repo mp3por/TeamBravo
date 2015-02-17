@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+
 public interface TweetDAO {
 	/**
 	 * Adds a tweet to the DB
@@ -22,6 +24,13 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
+	/*
 	//For word cloud
 	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
+
+	public JSONArray getSpecificTopicWeek(String collectionName);
+	
+	public JSONArray getSpecificTopicYear(String collectionName);
+	*/
+
 }

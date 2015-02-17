@@ -43,9 +43,9 @@ public class StreamReaderService {
 	public void run() throws IOException {
 		System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
-		twitIE.init();
+		// twitIE.init();
 
-		readTwitterFeed();
+		// readTwitterFeed();
 
 		System.out.println("\n\n\n");
 	}
