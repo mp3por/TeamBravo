@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Counter;
 
+import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
 import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 
 import java.util.Date;
@@ -19,15 +20,26 @@ public class CounterController {
 		
 		Counter c = new Counter();
 		c.dailyMapReduce(date);
+		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
 		
 		StringBuilder sb = new StringBuilder();
-		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTDAY, 10);
+		sb.append("Top Entities<br>");
+		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTDAY, 20);
 		for( EntityCountPair e : l ) {
 			sb.append(e.getID() + " : " +  e.getCount().intValue() + "<br>");
 		}
+		sb.append("<br><br>");
 		
 		ModelAndView model = new ModelAndView("counter");
 		model.addObject("output1", sb.toString());
+		
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append("Entity Search \"kodaline\"<br>");
+		List<DateCountPair> l2 = c.getEntitiyTrend("kodaline", 7);
+		for( DateCountPair e : l2 ) {
+			sb2.append(e.getDate() + " : " + e.getCount() + "<br>");
+		}
+		model.addObject("output2", sb2.toString());
 		
 		return model;
 	}
