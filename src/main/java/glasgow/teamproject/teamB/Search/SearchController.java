@@ -10,9 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.terrier.indexing.TwitterJSONDocument;
-import org.terrier.realtime.memory.MemoryIndex;
-
 
 @Controller
 //@RequestMapping("/search")
@@ -33,13 +30,26 @@ public class SearchController {
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView Search(@PathVariable("query") String query){
 		
-//		indexerindexTweets();
 		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
 		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(retriver.getResultSet().getDocids());
+		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getResultList(retriver.getResultSet().getDocids()));
 		
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);	
+		modelandview.addObject("tweets", tweets);
+		modelandview.addObject("count", tweets.size());
+		return modelandview;
+	}
+	
+	@RequestMapping("/terrier/{query}/rank")
+	public ModelAndView RankedSearch(@PathVariable("query") String query){
+		
+		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
+		retriver.runQuery();
+		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getRankedResultList(retriver.getResultSet().getDocids()));
+		
+		ModelAndView modelandview = new ModelAndView("TerrierResult");
+		modelandview.addObject("tweets", tweets);
+		modelandview.addObject("count", tweets.size());
 		return modelandview;
 	}
 }

@@ -5,8 +5,6 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.terrier.applications.secondary.CollectionEnrichment;
