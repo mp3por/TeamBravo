@@ -106,4 +106,42 @@ public class MapsController {
 		
 		return model;
 	}
+	
+	@RequestMapping("/test")
+	public ModelAndView test(){
+		
+		ModelAndView model = new ModelAndView("only-maps-all");
+		
+		
+		ArrayList<Double> latitudes = new ArrayList<>();
+		ArrayList<Double> longitudes = new ArrayList<>();
+		ArrayList<String> tweets = new ArrayList<>();
+		Random r = new Random();
+		double LowLat = 55.814552;
+		double HighLat = 55.919543;
+		double LowLong= -4.488351;
+		double HighLong = -4.129512;
+		
+		double LatDiff = HighLat -  LowLat ;
+		double LongDiff = HighLong - LowLong;
+		
+		for(int i = 0 ; i < 1000 ; i++ ){
+			double randLat = r.nextDouble();
+			double randLong = r.nextDouble();	
+			if(randLat <= LatDiff && randLong <= LongDiff ){
+				latitudes.add(LowLat + randLat);
+				longitudes.add(LowLong + randLong);
+				tweets.add("\"OMGOMGOMGOMG\"");
+			}
+			
+		}
+		
+		model.addObject("longitude", "-4.287393");
+		model.addObject("latitude", "55.873714");
+		model.addObject("latitudes", latitudes);
+		model.addObject("longitudes", longitudes);
+		model.addObject("text", tweets);
+		
+		return model;
+	}
 }
