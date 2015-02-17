@@ -11,6 +11,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import java.util.concurrent.ArrayBlockingQueue;
+
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -172,6 +178,74 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		
 		return hotTopics;
+	}
+
+	// For Terrier indexing
+	@Override
+	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+		DBCursor foo = dbCollection.find();
+		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(foo.size());
+		foo.next();
+		while(foo.hasNext()){
+			tweets.add(foo.next().toString());
+		}
+		return tweets;
+	}
+
+	// For Terrier Retriving
+	@Override
+	public BasicDBObject getNthEntry(String collectionName, int n) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+		DBCursor foo = dbCollection.find();
+		foo.skip(n + 1);
+		return (BasicDBObject) foo.next();
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getTerrierResults(int[] resultsDocids) {
+		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
+		BasicDBObject currentObj;
+		for (int i = 0; i < resultsDocids.length; i++){
+			currentObj = getNthEntry("tweets", resultsDocids[i]);
+			HashMap<String, Object> tweet = new HashMap<>();
+			for (String key: currentObj.keySet()) {
+				if (ProjectProperties.defaultNE.contains(key)) {
+					String s = currentObj.getString(key);
+					if (s.length() == 2) {
+						tweet.put(key, null);
+						continue;
+					}
+
+					s = s.replace("[", "");
+					s = s.replace("]", "");
+
+					HashSet<String> NEs = new HashSet<String>();
+
+					for (String NE: s.split(",")) {
+						NEs.add(NE);
+					}
+					tweet.put(key, NEs);
+				}
+				else {
+					tweet.put(key, currentObj.get(key));
+				}
+			}
+			tweets.add(tweet);
+		}
+		return tweets;
+	}	
+
+	@Override
+	public Queue<String> getCollection(String string) {
+		List<String> o = this.mongoOps.find(new Query(), String.class);
+		
+		System.out.println("OMGOMGOMGOM: " + o.size());
+		Queue<String> j = new PriorityQueue<String>();
+		for (String p : o){
+			j.add(p);
+		}
+		return j;
 	}
 
 }

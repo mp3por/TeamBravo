@@ -1,62 +1,85 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<html lang="en">
+<%@ include file="/WEB-INF/include.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<html>
+
+<%@include file="Terrier.jsp" %>
+
 <head>
-  <title>Terrier Search</title>
+<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
+
 </head>
 <body>
+	<h1>Terrier Search Results</h1>
 
-<%@ page import="org.terrier.utility.ApplicationSetup, org.springframework.data.mongodb.core.MongoOperations,
-				org.springframework.data.mongodb.core.MongoTemplate, org.terrier.matching.ResultSet, com.mongodb.DBCursor, 
-				com.mongodb.MongoClient, glasgow.teamproject.teamB.Search.TweetsIndexer, glasgow.teamproject.teamB.Search.TweetsRetriver, 
-				java.net.UnknownHostException"%>
+		<ul>
+			<!-- Loop over the tweets  -->
 
-<%
-	/* Configure Terrier here */
-	ApplicationSetup.setProperty("terrier.home", "/Users/vincentfung13/Development/TP3/terrier-4.0-win");
-	ApplicationSetup.setProperty("terrier.etc", "/Users/vincentfung13/Development/TP3/terrier-4.0-win/etc");
-	ApplicationSetup.setProperty("stopwords.filename", "/Users/vincentfung13/Development/TP3/terrier-4.0-win/share/stopwords.txt");
-	
-	/* Specify the database here */
-	final String DB_NAME = "tweetsTest";
-	final String TWEETS_COLLECTION = "tweets";
-	final String MONGO_HOST = "localhost";
-	final int MONGO_PORT = 27017;
-%>
+			<c:forEach var="tweet" items="${tweets}">
+				
+				<li class="tweet">
+					<img src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}' class="avatar"/>
+					<!-- Loop over the elements of the tweet -->
+					<c:if test="${tweet.containsKey('user')}">
+						<h3>${tweet.user.screen_name}</h3>
+					</c:if>
+					<c:if test="${tweet.containsKey('created_at')}">	
+						<b>${tweet.created_at}</b>
+					</c:if>
+					<c:if test="${tweet.containsKey('text')}">
+						<p>${tweet.text}</p>
+					</c:if>					
+					
+					<c:if test="${not empty tweet.Person}">
+					<c:forEach var="NE" items="${tweet.Person}">
+						<p>
+							<img src=<c:url value="resources/img/user91.png"/> class="icon_img"/>
+							<p title='${NE} is a person' class="masterTooltip">${NE}</p><br>
+						
+					</c:forEach>
+					</c:if>
+					
+					<c:forEach var="NE" items="${tweet.Location}">
+					<p>
+						<img src=<c:url value="resources/img/world90.png"/> class="icon_img"/>
+							<p title='${NE} is a location' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
+					<c:forEach var="NE" items="${tweet.Emoticon}">
+					<p>
+						<img src=<c:url value="resources/img/smiling36.png"/> class="icon_img"/>
+							<p title='${NE} is an emoticon' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
+					<c:forEach var="NE" items="${tweet.UserID}">
+						<p>
+							<img src=<c:url value="resources/img/at2.png"/> class="icon_img"/>
+							<p title='${NE} is a mentioned user' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
+					<c:forEach var="NE" items="${tweet.URL}">
+						<p>
+							<img src=<c:url value="resources/img/external1.png"/> class="icon_img"/>
+							<p title='${NE} is the URL' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
+					<c:forEach var="NE" items="${tweet.Hashtag}">
+					<p>
+						<img src=<c:url value="resources/img/internet60.png"/> class="icon_img"/>
+						<p title='${NE} is a hashtag' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
+					<c:forEach var="NE" items="${tweet.Organization}">
+					<p>
+							<img src=<c:url value="resources/img/factory6.png"/> class="icon_img"/>
+							<p title='${NE} is an organization' class="masterTooltip">${NE}</p><br>
+					</c:forEach>
+					
 
-<%
-	com.mongodb.MongoClient mongo;
-	try {
-		String query = "Taylor Swift";
-		mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-		MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
-	
-		TweetsIndexer indexer = new TweetsIndexer(mongoOps);
-		indexer.indexTweets();
-	
-		TweetsRetriver retriver = new TweetsRetriver(indexer.getIndex(), query);
-		retriver.runQuery();
-		ResultSet result = retriver.getResult();
-		
-		result.sort();
-		int[] resultDocnos = result.getDocids();
-		
-		out.println("Returned " + resultDocnos.length + " tweets: ");
-		
-		DBCursor cursor = mongoOps.getCollection("tweets").find();
-		cursor.next();
-		int j = 0;
-		for(int i = 0; i < resultDocnos.length; i++){
-			while(j != resultDocnos[i]){
-				cursor.next();
-				j++;
-			}
-			out.println(cursor.curr().get("text").toString());
-		}
-	}
-	catch (UnknownHostException e) {
-		e.printStackTrace();
-	}
-
-%>
+				</li>
+			</c:forEach>
+		</ul>
+	</div>
 </body>
 </html>

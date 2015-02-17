@@ -1,6 +1,23 @@
+<%@ include file="/WEB-INF/include.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>GMaps Demo</title>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
+<link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/base.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />"
+	rel="stylesheet">
 
-<script type="text/javascript" id="mapsJavaScript">
+</head>
+<body>
+<script type="text/javascript">
 	var styles = [ [ {
 		url : '<c:url value="/resources/img/maps/people35.png"/>',
 		height : 35,
@@ -89,7 +106,7 @@
 
 		
 		for (var i = 0; i < latitudes.length; ++i) {
-			//console.log("lat:" +latitudes[i]+ ",long:"+longitudes[i]);
+			console.log("lat:" +latitudes[i]+ ",long:"+longitudes[i]);
 			var latLng = new google.maps.LatLng(latitudes[i],
 					longitudes[i])
 			var marker = new google.maps.Marker({
@@ -100,11 +117,24 @@
 			markers.push(marker);
 		}
 
+		var zoom = parseInt(document.getElementById('zoom').value, 10);
+		var size = parseInt(document.getElementById('size').value, 10);
+		var style = parseInt(document.getElementById('style').value, 10);
+		zoom = zoom === -1 ? null : zoom;
+		size = size === -1 ? null : size;
+		style = style === -1 ? null : style;
+		
+		console.log("zoom:" + zoom);
+		console.log("size:" + size);
+		console.log("style:" + style);
+
 		markerClusterer = new MarkerClusterer(map, markers, {
-			maxZoom : null,
-			gridSize : null,
-			styles : styles[null]
+			maxZoom : zoom,
+			gridSize : size,
+			styles : styles[style]
 		});
+		
+		
 	}
 
 	function initialize() {
@@ -114,6 +144,12 @@
 			center : myCenter,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
+
+		var refresh = document.getElementById('refresh');
+		google.maps.event.addDomListener(refresh, 'click', refreshMap);
+
+		var clear = document.getElementById('clear');
+		google.maps.event.addDomListener(clear, 'click', clearClusters);
 
 		refreshMap();
 	}
@@ -126,9 +162,11 @@
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
-
-<div>
+<div class="mapHolder column">
+	<h3>Map</h3>
 	<div id="map-container">
 		<div id="map"></div>
 	</div>
 </div>
+</body>
+</html>

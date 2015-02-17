@@ -2,17 +2,18 @@
 <html>
 <head>
 <link href="<c:url value="/resources/css/base.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 
 
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-<script src = "https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 
+
+<script src = "https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 <title>Home</title>
 </head>
 <body>
@@ -39,7 +40,9 @@
 	
 		<div class="mapHolder column">
 			<h3>Map</h3>
-			<div id="map"></div>
+			<div id="map-container">
+				<div id="map"></div>
+			</div>
 		</div>
 		
 		<div class="main column">
@@ -94,7 +97,7 @@
 
 		function getMaps() {
 			$.ajax({
-				url : '/TeamBravo/maps/defaultMap/',
+				url : '/TeamBravo/maps/test',
 				success : function(data) {
 					$("#map").html(data);
 				}
