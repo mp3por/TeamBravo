@@ -234,15 +234,7 @@
 <body>
 
 
-	<div class="xTooltip">Hover me to see a tooltip</div>
-	<div class="NETest" style="visibility: hidden; display: inline;"
-		title="Edinburgh"></div>
-
-
-
-
-
-	<h1>Tweets Wall [Current]</h1>
+	<h1>Tweets Wall</h1>
 
 	<button type="button" onClick="window.location.reload();">Reload</button>
 
@@ -255,7 +247,7 @@
 				src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
 				class="avatar" /> <!-- Loop over the elements of the tweet --> <c:if
 					test="${tweet.containsKey('user')}">
-					<h3>${tweet.user.screen_name}</h3>
+					<p class="Username">${tweet.user.screen_name}</p>
 				</c:if> <c:if test="${tweet.containsKey('created_at')}">
 					<b>${fn:substringBefore(tweet.created_at,'+')}</b>
 				</c:if> <c:if test="${tweet.containsKey('text')}">
@@ -267,9 +259,8 @@
 					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
 
 					<div class="PersonTooltip" title=${NE}
-						style="visibility: hidden; display: inline;"> <!-- This class should hide the element, change it if needed -->
-					
-    						
+						style="visibility: hidden; display: none;"> <!-- This class should hide the element, change it if needed -->
+					    						
 							</div>
 					<br />
 
@@ -280,9 +271,7 @@
 					<div class="xTooltip" title=${NE}>
 						<a href="https://www.google.co.uk/maps/search/${NE}">${NE}</a>
 					</div>
-					<div class="LocationTooltip" title=${NE
-						} style="visibility: hidden; display: inline;"> <!-- This class should hide the element, change it if needed -->
-							</div>
+					<div class="LocationTooltip" title=${NE} style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.Organization}">
@@ -292,10 +281,7 @@
 					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
 
 					<div class="OrganizationTooltip" title=${NE}
-						style="visibility: hidden; display: inline;"> <!-- This class should hide the element, change it if needed -->
-					
-    						
-							</div>
+						style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.UserID}">
@@ -305,8 +291,7 @@
 						<a href="http://twitter.com/${NE}">${NE}</a>
 					</div>
 					<div class="UserIDTooltip" title=${NE
-						} style="visibility: hidden; display: inline;"> <!-- This class should hide the element, change it if needed -->
-							</div>
+						} style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.URL}">
@@ -316,8 +301,7 @@
 						<a href="${NE}">${NE}</a>
 					</div>
 					<div class="URLTooltip" title=${NE
-						} style="visibility: hidden; display: inline;"> <!-- This class should hide the element, change it if needed -->
-						</div>
+						} style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.Hashtag}">
@@ -329,8 +313,7 @@
 							${NE} </a>
 					</div>
 					<div class="HashtagTooltip" title=${NE
-						} style="visibility: hidden; display: inline;" />
-					<!-- This class should hide the element, change it if needed -->
+						} style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach></li>

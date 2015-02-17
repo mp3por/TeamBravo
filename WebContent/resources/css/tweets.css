@@ -17,6 +17,14 @@
  
 .avatar {
 	width: 100px;
+	float: left;
+	margin: 0 15px 0 0;
+}
+ 
+.username {
+	font-size: 2em;
+	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
+	
 }
  
 .tweet {
