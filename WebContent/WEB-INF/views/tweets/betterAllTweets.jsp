@@ -12,41 +12,15 @@
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.qtip.js" />"></script>
 
 <script type="text/javascript">
-			/* THIS DOES WORK */
-/*			title = "Glasgow";
-			var getImagess = function (title) {
-				$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=images&format=json&callback=?&limit=9", function (data) {
-					return data;
-			}
-				console.log(data);
-			})}*/
+
 			
 			function getWikiBox (title) {
+				var text = "hey"; 
 				text = getWiki(title);
-				console.log("This is returned:" +text);
+				//while (!text) {}
+				
 				return text;
-			}
-			
-			function getImages (title, count) {
-				images = getAllImages(title);
-				for (i = 0; i < images.length; i++) { 
-				 	console.log(images[i]);   
-				}
-			}
-			
-			function getWikiText (title) {
-				console.log(title);
-				return (title+"Blah");
-			}
-			
-			function getAllImages (title) {
-					//Get Leading paragraphs (section 0)
-					$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=images&format=json&callback=?&limit=9", function (data, error) {
-							array = data["parse"]["images"];
-							console.log (data);
-					        return data;
-					});
-				}			
+			};
 			
 			function getIntro (data) {
 				var t;
@@ -77,39 +51,37 @@
 			        }
 			        pText = pText.substring(0, pText.length - 2); //Remove extra newline
 			        pText = pText.replace(/\[\d+\]/g, ""); //Remove reference tags (e.x. [1], [4], etc)
-			        console.log("Returning \n" + pText);
 			        t = pText;
 			        
 			    }
 			    return t;
-			}
+			};
 			
-			function getWiki (callback, title) {
+			function getWiki (title) {
 				//Get Leading paragraphs (section 0)
 				var t = "";
 				
 				$.getJSON("http://en.wikipedia.org/w/api.php?action=parse&page=" + title + "&prop=text&section=0&format=json&callback=?", 
-				function (data, error) {
-					console.log(title);
-					console.log(data);
-					if (!data.parse) {
-						console.log("Not found - returning std message");
-				        t = "No additional information was found for "+title; 
-			    	} else {
-			    		t = getIntro(data);
-			    	}
-
+					function (data) {
+					console.log("Success for " + title);
+				})
+					.done(function(data) {
+					console.log("done");
+					t = getIntro(data);
+					console.log("returned" + t);
+				})
+					.fail (function() {
+					console.log("fail");
+					t = "No additional information was found for "+title;
+				})
+					.always (function() {
+					console.log("always");
+					return t;
 				});
-			    onAjaxSuccess: function() {
-			        callback();
-			    };
-			    console.log('Pass1');    
-
-				console.log ("TTTTTTTT: " + t);
-				console.log(t);
-				return t;
-				
-			}
+			};
+			
+			
+		
 			//x = getWiki("Glasgow");
 			//console.log(x);
 			//y = getImages("Glasgow");
@@ -178,13 +150,12 @@ $(document).ready(function()
 
 	    });
 	});
-	$(document).ready(function() {
 
 	$('.NETest').each(function () {
 		text = getWikiBox($(this).attr("title"));
 		console.log("For each: " + $(this).attr("title"));
-	    $(this).html("blah");
-	});
+		console.log(text);
+	    $(this).html("blah" + "\n" + text);
 	});	
 });
 </script>
