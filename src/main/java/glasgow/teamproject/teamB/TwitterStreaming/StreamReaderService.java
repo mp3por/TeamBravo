@@ -70,6 +70,7 @@ public class StreamReaderService {
 			@Override
 			public void onMessage(String rawString) {
 
+				
 				String tweet = manipulateTweetBeforeSaving(rawString);
 				tweetSaver.addTweet(tweet, projectProperties.TWEET_COLLECTION);
 

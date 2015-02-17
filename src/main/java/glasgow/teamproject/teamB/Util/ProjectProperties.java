@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectProperties {
 	
-	public final String DB_NAME = "tweetsTest";
+	public static final String DB_NAME = "tweetsTest";
 	
-	public final String TWEET_COLLECTION = "tweets";
+	public static final String TWEET_COLLECTION = "tweets";
 	
 	public final static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));
 	
