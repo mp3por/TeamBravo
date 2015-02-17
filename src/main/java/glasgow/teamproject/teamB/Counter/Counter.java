@@ -42,6 +42,7 @@ public class Counter {
 		USERID { public String toString() { return "UserID"; } },
 		URL { public String toString() { return "URL"; } },
 		LOCATION { public String toString() { return "Location"; } },
+		ALL { public String toString() { return "All"; } }
 	}
 
 	public enum TimePeriod { PASTDAY, PASTWEEK, PASTMONTH, ALLTIME }
@@ -145,8 +146,7 @@ public class Counter {
 		}
 		
 		DBObject query = QueryBuilder.start().put("_id.date").lessThanEquals(counterDateFormat.format(today.getTime())).greaterThan(counterDateFormat.format(end.getTime())).get();
-		//query.put("_id.date", new BasicDBObject("$lte", counterDateFormat.format(today.getTime())).append("$gte", counterDateFormat.format(today.getTime())));
-		
+
 		// create temporary collection for map-reduce
 		DBCollection temp = db.getCollection("temp");
 		DBCursor c = dailyCollection.find(query);
@@ -187,26 +187,34 @@ public class Counter {
 
 		List<EntityCountPair> l = new ArrayList<EntityCountPair>(numEntities);
 		
-		BasicDBObject query = new BasicDBObject();
-		query.put("value.type", field.toString());
-				
-		// TODO re-implement this part
+		Calendar end = Calendar.getInstance();
+		QueryBuilder queryStr = QueryBuilder.start();
+		DBCollection top;
 		if ( timePeriod.equals(TimePeriod.PASTDAY) ) {
-			DBCollection top = db.getCollection(DAILY_COLLECT_NAME);
-			query.put("_id.date", counterDateFormat.format(new Date()));
-			DBCursor cursor = top.find(query).sort(new BasicDBObject("value.count", -1)).limit(numEntities + 1);
-			int i = 0;
-			while( cursor.hasNext() && i < numEntities ) {
-				BasicDBObject obj = (BasicDBObject) cursor.next();
-				String tri = ((BasicDBObject) obj.get("_id")).getString("id");
-				if( tri.trim().length() <= 0 ) continue;
-				BasicDBObject value = (BasicDBObject) obj.get("value");
-				l.add(new EntityCountPair((String) tri, (Double) value.get("count")));
-			}
+			top = db.getCollection(DAILY_COLLECT_NAME);
+			queryStr = queryStr.put("_id.date").is(counterDateFormat.format(new Date()));
 		} else if ( timePeriod.equals(TimePeriod.PASTWEEK) ) {
-			
+			top = db.getCollection(WEEKLY_COLLECT_NAME);
+			end.add(Calendar.DATE, -7);
+			queryStr = queryStr.put("_id.date").lessThanEquals(counterDateFormat.format(new Date())).greaterThan(counterDateFormat.format(end.getTime()));
 		} else if ( timePeriod.equals(TimePeriod.PASTMONTH) ) {
-			
+			top = db.getCollection(MONTHLY_COLLECT_NAME);
+			end.add(Calendar.DATE, -30);
+			queryStr = queryStr.put("_id.date").lessThanEquals(counterDateFormat.format(new Date())).greaterThan(counterDateFormat.format(end.getTime()));
+		} else {
+			// TODO change to all time
+			top = db.getCollection(MONTHLY_COLLECT_NAME);
+		}
+		if( !field.equals(Field.ALL) ) queryStr.put("value.type").is(field.toString());
+		DBCursor cursor = top.find(queryStr.get()).sort(new BasicDBObject("value.count", -1)).limit(numEntities);
+		
+		int i = 0;
+		while( cursor.hasNext() && i < numEntities ) {
+			BasicDBObject obj = (BasicDBObject) cursor.next();
+			String tri = ((BasicDBObject) obj.get("_id")).getString("id");
+			if( tri.trim().length() <= 0 ) continue;
+			BasicDBObject value = (BasicDBObject) obj.get("value");
+			l.add(new EntityCountPair((String) tri, (Double) value.get("count")));
 		}
 		
 		return l;
