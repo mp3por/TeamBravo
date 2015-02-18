@@ -36,7 +36,11 @@ public interface TweetDAO {
 	
 	public BasicDBObject getNthEntry(String collectionName, int n);
 	
-	public ArrayList<HashMap<String, Object>> getTerrierResults(int[] resultsDocids);
+	public ArrayList<Tweet> getResultList(int[] resultsDocids);
+	
+	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids);
+	
+	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
 
 	//For Terrier
 	public Queue<String> getCollection(String string);

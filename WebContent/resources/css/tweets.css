@@ -8,33 +8,31 @@
 }
 
 .icon_img {
-	width: 20px;
+	width: 32px;
 	height: auto;
 	padding-left: 10px;
+	padding-right: 10px;
+	float: left;
 }
  
- .tooltip {
-	display:none;
-	position:absolute;
-	border:1px solid #333;
-	background-color:#161616;
-	border-radius:5px;
-	padding:10px;
-	color:#fff;
-	font-size:12px Arial;
-}
-
 .avatar {
 	width: 100px;
+	float: left;
+	margin: 0 15px 0 0;
 }
  
- 
+.username {
+	font-size: 2em;
+	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
+	
+}
  
 .tweet {
-  padding: 10px;
+  width: 60%;
   overflow: auto;
   border: dashed 1px blue;
-  margin: 15px;
+  margin-left: 5px;
+  margin-bottom: 15px;
   
 }
 
@@ -43,3 +41,40 @@
 	cursor: pointer;
 }
  
+ 
+.qtip-wiki{
+    max-width: 385px;
+}
+
+.qtip-wiki p{
+    margin: 0 0 6px;
+}
+
+.qtip-wiki h1{
+    font-size: 20px;
+    line-height: 1.1;
+    margin: 0 0 5px;
+}
+
+.qtip-wiki img{
+    float: left;
+    margin: 10px 10px 10px 0;
+}
+
+.qtip-wiki .info{
+    overflow: hidden;
+}
+
+.qtip-wiki p.note{
+    font-weight: 700;
+} 
+
+
+
+.qtip-content {
+	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 2em;
+	line-height: 2em;
+	color: #000000;
+}
