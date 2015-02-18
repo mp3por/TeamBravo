@@ -4,7 +4,6 @@ import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
 import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -17,14 +16,15 @@ public class CounterController {
 	@RequestMapping("/test")
 	public ModelAndView getCount(){
 		
-		Date date = new Date();
+		Calendar today = Calendar.getInstance();
+		today.add(Calendar.DATE,  -2);
 		Calendar end = Calendar.getInstance();
 		end.add(Calendar.DATE, -1);
 		Counter c = new Counter();
-		c.dailyMapReduce(date);
-		c.dailyMapReduce(end.getTime());
-		end.add(Calendar.DATE, -2);
-		c.dailyMapReduce(end.getTime());
+		c.dailyMapReduce(today.getTime());
+//		c.dailyMapReduce(end.getTime());
+//		end.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(end.getTime());
 		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
 		
 		StringBuilder sb = new StringBuilder();
