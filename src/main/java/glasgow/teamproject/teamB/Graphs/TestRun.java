@@ -28,18 +28,6 @@ public class TestRun {
 	private static MongoOperations mongoOps;
 	private static final int NUMBEROFTOPICS = 6;
 	
-	//Sets up client and mongo operations objects
-	private static void setUpDBInfo(){
-		try{
-			MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-			mongoOps = new MongoTemplate(mongo, DB_NAME);
-			tweetdao = new TweetDAOImpl(mongoOps);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
 	public static void main(String[] args){
 		
 		/*setUpDBInfo();
@@ -68,9 +56,9 @@ public class TestRun {
 		c.dailyMapReduce(end.getTime());
 		end.add(Calendar.DATE, -2);
 		c.dailyMapReduce(end.getTime());
-		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
+		c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
 		
-		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTWEEK, 10);
+		List<EntityCountPair> l = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
 		
 		for( EntityCountPair e : l ) {
 			System.out.println(e.getID() + " : " +  e.getCount().intValue());

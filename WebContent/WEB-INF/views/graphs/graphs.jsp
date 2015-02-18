@@ -11,13 +11,9 @@
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-<script
-	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
-
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script
-	src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
 
@@ -67,7 +63,7 @@
 
 		<div class="main column">
 			<h3>Top Hash Tags</h3>
-			<div id="topHashTags"></div>
+			<div id="wordCloud"></div>
 		</div>
 
 	</div>
@@ -83,18 +79,29 @@
 		extract();
 
 		function extract() {
+			graphInit();
 			getTopicsForWeek();
 			getTopicsForMonth();
 			getSearchBox();
 			getPieChart();
-			//getHashTags();
+			getWordCloud();
 		}
 		;
+		
+		function graphInit() {
+			$.ajax({
+				url : '/TeamBravo/graphs/graphInit',
+				async : false, //Quick fix, remove later
+				success : function(data) {
+					console.log("Graphs Initialised");
+				}
+			});
+		}
 
 		function getTopicsForWeek() {
 			$.ajax({
 				url : '/TeamBravo/graphs/graphWeek',
-				async : false, //Quick fix, remove later
+				//async : false, //Quick fix, remove later
 				success : function(data) {
 					$("#graphWeek").html(data);
 				}
@@ -104,7 +111,7 @@
 		function getTopicsForMonth() {
 			$.ajax({
 				url : '/TeamBravo/graphs/graphMonth',
-				async : false, //Quick fix remove later
+				//async : false, //Quick fix remove later
 				success : function(data) {
 					$("#graphMonth").html(data);
 				}
@@ -114,7 +121,7 @@
 		function getPieChart() {
 			$.ajax({
 				url : '/TeamBravo/graphs/pieChart',
-				async: false, //Quick fix remove later
+				//async: false, //Quick fix remove later
 				success : function(data) {
 					$("#chart").html(data);
 				}
@@ -130,12 +137,12 @@
 			});
 		}
 		
-		function getHashTags() {
+		function getWordCloud() {
 			$.ajax({
-				url : '/TeamBravo/graphs/hashTags',
-				async: false, //Quick fix remove later
+				url : '/TeamBravo/graphs/wordCloud',
+				//async: false, //Quick fix remove later
 				success : function(data) {
-					$("#topHashTags").html(data);
+					$("#wordCloud").html(data);
 				}
 			});
 		}

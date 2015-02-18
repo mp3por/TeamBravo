@@ -1,14 +1,14 @@
 <%@ include file="/WEB-INF/include.jsp"%>
 
 <script>
- var frequency_list = ${tweetsForPie};
+ var pieTweets = ${tweetsForPie};
  //console.log(frequency_list);
  var chart = c3.generate({
 	    data: {
 	        columns: [
-	            [frequency_list[0].Topic, frequency_list[0].Tweets],
-	            [frequency_list[1].Topic, frequency_list[1].Tweets],
-	            [frequency_list[2].Topic, frequency_list[2].Tweets],
+	            [pieTweets[0].Topic, pieTweets[0].Tweets],
+	            [pieTweets[1].Topic, pieTweets[1].Tweets],
+	            [pieTweets[2].Topic, pieTweets[2].Tweets],
 	        ],
 	        type : 'pie',
 	    },

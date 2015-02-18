@@ -1,96 +1,67 @@
 package glasgow.teamproject.teamB.Graphs;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.ListIterator;
 
 import glasgow.teamproject.teamB.Counter.Counter;
 import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
 import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.data.convert.EntityConverter;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mongodb.MongoClient;
-
-
 @Controller
 public class GraphsController {
-
-	/*
-	 * Database info - This code may need moved to DAO
-	 
-	private final String DB_NAME = "tweetsTest";
-	private final String TWEETS_COLLECTION = "tweets"; //table
-	private final String MONGO_HOST = "localhost";
-	private final int MONGO_PORT = 27017;
-	private TweetDAO tweetdao;
-	private MongoOperations mongoOps;
 	
-	//Sets up client and mongo operations objects
-	private void setUpDBInfo(){
-		try{
-			MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-			mongoOps = new MongoTemplate(mongo, DB_NAME);
-			tweetdao = new TweetDAOImpl(mongoOps);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}*/
+	private Calendar today;
+	private Calendar end;
+	private Counter c;
 	
-	/*
-	 * Wordcloud for main/Home
-	 * 
-	private JSONArray getTopicsForWordCloud(){
-		//Get list of top 8 topics from the "Topics_Week" table
-		List<TopicWrapper> topics = tweetdao.getHotTopics(10, "Name", "Tweets", "Topics_Week");
-		System.out.println("Topics in graph controller:" + topics);
-		//Build a frequency list of the top eight topics
-		//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
-		JSONArray frequencyList = new JSONArray();
-		//For every topic in topic list
-		for(TopicWrapper topic : topics){
-			//Create a new JSON Object
-			JSONObject hotTopic = new JSONObject();
-			try {
-				//Put the topic's values into the JSON Object
-				hotTopic.put("Name", topic.getTopic());
-				hotTopic.put("Tweets", topic.getNoOfTweets());
-				//Add the object to the frequency list
-				frequencyList.put(hotTopic);
-			} catch (JSONException e) {
-				System.err.print("Exception: GraphsController.getTopicsForWordCloud - JSONObject.put()");
-			}
-		}
-		JSONArray hashedFrequencyList = WordCloudHash.gethashedFrequencies(frequencyList);
-		System.out.println("JSON ARRAY of hashed frequency list in graphs controller: " + hashedFrequencyList.toString());
-		return hashedFrequencyList;
-	}*/
+	@RequestMapping("/graphInit")
+	public void graphInit(){
+		//Map reduce week
+		today = Calendar.getInstance();
+		today.add(Calendar.DATE, -1);
+		end = Calendar.getInstance();
+		end.add(Calendar.DATE, -2);
+		c = new Counter();
+		c.dailyMapReduce(today.getTime());
+		c.dailyMapReduce(end.getTime());
+		end.add(Calendar.DATE, -2);
+		c.dailyMapReduce(end.getTime());
+		c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
+	}
 
+	public JSONArray getTopicsForWordCloud(){
+		
+		JSONArray unhashedTopics = new JSONArray();
+		//Get top 10 topics for the past week
+		List<EntityCountPair> topTopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
+		
+		for(EntityCountPair e: topTopicsPastWeek){
+			JSONObject topic = new JSONObject();
+			String topicDirty = e.getID().replace("[", "");
+			String topicClean = topicDirty.replace("]", "");
+			topic.put("Name", topicClean);
+			topic.put("Tweets", e.getCount().intValue());
+			unhashedTopics.put(topic);
+		}
+		
+		 return WordCloudHash.gethashedFrequencies(unhashedTopics);
+	}
 	
 	//Get Word Cloud JSP
 	@RequestMapping("/wordCloud")
 	public ModelAndView getWordCloud(){
-		//setUpDBInfo();
-		//JSONArray frequencyList = getTopicsForWordCloud();
-		
-		//Instantiate Counter and call getTopicsForWordPie(10);////////////////////////
+		JSONArray frequencyList = getTopicsForWordCloud();
 		ModelAndView model = new ModelAndView("WordCloud");
-		//model.addObject("frequencyList", frequencyList);
+		model.addObject("wordCloudList", frequencyList);
 		return model;
 	}
 	
@@ -100,21 +71,7 @@ public class GraphsController {
 	 * */
 	public JSONArray getGraphWeekData(){
 
-		//Map reduce week
-		//Date date = new Date();
-		Calendar today = Calendar.getInstance();
-		today.add(Calendar.DATE, -1);
-		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, -2);
-		Counter c = new Counter();
-		c.dailyMapReduce(today.getTime());
-		c.dailyMapReduce(end.getTime());
-		end.add(Calendar.DATE, -2);
-		c.dailyMapReduce(end.getTime());
-		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
-		
 		JSONArray tweetsForWeek = new JSONArray();
-		
 		//Get top 3 topics for the past week
 		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 8);
 		
@@ -184,22 +141,7 @@ public class GraphsController {
 	 * past month
 	 * */
 	public JSONArray getGraphMonthData(){
-		
-		
-		//Map reduce week
-		//Date date = new Date();
-		Calendar today = Calendar.getInstance();
-		today.add(Calendar.DATE, -1);
-		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, -2);
-		Counter c = new Counter();
-		c.dailyMapReduce(today.getTime());
-		c.dailyMapReduce(end.getTime());
-		end.add(Calendar.DATE, -2);
-		c.dailyMapReduce(end.getTime());
-		c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
-		
-		
+
 		JSONArray tweetsForMonth = new JSONArray();
 		//Get top 3 topics for the past week
 		List<EntityCountPair> top3TopicsPastMonth = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 8);
@@ -266,22 +208,8 @@ public class GraphsController {
 	}
 	
 	public JSONArray getPieChartData(){
-		
-		//Map reduce week
-		//Date date = new Date();
-		Calendar today = Calendar.getInstance();
-		today.add(Calendar.DATE, -1);
-		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, -2);
-		Counter c = new Counter();
-		c.dailyMapReduce(today.getTime());
-		c.dailyMapReduce(end.getTime());
-		end.add(Calendar.DATE, -2);
-		c.dailyMapReduce(end.getTime());
-		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
-		
+
 		JSONArray tweetsForPie = new JSONArray();
-		
 		//Get top 3 topics for the past week
 		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
 		
@@ -324,19 +252,6 @@ public class GraphsController {
 	
 	
 	public JSONArray getHashData(){
-		
-		//Map reduce week
-		//Date date = new Date();
-		Calendar today = Calendar.getInstance();
-		today.add(Calendar.DATE, -1);
-		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, -2);
-		Counter c = new Counter();
-		c.dailyMapReduce(today.getTime());
-		c.dailyMapReduce(end.getTime());
-		end.add(Calendar.DATE, -2);
-		c.dailyMapReduce(end.getTime());
-		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
 		
 		JSONArray hashTags = new JSONArray();
 		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTWEEK, 10);
