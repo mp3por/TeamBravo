@@ -5,7 +5,7 @@
   <title>Terrier Search</title>
 </head>
 <body>
-<h2>Please enter your query.</h2>
+
 </body>
 
 <form method="get" target="_blank" action="http://localhost:8080/TeamBravo/search/terrier" accept-charset="UTF-8" 

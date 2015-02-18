@@ -6,16 +6,21 @@
 
 <%@include file="Terrier.jsp" %>
 
+<form method="get" target="_blank" action= "${requestScope['javax.servlet.forward.request_uri']}/rank" 
+      onsubmit="window.open(${requestScope['javax.servlet.forward.request_uri']} + '/rank', '_self'); return false;">
+    <input type="submit" value="Rank by retweeted count" style="vertical-align: bottom; cursor: pointer; font-size: 11px;"/>
+</form>
+
+
 <head>
 <link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
 
 </head>
 <body>
-	<h1>Terrier Search Results</h1>
-
+	    Search returned ${count} tweets.
+	    
 		<ul>
 			<!-- Loop over the tweets  -->
-
 			<c:forEach var="tweet" items="${tweets}">
 				
 				<li class="tweet">
@@ -29,57 +34,13 @@
 					</c:if>
 					<c:if test="${tweet.containsKey('text')}">
 						<p>${tweet.text}</p>
-					</c:if>					
-					
-					<c:if test="${not empty tweet.Person}">
-					<c:forEach var="NE" items="${tweet.Person}">
-						<p>
-							<img src=<c:url value="resources/img/user91.png"/> class="icon_img"/>
-							<p title='${NE} is a person' class="masterTooltip">${NE}</p><br>
-						
-					</c:forEach>
 					</c:if>
-					
-					<c:forEach var="NE" items="${tweet.Location}">
-					<p>
-						<img src=<c:url value="resources/img/world90.png"/> class="icon_img"/>
-							<p title='${NE} is a location' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-					<c:forEach var="NE" items="${tweet.Emoticon}">
-					<p>
-						<img src=<c:url value="resources/img/smiling36.png"/> class="icon_img"/>
-							<p title='${NE} is an emoticon' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-					<c:forEach var="NE" items="${tweet.UserID}">
-						<p>
-							<img src=<c:url value="resources/img/at2.png"/> class="icon_img"/>
-							<p title='${NE} is a mentioned user' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-					<c:forEach var="NE" items="${tweet.URL}">
-						<p>
-							<img src=<c:url value="resources/img/external1.png"/> class="icon_img"/>
-							<p title='${NE} is the URL' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-					<c:forEach var="NE" items="${tweet.Hashtag}">
-					<p>
-						<img src=<c:url value="resources/img/internet60.png"/> class="icon_img"/>
-						<p title='${NE} is a hashtag' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-					<c:forEach var="NE" items="${tweet.Organization}">
-					<p>
-							<img src=<c:url value="resources/img/factory6.png"/> class="icon_img"/>
-							<p title='${NE} is an organization' class="masterTooltip">${NE}</p><br>
-					</c:forEach>
-					
-
+					<c:if test="${tweet.containsKey('retweet_count')}">
+						<p>Retweeted Count: ${tweet.retweet_count}</p>
+					</c:if>										
 				</li>
+				
 			</c:forEach>
 		</ul>
-	</div>
 </body>
 </html>

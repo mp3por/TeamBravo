@@ -10,12 +10,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.ArrayBlockingQueue;
-
 import java.util.PriorityQueue;
 import java.util.Queue;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -201,13 +198,36 @@ public class TweetDAOImpl implements TweetDAO {
 		foo.skip(n + 1);
 		return (BasicDBObject) foo.next();
 	}
-
+	
 	@Override
-	public ArrayList<HashMap<String, Object>> getTerrierResults(int[] resultsDocids) {
-		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
+	public ArrayList<Tweet> getResultList(int[] resultsDocids) {
+		ArrayList<Tweet> list = new ArrayList<>();
 		BasicDBObject currentObj;
 		for (int i = 0; i < resultsDocids.length; i++){
 			currentObj = getNthEntry("tweets", resultsDocids[i]);
+			list.add(new Tweet(currentObj));
+		}
+		return list;
+	}
+
+	@Override
+	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids) {
+		ArrayList<Tweet> list = new ArrayList<>();
+		BasicDBObject currentObj;
+		for (int i = 0; i < resultsDocids.length; i++){
+			currentObj = getNthEntry("tweets", resultsDocids[i]);
+			list.add(new Tweet(currentObj));
+		}
+		list.sort(Tweet.RetweetCountComparator);
+		return list;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets) {
+		ArrayList<HashMap<String,Object>> results = new ArrayList<>(); 
+		BasicDBObject currentObj;
+		for (int i = 0; i < tweets.size(); i++){
+			currentObj = tweets.get(i).getTweet();
 			HashMap<String, Object> tweet = new HashMap<>();
 			for (String key: currentObj.keySet()) {
 				if (ProjectProperties.defaultNE.contains(key)) {
@@ -231,21 +251,21 @@ public class TweetDAOImpl implements TweetDAO {
 					tweet.put(key, currentObj.get(key));
 				}
 			}
-			tweets.add(tweet);
+			results.add(tweet);
 		}
-		return tweets;
+		return results;
 	}	
 
 	@Override
 	public Queue<String> getCollection(String string) {
 		List<String> o = this.mongoOps.find(new Query(), String.class);
-		
-		System.out.println("OMGOMGOMGOM: " + o.size());
 		Queue<String> j = new PriorityQueue<String>();
 		for (String p : o){
 			j.add(p);
 		}
 		return j;
 	}
+
+	
 
 }

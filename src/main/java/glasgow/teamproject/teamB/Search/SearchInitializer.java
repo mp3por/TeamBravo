@@ -15,6 +15,7 @@ public class SearchInitializer {
 		String query = "Labour";
 		// To be configured
 		ApplicationSetup.setProperty("stopwords.filename", System.getProperty("user.dir") + "/stopword-list.txt");
+		System.out.println(System.getProperty("user.dir"));
 		
 		
 			
