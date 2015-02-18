@@ -30,17 +30,6 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
-	/*
-	//For word cloud
-	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
-
-<<<<<<< HEAD
-	public JSONArray getSpecificTopicWeek(String collectionName);
-	
-	public JSONArray getSpecificTopicYear(String collectionName);
-	*/
-
-=======
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
@@ -49,12 +38,6 @@ public interface TweetDAO {
 	
 	public ArrayList<HashMap<String, Object>> getTerrierResults(int[] resultsDocids);
 
-
-	
-	
-	
-	
 	//For Terrier
 	public Queue<String> getCollection(String string);
->>>>>>> master
 }

@@ -11,16 +11,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
+
 import org.json.JSONArray;
-=======
+
 import java.util.concurrent.ArrayBlockingQueue;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 
->>>>>>> master
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -204,8 +204,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return tweetsForYear;
 	}*/
 	
-	
-=======
+
 	// For Terrier indexing
 	@Override
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
@@ -273,6 +272,4 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return j;
 	}
-
->>>>>>> master
 }

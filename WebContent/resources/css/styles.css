@@ -177,8 +177,6 @@ header {
 	-moz-transition: all 0.7s ease 0s;
 	-o-transition: all 0.7s ease 0s;
 	transition: all 0.7s ease 0s;
-	
-
 }
 
 /*#search input[type="text"]:focus {
@@ -197,6 +195,7 @@ header {
     float:left;
     margin-left: 2.5%;
 	margin-right: 2.5%;
+	margin-top: 2.5%;
     /*Add height in here if you want to keep all the heights of the columns the same*/
     /*height:300px;*/
     

@@ -32,7 +32,7 @@ public class Counter {
 	public static final String WEEKLY_COLLECT_NAME = "WCNT";
 	public static final String MONTHLY_COLLECT_NAME = "MCNT";
 	
-	private static final String COUNTER_DATE_FORMAT = "yyyyMMdd";
+	private static final String COUNTER_DATE_FORMAT = "yyyy-MM-dd";
 	private DateFormat counterDateFormat;
 	
 	public enum Field {
@@ -122,6 +122,15 @@ public class Counter {
 		// delete the temporary collection
 		temp.drop();
 	}
+	
+	
+
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * This method is called once a day to calculate trends for the past week/month
