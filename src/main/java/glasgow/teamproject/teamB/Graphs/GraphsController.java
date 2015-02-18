@@ -73,14 +73,14 @@ public class GraphsController {
 
 		JSONArray tweetsForWeek = new JSONArray();
 		//Get top 3 topics for the past week
-		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 8);
+		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
 		
 		//Clean up the strings removing "[" and "]" characters and disregard first 3 values [get 3,4,7]
 		String topic1 = top3TopicsPastWeek.get(4).getID().replace("[", "");
 		String topic1Clean = topic1.replace("]", "");
-		String topic2 = top3TopicsPastWeek.get(5).getID().replace("[", "");
+		String topic2 = top3TopicsPastWeek.get(7).getID().replace("[", "");
 		String topic2Clean = topic2.replace("]", "");
-		String topic3 = top3TopicsPastWeek.get(6).getID().replace("[", "");
+		String topic3 = top3TopicsPastWeek.get(9).getID().replace("[", "");
 		String topic3Clean = topic3.replace("]", "");
 		
 		//Get lists of past week number of tweets for each topic)
@@ -144,14 +144,14 @@ public class GraphsController {
 
 		JSONArray tweetsForMonth = new JSONArray();
 		//Get top 3 topics for the past week
-		List<EntityCountPair> top3TopicsPastMonth = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 8);
+		List<EntityCountPair> top3TopicsPastMonth = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 10);
 		
 		//Clean up the strings removing "[" and "]" characters and disregard first 3 values
 		String topic1 = top3TopicsPastMonth.get(4).getID().replace("[", "");
 		String topic1Clean = topic1.replace("]", "");
-		String topic2 = top3TopicsPastMonth.get(5).getID().replace("[", "");
+		String topic2 = top3TopicsPastMonth.get(7).getID().replace("[", "");
 		String topic2Clean = topic2.replace("]", "");
-		String topic3 = top3TopicsPastMonth.get(6).getID().replace("[", "");
+		String topic3 = top3TopicsPastMonth.get(9).getID().replace("[", "");
 		String topic3Clean = topic3.replace("]", "");
 		
 		//Get lists of past month number of tweets for each topic)
@@ -216,9 +216,9 @@ public class GraphsController {
 		//Clean up the strings removing "[" and "]" characters and disregard first 3 values
 		String topic1 = top3TopicsPastWeek.get(4).getID().replace("[", "");
 		String topic1Clean = topic1.replace("]", "");
-		String topic2 = top3TopicsPastWeek.get(5).getID().replace("[", "");
+		String topic2 = top3TopicsPastWeek.get(7).getID().replace("[", "");
 		String topic2Clean = topic2.replace("]", "");
-		String topic3 = top3TopicsPastWeek.get(6).getID().replace("[", "");
+		String topic3 = top3TopicsPastWeek.get(9).getID().replace("[", "");
 		String topic3Clean = topic3.replace("]", "");
 		
 		JSONObject top1 = new JSONObject();
