@@ -4,10 +4,12 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -92,10 +94,11 @@ public class Counter {
 			map += "var entity" + i + " = this." + field.toString() + ";"
 					+ "if( entity" + i + " ) {"
 						+ "entity" + i + " = entity" + i + ".toString().toLowerCase()"
-						+ (field.toString() == Field.PERSON.toString() ? ".replace(/[^a-zA-Z]/g, ' ')" : "")
-						+ ".split(\",\");"
+						+ ".split(\",\"); "
 						+ "for ( var i = entity" + i + ".length - 1; i >= 0; --i) {"
-								+ "if ( entity" + i + "[i] && entity" + i + "[i].trim().length > 0) { "
+								+ "entity" + i + "[i] = entity" + i + "[i]" + ( (field.toString() == Field.PERSON.toString() ? ".replace(/[^a-zA-Z]/g, ' ');" : 
+									( field.toString() != Field.URL.toString() ? ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\",.<>\\{\\}\\[\\]\\\\/]/gi, '');" : ";")))
+								+ "if ( entity" + i + "[i] && entity" + i + "[i].trim().length > 0 && entity" + i + "[i] != '[]') { "
 										+ "var values = { type: \"" + field.toString() + "\", "
 														+ "count: 1 };"
 										+ "emit( { id: entity" + i + "[i].trim(), date: \"" + counterDateFormat.format(date) + "\"}, values);"
@@ -199,6 +202,7 @@ public class Counter {
 		Calendar end = Calendar.getInstance();
 		QueryBuilder queryStr = QueryBuilder.start();
 		DBCollection top;
+		DBObject query;
 		if ( timePeriod.equals(TimePeriod.PASTDAY) ) {
 			top = db.getCollection(DAILY_COLLECT_NAME);
 			queryStr = queryStr.put("_id.date").is(counterDateFormat.format(new Date()));
@@ -214,16 +218,49 @@ public class Counter {
 			// TODO change to all time
 			top = db.getCollection(MONTHLY_COLLECT_NAME);
 		}
-		if( !field.equals(Field.ALL) ) queryStr.put("value.type").is(field.toString());
-		DBCursor cursor = top.find(queryStr.get()).sort(new BasicDBObject("value.count", -1)).limit(numEntities);
-		
-		int i = 0;
-		while( cursor.hasNext() && i < numEntities ) {
-			BasicDBObject obj = (BasicDBObject) cursor.next();
-			String tri = ((BasicDBObject) obj.get("_id")).getString("id");
-			if( tri.trim().length() <= 0 ) continue;
-			BasicDBObject value = (BasicDBObject) obj.get("value");
-			l.add(new EntityCountPair((String) tri, (Double) value.get("count")));
+		if( !field.equals(Field.ALL) ) { 
+			queryStr.put("value.type").is(field.toString());
+			query = queryStr.get();
+			
+			DBCursor cursor = top.find(query).sort(new BasicDBObject("value.count", -1)).limit(numEntities);
+			
+			int i = 0;
+			while( cursor.hasNext() && i < numEntities ) {
+				BasicDBObject obj = (BasicDBObject) cursor.next();
+				String tri = ((BasicDBObject) obj.get("_id")).getString("id");
+				if( tri.trim().length() <= 0 ) continue;
+				BasicDBObject value = (BasicDBObject) obj.get("value");
+				l.add(new EntityCountPair((String) tri, (Double) value.get("count")));
+			}
+		} else {
+			
+			// create pipeline operations, first with the $match
+			DBObject match = new BasicDBObject("$match",queryStr.get());
+			
+			// build the $projection operation
+			DBObject fields = new BasicDBObject("_id.id", 1);
+			fields.put("value.count", 1);
+			DBObject project = new BasicDBObject("$project", fields );
+			
+			// the $group operation
+			DBObject groupFields = new BasicDBObject( "_id", "$_id.id");
+			groupFields.put("sum", new BasicDBObject( "$sum", "$value.count"));
+			DBObject group = new BasicDBObject("$group", groupFields);
+			
+			// Finally the $sort operation
+			DBObject sort = new BasicDBObject("$sort", new BasicDBObject("sum", -1));
+			
+			List<DBObject> pipeline = Arrays.asList(match, project, group, sort);
+			AggregationOutput output = top.aggregate(pipeline);
+			
+			int numAdded = 0;
+			for (DBObject result : output.results()) {
+				String tri = (String) result.get("_id");
+				Double d = (Double) result.get("sum");
+				if( tri.trim().length() <= 0 ) continue;
+				l.add(new EntityCountPair( tri, d));
+				if( ++numAdded > numEntities ) break;
+			}
 		}
 		
 		return l;
