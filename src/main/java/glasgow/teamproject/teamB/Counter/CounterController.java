@@ -16,15 +16,14 @@ public class CounterController {
 	@RequestMapping("/test")
 	public ModelAndView getCount(){
 		
-		Calendar today = Calendar.getInstance();
-		today.add(Calendar.DATE,  -2);
-		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, -1);
 		Counter c = new Counter();
+		Calendar today = Calendar.getInstance();
 		c.dailyMapReduce(today.getTime());
-//		c.dailyMapReduce(end.getTime());
-//		end.add(Calendar.DATE, -1);
-//		c.dailyMapReduce(end.getTime());
+		today.add(Calendar.DATE,  -2);
+		c.dailyMapReduce(today.getTime());
+		today.add(Calendar.DATE,  -2);
+		c.dailyMapReduce(today.getTime());
+
 		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
 		
 		StringBuilder sb = new StringBuilder();

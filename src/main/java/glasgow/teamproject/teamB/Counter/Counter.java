@@ -96,8 +96,9 @@ public class Counter {
 						+ "entity" + i + " = entity" + i + ".toString().toLowerCase()"
 						+ ".split(\",\"); "
 						+ "for ( var i = entity" + i + ".length - 1; i >= 0; --i) {"
-								+ "entity" + i + "[i] = entity" + i + "[i]" + ( (field.toString() == Field.PERSON.toString() ? ".replace(/[^a-zA-Z]/g, ' ');" : ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\",.<>\\{\\}\\[\\]\\\\/]/gi, '');"))
-								+ "if ( entity" + i + "[i] && entity" + i + "[i].trim().length > 0) { "
+								+ "entity" + i + "[i] = entity" + i + "[i]" + ( (field.toString() == Field.PERSON.toString() ? ".replace(/[^a-zA-Z]/g, ' ');" : 
+									( field.toString() != Field.URL.toString() ? ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\",.<>\\{\\}\\[\\]\\\\/]/gi, '');" : ";")))
+								+ "if ( entity" + i + "[i] && entity" + i + "[i].trim().length > 0 && entity" + i + "[i] != '[]') { "
 										+ "var values = { type: \"" + field.toString() + "\", "
 														+ "count: 1 };"
 										+ "emit( { id: entity" + i + "[i].trim(), date: \"" + counterDateFormat.format(date) + "\"}, values);"
@@ -238,7 +239,7 @@ public class Counter {
 			DBObject group = new BasicDBObject("$group", groupFields);
 			
 			// Finally the $sort operation
-			DBObject sort = new BasicDBObject("$sort", new BasicDBObject("value.count", -1));
+			DBObject sort = new BasicDBObject("$sort", new BasicDBObject("sum", -1));
 			
 			List<DBObject> pipeline = Arrays.asList(match, project, group, sort);
 			AggregationOutput output = top.aggregate(pipeline);
