@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600);
+
 /*-- Chart --*/
 
 .c3 svg {
@@ -138,6 +140,7 @@
 
 .c3-legend-item {
   font-size: 12px;
+  fill: #FFFFFF;
 }
 .c3-legend-item-hidden {
   opacity: 0.15;
@@ -177,6 +180,7 @@
 }
 .c3-tooltip td {
   font-size:13px;
+  font-family: "Exo 2";
   padding: 3px 6px;
   background-color:#fff;
   border-left:1px dotted #999;

@@ -9,7 +9,6 @@
 
 
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
@@ -43,12 +42,12 @@
 	<div class="row cf">
 
 		<div class="main column">
-			<h3>Hot Topic Trends Over Past Week</h3>
+			<h3>Hot Topics: Past Week</h3>
 			<div id="graphWeek"></div>
 		</div>
 
 		<div class="main column">
-			<h3>Hot Topic Trends Over Past Month</h3>
+			<h3>Hot Topics: Past Month</h3>
 			<div id="graphMonth"></div>
 		</div>
 
@@ -57,12 +56,12 @@
 	<div class="row cf">
 
 		<div class="main column">
-			<h3>This Weeks Hot Topics</h3>
+			<h3>Hot Topics By Percentage</h3>
 			<div id="chart"></div>
 		</div>
 
 		<div class="main column">
-			<h3>Top Hash Tags</h3>
+			<h3>Top Mentions</h3>
 			<div id="wordCloud"></div>
 		</div>
 

@@ -12,6 +12,9 @@
 	        ],
 	        type : 'pie',
 	    },
+	    legend: {
+	    	  position: 'bottom'
+	    },
 		color: {
 			pattern: ['#C01E11', '#92B710', '#134C7C']
 	    }
