@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Graphs;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -11,7 +12,6 @@ import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -205,7 +205,7 @@ public class GraphsController {
 		mv.addObject("tweetsForMonth", tweetsForMonth);
 		return mv;
 	}
-	
+
 	public JSONArray getPieChartData(){
 
 		JSONArray tweetsForPie = new JSONArray();
@@ -244,52 +244,10 @@ public class GraphsController {
 	@RequestMapping("/pieChart")
 	public ModelAndView getPieChart(){
 		JSONArray tweetsForPie = getPieChartData();
-		ModelAndView mv = new ModelAndView("pieChart");
+		ModelAndView mv = new ModelAndView("PieChart");
 		mv.addObject("tweetsForPie", tweetsForPie);
 		return mv;
 	}
-	
-	
-	public JSONArray getHashData(){
-		
-		JSONArray hashTags = new JSONArray();
-		List<EntityCountPair> l = c.getTopEntities(Counter.Field.HASHTAG, Counter.TimePeriod.PASTWEEK, 10);
-		
-		for(EntityCountPair e : l){
-			JSONObject hashtag = new JSONObject();
-			String hash = e.getID().replace("[", "");
-			String hashClean = hash.replace("]", "");
-			hashtag.put("hashTag", hashClean);
-			hashTags.put(hash);
-		}
-
-		return hashTags;
-	}
-	
-	//Get Hash Tags
-	@RequestMapping("/hashTags")
-	public ModelAndView getHashTags(){
-		JSONArray hashTags = getHashData();
-		ModelAndView mv = new ModelAndView("hashTags");
-		mv.addObject("hashTags", hashTags);
-		return mv;
-	}
-	
-
-	//Get All graphs
-	@RequestMapping("/allGraphs")
-	public ModelAndView getAllGraphs(){
-		ModelAndView mv = new ModelAndView("graphs");
-		return mv;
-	}
-	
-	//Testing pathVariable
-	@RequestMapping("/allGraphs/{timeScale}")
-	public void getGraphTime(@PathVariable String timeScale){
-		ModelAndView mv = new ModelAndView();
-		System.out.println(timeScale);
-	}
-	
 	
 	
 	

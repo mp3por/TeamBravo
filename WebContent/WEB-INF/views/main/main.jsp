@@ -100,15 +100,14 @@
 		extract();
 
 		function extract() {
-			//graphInit();
-			//getTweetWall();
-			//getMaps();
+			graphInit();
+			getTweetWall();
+			getMaps();
 			getSearchBox();
-			//getTopicsForWeek();
-			//getTopicsForMonth();
-			//getPieChart();
-			//getWordCloud();
-			test();
+			getTopicsForWeek();
+			getTopicsForMonth();
+			getPieChart();
+			getWordCloud();
 		}
 		;
 		
@@ -176,18 +175,6 @@
 			});
 		}
 		
-		function test() {
-			$.ajax({
-				url : '/allGraphs/WEEK',
-				success : function(data) {
-					$("").html(data);
-				}
-			});
-		}
-		
-		
-		
-
 		function getWordCloud() {
 			$.ajax({
 				url : '/TeamBravo/graphs/wordCloud',

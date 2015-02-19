@@ -4,13 +4,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class WordCloudHash {
-	
+
 	private static JSONArray hashedFrequencies;
-	
+
 	public static JSONArray gethashedFrequencies(JSONArray frequencyList){
-		
-		
+
+
 		hashedFrequencies = new JSONArray();
 		double n = 0; //The sum of all values
 		for (int i = 0; i < frequencyList.length(); i++) {
@@ -21,16 +22,16 @@ public class WordCloudHash {
 				System.err.println("Exception: WordCloudHash.getFrequencies()");
 			}
 		}
-		
+
 		double sum = 100/n; //For percentage
-		
+
 		for (int i = 0; i < frequencyList.length(); i++) {
 			try {
 				JSONObject item = frequencyList.getJSONObject(i);
-				
+
 				JSONObject hashedItem = new JSONObject();
 				hashedItem.put("Name", item.get("Name"));
-				
+
 				//Rounding value to int
 				Integer intTweet = (Integer) item.get("Tweets");
 				Double value = new Double((double) intTweet);
@@ -41,22 +42,22 @@ public class WordCloudHash {
 					value = (double) Math.round(value); //Rounds to nearest whole
 				}
 				int intVal = value.intValue();
-				
+
 				//Hash the value
 				int hashedValue = hashValue(intVal);
 				hashedItem.put("Tweets", hashedValue);
-				
+
 				//Place into new array
 				hashedFrequencies.put(hashedItem);
-				
+
 			} catch (JSONException e) {
 				System.err.println("Exception: WordCloudHash.getFrequencies()");
 			}
 		}
-		
-		return hashedFrequencies;	
+
+		return hashedFrequencies;
 	}
-	
+
 	private static int hashValue(int value){
 		return value + 40;
 	}

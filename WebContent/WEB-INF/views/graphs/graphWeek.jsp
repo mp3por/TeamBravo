@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/include.jsp"%>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script>
 	//Graph Week
 	var svg = dimple.newSvg("#graphWeek", 520, 320);

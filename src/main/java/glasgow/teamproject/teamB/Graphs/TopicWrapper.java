@@ -8,7 +8,7 @@ package glasgow.teamproject.teamB.Graphs;
 import com.mongodb.DBObject;
 
 public class TopicWrapper {
-	// omh
+	
 	
 	private String topic;
 	private int noOfTweets;

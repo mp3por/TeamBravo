@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
-
-import java.util.Queue;
 
 
 import org.json.JSONArray;
@@ -44,4 +43,7 @@ public interface TweetDAO {
 
 	//For Terrier
 	public Queue<String> getCollection(String string);
+
+	
+
 }

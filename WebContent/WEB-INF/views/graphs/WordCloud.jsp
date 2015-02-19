@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/include.jsp"%>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
   <script>
   	var frequency_list = ${wordCloudList};
   	
@@ -38,4 +37,3 @@
 			});
 	}
   </script>
-

@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/include.jsp"%>
-
 <script>    
 	var svg1 = dimple.newSvg("#graphMonth", 520, 320);
 
