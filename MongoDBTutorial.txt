@@ -1,0 +1,30 @@
+1. Install mongoDB on your computer. There are tons of guides on how to do this.
+2. Open a terminal
+3. Write:
+		mongod
+4. Do not close the terminal, because if you do it will stop the database connection. "mognod" starts the deamon that manages the db.
+5. Open another tab/windows of the terminal and type:
+		mongo
+This is the client that is used to do stuff on the db. There are tons of commands. I will write some of them under this tutorial.
+
+Commands:
+In the tab where you typed "mongod" you DO NOT run any commands.
+In the tab where you typed "mongo" you can run those and many more commands:
+	1. show dbs 				-> shows all databases 
+	2. show collections 			-> shows all collections(tables) in the current db
+	3. use dbName				-> used to select a db
+	4. db.collectionName.find()		-> used to show all documents(entries) in collectionName
+	5. use admin;db.shutdownServer()	-> used to stop the mongod instance.
+	6. db.collectionName.drop()		-> drops current collection
+
+
+
+If this error pops up :
+	ERROR: dbpath (/data/db) does not exist.Create this directory or give existing directory in --dbpath.
+open a new terminal and type:
+	1. sudo mkdir -p /data/db
+	2. sudo chown your_username /data/db
+
+If there is any other error try running both:
+1. sudo service mongod stop
+2. mongod --repair

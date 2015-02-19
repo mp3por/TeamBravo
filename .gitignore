@@ -3,4 +3,6 @@
 .springBeans
 .settings/
 .DS_Store
+.localized
 target/
+*.json
