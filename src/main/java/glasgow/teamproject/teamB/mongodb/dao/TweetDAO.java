@@ -2,18 +2,14 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Graphs.TopicWrapper;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashMap;
-=======
->>>>>>> Steven
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
-
-import java.util.Queue;
 
 
 public interface TweetDAO {
