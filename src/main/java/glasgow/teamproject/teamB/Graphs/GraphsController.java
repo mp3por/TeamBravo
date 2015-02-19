@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.Graphs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import java.util.List;
 
 import glasgow.teamproject.teamB.Counter.Counter;
@@ -11,8 +10,8 @@ import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -190,9 +189,9 @@ public class GraphsController {
 		
 		//Construct JSON Array in correct format for graph
 		for(int i = 0; i < 30; i++){
-			tweetsForMonth .put(topic1List.get(i));
-			tweetsForMonth .put(topic2List.get(i));
-			tweetsForMonth .put(topic3List.get(i));
+			tweetsForMonth.put(topic1List.get(i));
+			tweetsForMonth.put(topic2List.get(i));
+			tweetsForMonth.put(topic3List.get(i));
 		}
 		
 		return tweetsForMonth ;
@@ -283,6 +282,24 @@ public class GraphsController {
 		ModelAndView mv = new ModelAndView("graphs");
 		return mv;
 	}
+	
+	//Testing pathVariable
+	@RequestMapping("/allGraphs/{timeScale}")
+	public void getGraphTime(@PathVariable String timeScale){
+		ModelAndView mv = new ModelAndView();
+		System.out.println(timeScale);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }
