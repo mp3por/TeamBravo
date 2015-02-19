@@ -1,6 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:700);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600);
-@import url(http://fonts.googleapis.com/css?family=Lato);
 @import url(http://fonts.googleapis.com/css?family=Lobster);
 
 #cssmenu {
@@ -177,25 +175,25 @@ header {
 	-moz-transition: all 0.7s ease 0s;
 	-o-transition: all 0.7s ease 0s;
 	transition: all 0.7s ease 0s;
-	
-
 }
-
-/*#search input[type="text"]:focus {
-	width: 100px;
-}*/
 
 /*---------------Rows and Columns--------*/
 .row{
     width:100%; 
 }
 
+
 .column{
     
     width:45%;
     background-color:#656565;
     float:left;
+
+    margin-left: 2.5%;
+	margin-right: 2.5%;
+	margin-top: 2.5%;
 	margin: 2.5%;
+	
     /*Add height in here if you want to keep all the heights of the columns the same*/
     /*height:300px;*/
     
@@ -212,6 +210,7 @@ header {
 	text-decoration: none;
 	font-size: 14px;
 	text-align: center;
+	color: #FFFFFF;
 }
 
 /*------------------Map-----------------*/
@@ -262,6 +261,15 @@ header {
     padding: 0px !important;
 }
  */
+ 
+ /*--------------Word Cloud----------*/
+.wordcloud text {
+	font-family: "Exo 2";
+
+   
+}
+ 
+ 
 /*------------------Clearfix---------*/
 .cf:before,
 .cf:after {

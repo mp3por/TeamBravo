@@ -1,15 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Graphs.TopicComparator;
-import glasgow.teamproject.teamB.Graphs.TopicWrapper;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -99,6 +97,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return result.isUpdateOfExisting();
 	}
 
+	
 	@Override
 	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 
@@ -231,69 +230,4 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return j;
 	}
-
-	
-
-
-	
-	//Tweets for Graphs
-	@Override
-	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName){
-		
-		List<TopicWrapper> hotTopics = null;
-		List<DBObject> topicDBObjects;
-		try{
-			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
-			//Set up list for db objects wrappers
-			hotTopics = new ArrayList<TopicWrapper>();
-			//For every db object, wrap it in topic wrapper and add to list
-			for (DBObject dbobj: topicDBObjects){
-				TopicWrapper topic = new TopicWrapper(dbobj, topicCol, tweetCol, dateCol, monthCol);
-				hotTopics.add(topic);
-			}
-		} catch (Exception e){
-			System.err.println(collectionName + " does not exist");
-		}
-		
-		return hotTopics;
-	}
-	
-	//Return a List of wrapped db objects
-	@Override
-	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName){
-
-		List<TopicWrapper> hotTopics = null;
-		List<DBObject> topicDBObjects;
-		try {
-			//Set up list of db objects
-			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
-			//Set up list for db objects wrappers
-			hotTopics = new ArrayList<TopicWrapper>();
-			//For every db object, wrap it in topic wrapper and add to list
-			for (DBObject dbobj: topicDBObjects){
-				TopicWrapper topic = new TopicWrapper(dbobj, topicColumnName, tweetColumnName);
-				hotTopics.add(topic);
-			}
-			//Sort the list of topics in descending order
-			Collections.sort(hotTopics, new TopicComparator());
-			
-			//Trim the list to the number of topics specified in noOfTopics
-			int topicListSize = hotTopics.size();
-			if ( topicListSize > noOfTopics )
-			    hotTopics.subList(noOfTopics, topicListSize).clear();
-		} catch (Exception e) {
-			System.err.println(collectionName + " does not exist");
-		}
-		
-		return hotTopics;
-
-	}
-	
-	@Override
-	public List<String> getTweetsForGraphBarchart(){
-		return null;
-	}
-	
-	
-	
 }

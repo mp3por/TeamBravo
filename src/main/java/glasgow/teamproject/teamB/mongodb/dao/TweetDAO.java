@@ -12,6 +12,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import com.mongodb.BasicDBObject;
 
 
+import org.json.JSONArray;
+
 public interface TweetDAO {
 	/**
 	 * Adds a tweet to the DB
@@ -27,13 +29,6 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
-
-	//For word cloud
-	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
-
-	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName);
-	
-	public List<String> getTweetsForGraphBarchart();
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
@@ -46,11 +41,6 @@ public interface TweetDAO {
 	
 	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
 
-
-	
-	
-	
-	
 	//For Terrier
 	public Queue<String> getCollection(String string);
 
