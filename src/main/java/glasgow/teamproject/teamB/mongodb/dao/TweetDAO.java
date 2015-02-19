@@ -2,8 +2,11 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Graphs.TopicWrapper;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashMap;
+=======
+>>>>>>> Steven
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -28,9 +31,13 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
+
 	//For word cloud
 	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
 
+	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName);
+	
+	public List<String> getTweetsForGraphBarchart();
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
@@ -50,4 +57,7 @@ public interface TweetDAO {
 	
 	//For Terrier
 	public Queue<String> getCollection(String string);
+
+	
+
 }

@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -142,41 +142,6 @@ public class TweetDAOImpl implements TweetDAO {
 		return tweets;
 	}
 
-	//For word cloud
-	@Override
-	public List<TopicWrapper> getHotTopics(int noOfTopics,
-			String topicColumnName, String tweetColumnName,
-			String collectionName) {
-		
-		List<TopicWrapper> hotTopics = null;
-		List<DBObject> topicDBObjects;
-		try {
-			//Set up list of db objects
-			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
-			//Set up list for db objects wrappers
-			hotTopics = new ArrayList<TopicWrapper>();
-			//For every db object, wrap it in topic wrapper and add to list
-			for (DBObject dbobj: topicDBObjects){
-				TopicWrapper topic = new TopicWrapper(dbobj, topicColumnName, tweetColumnName);
-				hotTopics.add(topic);
-			}
-			System.out.println("Topics before sort: " + hotTopics);
-			//Sort the list of topics in descending order
-			Collections.sort(hotTopics, new TopicComparator());
-			System.out.println("Topics after sort: " + hotTopics);
-			
-			//Trim the list to the number of topics specified in noOfTopics
-			int topicListSize = hotTopics.size();
-			if ( topicListSize > noOfTopics )
-			    hotTopics.subList(noOfTopics, topicListSize).clear();
-			System.out.println("Topics after trim: " + hotTopics);
-		} catch (Exception e) {
-			System.err.println(collectionName + " does not exist");
-		}
-		
-		return hotTopics;
-	}
-
 	// For Terrier indexing
 	@Override
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
@@ -221,6 +186,7 @@ public class TweetDAOImpl implements TweetDAO {
 		list.sort(Tweet.RetweetCountComparator);
 		return list;
 	}
+
 
 	@Override
 	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets) {
@@ -268,4 +234,66 @@ public class TweetDAOImpl implements TweetDAO {
 
 	
 
+
+	
+	//Tweets for Graphs
+	@Override
+	public List<TopicWrapper> getTweetsForGraphLine(String dateCol, String monthCol, String tweetCol, String topicCol, String collectionName){
+		
+		List<TopicWrapper> hotTopics = null;
+		List<DBObject> topicDBObjects;
+		try{
+			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
+			//Set up list for db objects wrappers
+			hotTopics = new ArrayList<TopicWrapper>();
+			//For every db object, wrap it in topic wrapper and add to list
+			for (DBObject dbobj: topicDBObjects){
+				TopicWrapper topic = new TopicWrapper(dbobj, topicCol, tweetCol, dateCol, monthCol);
+				hotTopics.add(topic);
+			}
+		} catch (Exception e){
+			System.err.println(collectionName + " does not exist");
+		}
+		
+		return hotTopics;
+	}
+	
+	//Return a List of wrapped db objects
+	@Override
+	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName){
+
+		List<TopicWrapper> hotTopics = null;
+		List<DBObject> topicDBObjects;
+		try {
+			//Set up list of db objects
+			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
+			//Set up list for db objects wrappers
+			hotTopics = new ArrayList<TopicWrapper>();
+			//For every db object, wrap it in topic wrapper and add to list
+			for (DBObject dbobj: topicDBObjects){
+				TopicWrapper topic = new TopicWrapper(dbobj, topicColumnName, tweetColumnName);
+				hotTopics.add(topic);
+			}
+			//Sort the list of topics in descending order
+			Collections.sort(hotTopics, new TopicComparator());
+			
+			//Trim the list to the number of topics specified in noOfTopics
+			int topicListSize = hotTopics.size();
+			if ( topicListSize > noOfTopics )
+			    hotTopics.subList(noOfTopics, topicListSize).clear();
+		} catch (Exception e) {
+			System.err.println(collectionName + " does not exist");
+		}
+		
+		return hotTopics;
+
+	}
+	
+	@Override
+	public List<String> getTweetsForGraphBarchart(){
+		return null;
+	}
+	
+	
+	
 }

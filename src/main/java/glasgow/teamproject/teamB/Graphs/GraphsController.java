@@ -1,10 +1,10 @@
 package glasgow.teamproject.teamB.Graphs;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
+
+import java.net.UnknownHostException;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +44,9 @@ public class GraphsController {
 	
 	private JSONArray getTopicsForWordCloud(){
 		//Get list of top 8 topics from the "Topics_Week" table
-		List<TopicWrapper> topics = tweetdao.getHotTopics(10, "Name", "Tweets", "Topics_Week");
-		System.out.println("Topics in graph controller:" + topics);
+		List<TopicWrapper> topics = tweetdao.getHotTopics(8, "Name", "Tweets", "Topics_Week");
+		
+
 		//Build a frequency list of the top eight topics
 		//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
 		JSONArray frequencyList = new JSONArray();
@@ -64,17 +65,93 @@ public class GraphsController {
 			}
 		}
 		JSONArray hashedFrequencyList = WordCloudHash.gethashedFrequencies(frequencyList);
-		System.out.println("JSON ARRAY of hashed frequency list in graphs controller: " + hashedFrequencyList.toString());
+	
 		return hashedFrequencyList;
 	}
 	
+	private JSONArray getTopicsForPieChart(){
+		//This also works by calling getTopicsForWordCloud()
+		//As the javascript in PieChart.jsp selects first 3 positions of frequency array
+		
+		//Get list of top 3 topics from the "Topics_Week" table
+		List<TopicWrapper> topics = tweetdao.getHotTopics(3, "Name", "Tweets", "Topics_Week");
+		
+		//Build a frequency list of the top 3 topics
+		//Frequency list - JSON array:  [{"text":"Ibrox","size":50,"URL":"http://www.rangers.co.uk/"},...]
+		JSONArray frequencyList = new JSONArray();
+		//For every topic in topic list
+		for(TopicWrapper topic : topics){
+			//Create a new JSON Object
+			JSONObject hotTopic = new JSONObject();
+			try {
+				//Put the topic's values into the JSON Object
+				hotTopic.put("Name", topic.getTopic());
+				hotTopic.put("Tweets", topic.getNoOfTweets());
+				//Add the object to the frequency list
+				frequencyList.put(hotTopic);
+			} catch (JSONException e) {
+				System.err.print("Exception: GraphsController.getTopicsForPieChart - JSONObject.put()");
+			}
+		}
+		return frequencyList;
+	}
+	
+	private JSONArray getTopicsForLineGraph(){
+		
+		//Get list of top hot topics from the "Topics_Year" table
+		List<TopicWrapper> topics = tweetdao.getTweetsForGraphLine("Date", "Month", "Tweets", "Topic", "Topics_Year");
+		
+		//Create a data Json array
+		JSONArray topicData = new JSONArray();
+		//For every topic in topic list
+		for(TopicWrapper topic : topics){
+			//Create a new JSON Object
+			JSONObject hotTopic = new JSONObject();
+			try {
+				//Put the topic's values into the JSON Object
+				hotTopic.put("Date", topic.getDate());
+				hotTopic.put("Month", topic.getMonth());
+				hotTopic.put("Tweets", topic.getNoOfTweets());
+				hotTopic.put("Topic", topic.getTopic());
+				//Add the object to the frequency list
+				topicData.put(hotTopic);
+			} catch (JSONException e) {
+				System.err.print("Exception: GraphsController.getTopicsForLineGraph - JSONObject.put()");
+			}
+		}
+		return topicData;
+	}
 	
 	
 	@RequestMapping("/getAll")
 	public ModelAndView getGraphs(){
-		
+		setUpDBInfo();
 		ModelAndView model = new ModelAndView("graphs-all");
-		
+		return model;
+	}
+	
+	@RequestMapping("/lineGraph")
+	public ModelAndView getLineGraph(){
+		setUpDBInfo();
+		JSONArray topicData = getTopicsForLineGraph();
+		ModelAndView model = new ModelAndView("LineGraph");
+		model.addObject("topicData", topicData);
+		return model;
+	}
+	
+	@RequestMapping("/pieChart")
+	public ModelAndView getPieChart(){
+		setUpDBInfo();
+		JSONArray frequencyList = getTopicsForPieChart();
+		ModelAndView model = new ModelAndView("PieChart");
+		model.addObject("frequencyList", frequencyList);
+		return model;
+	}
+	
+	@RequestMapping("/barChart")
+	public ModelAndView getBarChart(){
+		setUpDBInfo();
+		ModelAndView model = new ModelAndView("BarChart");
 		return model;
 	}
 	
