@@ -19,7 +19,7 @@ public class CounterController {
 		Counter c = new Counter();
 		Calendar today = Calendar.getInstance();
 		c.dailyMapReduce(today.getTime());
-		today.add(Calendar.DATE,  -2);
+		today.add(Calendar.DATE,  -4);
 		c.dailyMapReduce(today.getTime());
 		today.add(Calendar.DATE,  -2);
 		c.dailyMapReduce(today.getTime());
@@ -28,7 +28,7 @@ public class CounterController {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Top Entities<br>");
-		List<EntityCountPair> l = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 20);
+		List<EntityCountPair> l = c.getTopEntities(Counter.Field.PERSON, Counter.TimePeriod.PASTWEEK, 20);
 		for( EntityCountPair e : l ) {
 			sb.append(e.getID() + " : " +  e.getCount().intValue() + "<br>");
 		}
@@ -38,8 +38,8 @@ public class CounterController {
 		model.addObject("output1", sb.toString());
 		
 		StringBuilder sb2 = new StringBuilder();
-		sb2.append("Entity Search \"breakfast\"<br>");
-		List<DateCountPair> l2 = c.getEntitiyTrend("breakfast", 7);
+		sb2.append("Entity Search \"rain\"<br>");
+		List<DateCountPair> l2 = c.getEntitiyTrend("rain", 7);
 		for( DateCountPair e : l2 ) {
 			sb2.append(e.getDate() + " : " + e.getCount() + "<br>");
 		}
