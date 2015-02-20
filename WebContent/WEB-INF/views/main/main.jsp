@@ -150,11 +150,8 @@
 
 		function getTopicsForWeek() {
 			$.ajax({
-<<<<<<< HEAD
 				url : '/TeamBravo/search/searchBox',
-=======
 				url : '/TeamBravo/graphs/graphWeek',
->>>>>>> b2a894a53002f20f5d5543cbb15fc2d2494494b0
 				success : function(data) {
 					$("#graphWeek").html(data);
 				}
