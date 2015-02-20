@@ -12,7 +12,9 @@ import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -241,12 +243,40 @@ public class GraphsController {
 	}
 	
 	//Get Pie Chart
-	@RequestMapping("/pieChart")
+	@RequestMapping("/graphPie")
 	public ModelAndView getPieChart(){
 		JSONArray tweetsForPie = getPieChartData();
-		ModelAndView mv = new ModelAndView("PieChart");
-		mv.addObject("tweetsForPie", tweetsForPie);
+		ModelAndView mv = new ModelAndView("graphPie");
+		mv.addObject("TweetsForPie", tweetsForPie);
 		return mv;
+	}
+	
+	//Testing path variable--------------------------------------------------//
+	@RequestMapping("/bar/{timeScale}")
+	public void getBarTime(@PathVariable String timeScale){
+		if(timeScale.equals("WEEK")){
+			System.out.println("Time scale is: " + timeScale);
+		}else{
+			System.out.println("Time scale not recognised");
+		}
+	}
+	
+	//Testing path variable
+	@RequestMapping("/line/{timeScale}")
+	public void getLineTime(@PathVariable String timeScale){
+		System.out.println("Time scale is: " + timeScale);
+	}
+	
+	//Testing path variable
+	@RequestMapping("/pie/{timeScale}")
+	public void getPieTime(@PathVariable String timeScale){
+		System.out.println("Time scale is: " + timeScale);
+	}
+	
+	//Testing path variable
+	@RequestMapping("/wordCloud/{timeScale}")
+	public void getWordTime(@PathVariable String timeScale){
+		System.out.println("Time scale is: " + timeScale);
 	}
 	
 	

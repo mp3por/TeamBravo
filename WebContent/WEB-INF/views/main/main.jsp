@@ -20,6 +20,7 @@
 <script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
 
 <title>Home</title>
 </head>
@@ -94,32 +95,18 @@
 </body>
 
 <script type="text/javascript">
+
 	$(document).ready(function() {
 		console.log("ready!");
 
 		extract();
 
 		function extract() {
-			graphInit();
 			getTweetWall();
 			getMaps();
 			getSearchBox();
-			getTopicsForWeek();
-			getTopicsForMonth();
-			getPieChart();
-			getWordCloud();
 		}
 		;
-		
-		function graphInit() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphInit',
-				async : false, //Quick fix, remove later
-				success : function(data) {
-					console.log("Graphs Initialised");
-				}
-			});
-		}
 
 		function getTweetWall() {
 			$.ajax({
@@ -144,42 +131,6 @@
 				url : '/TeamBravo/main/searchBox',
 				success : function(data) {
 					$("#search").html(data);
-				}
-			});
-		}
-
-		function getTopicsForWeek() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphWeek',
-				success : function(data) {
-					$("#graphWeek").html(data);
-				}
-			});
-		}
-
-		function getTopicsForMonth() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphMonth',
-				success : function(data) {
-					$("#graphMonth").html(data);
-				}
-			});
-		}
-		
-		function getPieChart() {
-			$.ajax({
-				url : '/TeamBravo/graphs/pieChart',
-				success : function(data) {
-					$("#chart").html(data);
-				}
-			});
-		}
-		
-		function getWordCloud() {
-			$.ajax({
-				url : '/TeamBravo/graphs/wordCloud',
-				success : function(data) {
-					$("#wordCloud").html(data);
 				}
 			});
 		}
