@@ -2,6 +2,7 @@ package glasgow.teamproject.teamB.Search;
 
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,15 @@ public class SearchController {
 	public ModelAndView Search(){
 		ModelAndView modelandview = new ModelAndView("Terrier");	
 		return modelandview;
+	}
+	
+	@RequestMapping("/searchBox")
+	public ModelAndView searchBox(){
+		String now = (new Date()).toString();
+		String viewName = "search_box";
+		ModelAndView mv = new ModelAndView(viewName);
+		mv.addObject("serverTime", now);
+		return mv;
 	}
 	
 	@RequestMapping("/terrier/{query}")
