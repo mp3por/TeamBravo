@@ -1,6 +1,5 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Graphs.TopicWrapper;
 import glasgow.teamproject.teamB.Search.Tweet;
 
 import java.util.ArrayList;
@@ -9,10 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-
-import com.mongodb.BasicDBObject;
-
-import org.json.JSONArray;
 
 public interface TweetDAO {
 	/**
@@ -33,7 +28,7 @@ public interface TweetDAO {
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
 	
-	public BasicDBObject getNthEntry(String collectionName, int n);
+	public Map<String, Object> getNthEntry(String collectionName, int n);
 	
 	public ArrayList<Tweet> getResultList(int[] resultsDocids);
 	
@@ -43,6 +38,10 @@ public interface TweetDAO {
 
 	//For Terrier
 	public Queue<String> getCollection(String string);
+	
+	public ArrayList<Double> latitudesForMaps(ArrayList<Tweet> tweets);
+	
+	public ArrayList<Double> longtitudesForMaps(ArrayList<Tweet> tweets);
 
 	
 

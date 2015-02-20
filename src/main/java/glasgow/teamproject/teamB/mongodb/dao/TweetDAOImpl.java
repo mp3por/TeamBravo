@@ -155,29 +155,86 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 
 	// For Terrier Retriving
+	@SuppressWarnings("unchecked")
 	@Override
-	public BasicDBObject getNthEntry(String collectionName, int n) {
+	public Map<String, Object> getNthEntry(String collectionName, int n) {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
 		foo.skip(n + 1);
-		return (BasicDBObject) foo.next();
+		BasicDBObject obj = (BasicDBObject)foo.next();
+		return obj.toMap();
 	}
 	
 	@Override
 	public ArrayList<Tweet> getResultList(int[] resultsDocids) {
 		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
+		Map<String, Object> currentObj;
 		for (int i = 0; i < resultsDocids.length; i++){
 			currentObj = getNthEntry("tweets", resultsDocids[i]);
 			list.add(new Tweet(currentObj));
 		}
 		return list;
 	}
+	
+	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
+	private double[] getCoordinate(Tweet tweet){	
+		
+		double[] coordinate = new double[2];
+		Map<String, Object> map = tweet.getTweet();
+		System.err.println(map);
+		if (tweet.getTweet().get("coordinates") != null){
+			String pairString = tweet.getTweet().get("coordinates").toString();
+			System.err.println(pairString);
+		
+			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
+			int comma = pairString.lastIndexOf(',');
+			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
+		
+			String latitude = pairString.substring(startOfCoordinate, comma - 1);
+			String longtitude = pairString.substring(comma + 2, endOfCoordinate + 1);
+		
+		
+			coordinate[0] = Double.parseDouble(latitude);
+			coordinate[1] = Double.parseDouble(longtitude);
+		
+		
+			return coordinate;
+		}
+		else return null;
+	}
+	
+	@Override
+	public ArrayList<Double> latitudesForMaps(ArrayList<Tweet> tweets){
+		
+		ArrayList<Double> latitudes = new ArrayList<>();
+		double[] coordinate;
+		for (int i = 0; i < tweets.size(); i++){
+			coordinate = this.getCoordinate(tweets.get(i));
+			if (coordinate != null)
+				latitudes.add(coordinate[0]);
+		}
+		System.err.println("latitudes list created");
+		return latitudes;
+	}
+	
+	@Override
+	public ArrayList<Double> longtitudesForMaps(ArrayList<Tweet> tweets){
+		
+		ArrayList<Double> longtitudes = new ArrayList<>();
+		double[] coordinate;
+		for (int i = 0; i < tweets.size(); i++){
+			coordinate = this.getCoordinate(tweets.get(i));
+			if (coordinate != null)
+				longtitudes.add(coordinate[1]);
+		}
+		System.err.println(longtitudes);
+		return longtitudes;
+	}
 
 	@Override
 	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids) {
 		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
+		Map<String, Object> currentObj;
 		for (int i = 0; i < resultsDocids.length; i++){
 			currentObj = getNthEntry("tweets", resultsDocids[i]);
 			list.add(new Tweet(currentObj));

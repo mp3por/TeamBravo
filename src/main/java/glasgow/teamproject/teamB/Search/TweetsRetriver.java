@@ -53,6 +53,10 @@ public class TweetsRetriver {
 		return this.result;
 	}
 	
+	public String getQuery(){
+		return this.query;
+	}
+	
 	public void runQuery(){
 		System.err.println("Running search for " + this.query);
         StringBuffer sb = new StringBuffer();
