@@ -1,18 +1,17 @@
-package glasgow.teamproject.teamB.mongodb.dao;
+package glasgow.teamproject.teamB.Search;
 
 import java.util.Comparator;
-
-import com.mongodb.BasicDBObject;
+import java.util.Map;
 
 public class Tweet implements Comparable<Tweet>{
 	
-	private BasicDBObject tweet;
+	private Map<String, Object> tweet;
 	
-	protected Tweet (BasicDBObject tweet){
+	public Tweet (Map<String, Object> tweet){
 		this.tweet = tweet;
 	}
 	
-	protected BasicDBObject getTweet(){
+	public Map<String, Object> getTweet(){
 		return this.tweet;
 	}
 

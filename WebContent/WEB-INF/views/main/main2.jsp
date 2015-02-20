@@ -133,7 +133,7 @@
 
 		function getSearchBox() {
 			$.ajax({
-				url : '/TeamBravo/main/searchBox',
+				url : '/TeamBravo/Search/searchBox',
 				success : function(data) {
 					$("#search").html(data);
 				}

@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.util.ArrayList;
@@ -7,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -190,13 +190,13 @@ public class TweetDAOImpl implements TweetDAO {
 	@Override
 	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets) {
 		ArrayList<HashMap<String,Object>> results = new ArrayList<>(); 
-		BasicDBObject currentObj;
+		Map<String, Object> currentTweet;
 		for (int i = 0; i < tweets.size(); i++){
-			currentObj = tweets.get(i).getTweet();
+			currentTweet = tweets.get(i).getTweet();
 			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key: currentObj.keySet()) {
+			for (String key: currentTweet.keySet()) {
 				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentObj.getString(key);
+					String s = currentTweet.get(key).toString();
 					if (s.length() == 2) {
 						tweet.put(key, null);
 						continue;
@@ -213,7 +213,7 @@ public class TweetDAOImpl implements TweetDAO {
 					tweet.put(key, NEs);
 				}
 				else {
-					tweet.put(key, currentObj.get(key));
+					tweet.put(key, currentTweet.get(key));
 				}
 			}
 			results.add(tweet);

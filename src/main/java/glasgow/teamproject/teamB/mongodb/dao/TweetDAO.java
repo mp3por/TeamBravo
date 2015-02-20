@@ -1,6 +1,7 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Graphs.TopicWrapper;
+import glasgow.teamproject.teamB.Search.Tweet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
-
 
 import org.json.JSONArray;
 
