@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
 
-import java.util.Queue;
 
+import org.json.JSONArray;
 
 public interface TweetDAO {
 	/**
@@ -28,9 +29,6 @@ public interface TweetDAO {
 	
 	public List<String> getTweetsForMaps(String collectionName);
 	
-	//For word cloud
-	public List<TopicWrapper> getHotTopics(int noOfTopics, String topicColumnName, String tweetColumnName,String collectionName);
-
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
@@ -43,11 +41,9 @@ public interface TweetDAO {
 	
 	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
 
-
-	
-	
-	
-	
 	//For Terrier
 	public Queue<String> getCollection(String string);
+
+	
+
 }

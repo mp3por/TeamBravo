@@ -6,10 +6,6 @@
 <body>
 
 	<P>  ${output1} </P>
-	
-	<P>  ${output2} </P>
-	
-	<P>  ${output3} </P>
 
 </body>
 </html>

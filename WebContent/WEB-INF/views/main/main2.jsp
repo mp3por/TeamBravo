@@ -1,25 +1,36 @@
 <%@ include file="/WEB-INF/include.jsp"%>
 <html>
 <head>
+
 <link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
-
-<link href="<c:url value="/resources/css/tweets.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
+<!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 
-<script
-	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<!-- maps -->
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 
-<link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
+<!-- graphs -->
+<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
+
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Home</title>
 </head>
@@ -28,15 +39,22 @@
 	<!--------------------------- BAR ------------------------------------>
 	<header>
 		<div id='logo'>
-			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
-				style="width: 30%;">
+			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png" style="width: 30%;">
 		</div>
 		<div id='cssmenu'>
 			<ul id='naviMenu'>
-				<li class='active'><a href='#'><span>Home</span></a></li>
-				<li><a href='#'><span>Tweets</span></a></li>
-				<li><a href='#'><span>Map</span></a></li>
-				<li class='last'><a href='#'><span>Graphs</span></a></li>
+				<li class='active'>
+					<a href='#'><span>Home</span></a>
+				</li>
+				<li>
+					<a href='#'><span>Tweets</span></a>
+				</li>
+				<li>
+					<a href='#'><span>Map</span></a>
+				</li>
+				<li class='last'>
+					<a href='#'><span>Graphs</span></a>
+				</li>
 			</ul>
 			<div id="search"></div>
 		</div>
@@ -44,54 +62,28 @@
 	<!-- -------------------------------------------------------------- -->
 
 	<!-- MAIN OUTLOOK TABLE  -->
-	<div class="row cf">
 
-		<div class="mapHolder column">
-			<h3>Map</h3>
-			<div id="map-container">
-				<div id="map"></div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6" id="holder_map">
+				<h3 class="box">Map</h3>
+				<div id="map-container" class="box">
+					<div id="map"></div>
+				</div>
+			</div>
+			<div class="col-md-6 " id="holder_tweet_wall">
+				<h3 class="box">Tweets</h3>
+				<div id="tweetwall" class="box"></div>
 			</div>
 		</div>
-
-		<div class="main column">
-			<h3>Tweets</h3>
-			<div id="tweetwall"></div>
-		</div>
-
 	</div>
-
-	<div class="row cf">
-
-		<div class="main column">
-			<h3>This Week</h3>
-			<div id="graphWeek"></div>
-		</div>
-
-		<div class="main column">
-			<h3>This Month</h3>
-			<div id="graphMonth"></div>
-		</div>
-
-	</div>
-
-	<div class="row cf">
-
-		<div class="main column">
-			<h3>Hot Topics By Percentage</h3>
-			<div id="chart"></div>
-		</div>
-
-		<div class="main column">
-			<h3>Top Mentions</h3>
-			<div id="wordCloud"></div>
-		</div>
-
-	</div>
-
 
 	<!-- -------------------------------------------- -->
 
 </body>
+<footer>
+	footer
+</footer>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -100,17 +92,17 @@
 		extract();
 
 		function extract() {
-			graphInit();
-			getTweetWall();
+			//graphInit();
+			//getTweetWall();
 			getMaps();
-			getSearchBox();
-			getTopicsForWeek();
-			getTopicsForMonth();
-			getPieChart();
-			getWordCloud();
+			//getSearchBox();
+			//getTopicsForWeek();
+			//getTopicsForMonth();
+			//getPieChart();
+			//getWordCloud();
 		}
 		;
-		
+
 		function graphInit() {
 			$.ajax({
 				url : '/TeamBravo/graphs/graphInit',
@@ -141,7 +133,7 @@
 
 		function getSearchBox() {
 			$.ajax({
-				url : '/TeamBravo/search/searchBox',
+				url : '/TeamBravo/main/searchBox',
 				success : function(data) {
 					$("#search").html(data);
 				}
@@ -150,7 +142,6 @@
 
 		function getTopicsForWeek() {
 			$.ajax({
-				url : '/TeamBravo/search/searchBox',
 				url : '/TeamBravo/graphs/graphWeek',
 				success : function(data) {
 					$("#graphWeek").html(data);
@@ -166,7 +157,7 @@
 				}
 			});
 		}
-		
+
 		function getPieChart() {
 			$.ajax({
 				url : '/TeamBravo/graphs/pieChart',
@@ -175,7 +166,7 @@
 				}
 			});
 		}
-		
+
 		function getWordCloud() {
 			$.ajax({
 				url : '/TeamBravo/graphs/wordCloud',

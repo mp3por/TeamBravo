@@ -8,11 +8,11 @@ public class Tweet implements Comparable<Tweet>{
 	
 	private BasicDBObject tweet;
 	
-	public Tweet (BasicDBObject tweet){
+	protected Tweet (BasicDBObject tweet){
 		this.tweet = tweet;
 	}
 	
-	public BasicDBObject getTweet(){
+	protected BasicDBObject getTweet(){
 		return this.tweet;
 	}
 

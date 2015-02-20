@@ -4,8 +4,7 @@ import java.util.Comparator;
 import com.mongodb.DBObject;
 
 public class TopicComparator implements Comparator<TopicWrapper> {
-	// omh 
-
+	
 	@Override
 	public int compare(TopicWrapper topic1, TopicWrapper topic2) {
 		
