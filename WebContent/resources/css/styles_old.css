@@ -1,7 +1,4 @@
-@import
-	url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600)
-	;
-
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600);
 @import url(http://fonts.googleapis.com/css?family=Lobster);
 
 #cssmenu {
@@ -39,6 +36,7 @@
 	margin: 0;
 }
 
+
 #cssmenu.align-right ul li {
 	float: right;
 }
@@ -46,6 +44,7 @@
 #cssmenu.align-center ul {
 	text-align: center;
 }
+
 
 #cssmenu ul li a {
 	color: #666666;
@@ -98,6 +97,7 @@
 	-ms-transition: width .25s;
 	-o-transition: width .25s;
 	transition: width .25s;
+	
 }
 
 #cssmenu ul li.last>a:after, #cssmenu ul li:last-child>a:after {
@@ -112,8 +112,7 @@
 	width: 100%;
 }
 
-#cssmenu.align-right li.last>a:after, #cssmenu.align-right li:last-child>a:after
-	{
+#cssmenu.align-right li.last>a:after, #cssmenu.align-right li:last-child>a:after {
 	display: block;
 }
 
@@ -150,25 +149,6 @@ header {
 	text-align: center;
 }
 
-h3.box {
-	background-color: #656565;
-	text-align: center;
-	margin-bottom: 0px;
-}
-
-div.box {
-	background-color: #656565;
-}
-
-h:FIRST-CHILD {
-	font-family: 'Exo 2';
-	font-weight: 700;
-	text-decoration: none;
-	font-size: 14px;
-	text-align: center;
-	color: #FFFFFF;
-}
-
 #search {
 	float: right;
 	margin: 5px;
@@ -195,6 +175,42 @@ h:FIRST-CHILD {
 	-moz-transition: all 0.7s ease 0s;
 	-o-transition: all 0.7s ease 0s;
 	transition: all 0.7s ease 0s;
+}
+
+/*---------------Rows and Columns--------*/
+.row{
+    width:100%; 
+}
+
+
+.column{
+    
+    width:45%;
+    background-color:#656565;
+    float:left;
+
+    margin-left: 2.5%;
+	margin-right: 2.5%;
+	margin-top: 2.5%;
+	margin: 2.5%;
+	
+    /*Add height in here if you want to keep all the heights of the columns the same*/
+    /*height:300px;*/
+    
+    /*You can also add minimum heights and widths if you dont want stuff getting too small*/
+    /*
+    min-height:200px;
+    min-width:100px;
+    */
+}
+
+.column h3{
+ 	font-family: 'Exo 2';
+	font-weight: 700;
+	text-decoration: none;
+	font-size: 14px;
+	text-align: center;
+	color: #FFFFFF;
 }
 
 /*------------------Map-----------------*/
@@ -245,22 +261,24 @@ h:FIRST-CHILD {
     padding: 0px !important;
 }
  */
-
-/*--------------Word Cloud----------*/
+ 
+ /*--------------Word Cloud----------*/
 .wordcloud text {
 	font-family: "Exo 2";
-}
 
+   
+}
+ 
+ 
 /*------------------Clearfix---------*/
-.cf:before, .cf:after {
-	content: "";
-	display: table;
-}
-
+.cf:before,
 .cf:after {
-	clear: both;
+  content:"";
+  display:table;
 }
-
+.cf:after {
+  clear:both;
+}
 .cf {
-	zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+  zoom:1; /* For IE 6/7 (trigger hasLayout) */
 }

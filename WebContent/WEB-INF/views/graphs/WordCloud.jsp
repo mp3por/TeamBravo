@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/include.jsp"%>
-
   <script>
-  	var frequency_list = ${frequencyList};
+  	var frequency_list = ${wordCloudList};
   	
   	var color = d3.scale.linear()
     .domain([0,1,2,3,4,5,6,10,15,20,100])
@@ -23,7 +22,7 @@
 	        .append("g")
 	        // without the transform, words would get cut off to the left and top, they would
 	        // appear outside of the SVG area
-	        .attr("transform", "translate(121,175)") //(from left, from top) size(445,340) transform(110,175) worked
+	        .attr("transform", "translate(200,175)") //(from left, from top) size(445,340) transform(110,175) worked
 	        .selectAll("text")
 	        .data(words)
 	        .enter().append("text")
@@ -38,4 +37,3 @@
 			});
 	}
   </script>
-

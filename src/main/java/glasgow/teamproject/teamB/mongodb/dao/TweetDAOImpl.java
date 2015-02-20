@@ -1,18 +1,16 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Graphs.TopicComparator;
-import glasgow.teamproject.teamB.Graphs.TopicWrapper;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
+
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -99,6 +97,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return result.isUpdateOfExisting();
 	}
 
+	
 	@Override
 	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 
@@ -140,41 +139,6 @@ public class TweetDAOImpl implements TweetDAO {
 			dbCursor.next();
 		}
 		return tweets;
-	}
-
-	//For word cloud
-	@Override
-	public List<TopicWrapper> getHotTopics(int noOfTopics,
-			String topicColumnName, String tweetColumnName,
-			String collectionName) {
-		
-		List<TopicWrapper> hotTopics = null;
-		List<DBObject> topicDBObjects;
-		try {
-			//Set up list of db objects
-			topicDBObjects = mongoOps.find(new Query(), DBObject.class, collectionName);
-			//Set up list for db objects wrappers
-			hotTopics = new ArrayList<TopicWrapper>();
-			//For every db object, wrap it in topic wrapper and add to list
-			for (DBObject dbobj: topicDBObjects){
-				TopicWrapper topic = new TopicWrapper(dbobj, topicColumnName, tweetColumnName);
-				hotTopics.add(topic);
-			}
-			System.out.println("Topics before sort: " + hotTopics);
-			//Sort the list of topics in descending order
-			Collections.sort(hotTopics, new TopicComparator());
-			System.out.println("Topics after sort: " + hotTopics);
-			
-			//Trim the list to the number of topics specified in noOfTopics
-			int topicListSize = hotTopics.size();
-			if ( topicListSize > noOfTopics )
-			    hotTopics.subList(noOfTopics, topicListSize).clear();
-			System.out.println("Topics after trim: " + hotTopics);
-		} catch (Exception e) {
-			System.err.println(collectionName + " does not exist");
-		}
-		
-		return hotTopics;
 	}
 
 	// For Terrier indexing
@@ -222,6 +186,7 @@ public class TweetDAOImpl implements TweetDAO {
 		return list;
 	}
 
+
 	@Override
 	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets) {
 		ArrayList<HashMap<String,Object>> results = new ArrayList<>(); 
@@ -265,7 +230,4 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return j;
 	}
-
-	
-
 }
