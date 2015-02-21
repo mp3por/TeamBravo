@@ -1,0 +1,63 @@
+#stat-container {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	/* gradient from top to bottom */
+	/* For Safari 5.1 to 6.0 */
+	background: -webkit-linear-gradient(#ffffff, #E8E8E8);
+	/* For Opera 11.1 to 12.0 */
+	background: -o-linear-gradient(#ffffff, #E8E8E8);
+	/* For Firefox 3.6 to 15 */
+	background: -moz-linear-gradient(#ffffff, #E8E8E8);
+	/* Standard syntax */
+	background: linear-gradient(#ffffff, #E8E8E8);
+}
+
+hr.horizontal-line {
+	background: #C9C9C9 no-repeat scroll center;
+	width: 95%;
+	height: 1px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+p.mini {
+	margin-bottom: 0px;
+}
+
+h4.mini {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+h4.subtopic {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+blockquote.mini {
+	margin: 0px;
+	padding: 0px;
+}
+
+.stat_icon {
+	width: 50px;
+	height: 50ps;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	float: left;
+}
+
+.user_icon {
+	border-style: solid;
+	border-width: 1px;
+	border-color: ##C9C9C9;
+	width: 50px;
+	height: 50ps;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	float: left;
+}

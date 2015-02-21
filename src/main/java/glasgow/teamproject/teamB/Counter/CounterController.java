@@ -13,11 +13,21 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CounterController {
 	
+	@RequestMapping("/stat")
+	public ModelAndView getStat() {
+		ModelAndView model = new ModelAndView("statistics");
+		
+		return model;
+	}
+	
+	
 	@RequestMapping("/test")
 	public ModelAndView getCount(){
 		
 		Counter c = new Counter();
 		Calendar today = Calendar.getInstance();
+		c.dailyMapReduce(today.getTime());
+		today.add(Calendar.DATE,  -1);
 		c.dailyMapReduce(today.getTime());
 		today.add(Calendar.DATE,  -4);
 		c.dailyMapReduce(today.getTime());
