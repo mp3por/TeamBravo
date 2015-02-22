@@ -33,6 +33,131 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Home</title>
+
+<script type="text/javascript" id="mapsJavaScript">
+	var styles = [ [ {
+		url : '<c:url value="/resources/img/maps/people35.png"/>',
+		height : 35,
+		width : 35,
+		anchor : [ 16, 0 ],
+		textColor : '#ff00ff',
+		textSize : 10
+	}, {
+		url : '<c:url value="/resources/img/maps/people45.png"/>',
+		height : 45,
+		width : 45,
+		anchor : [ 24, 0 ],
+		textColor : '#ff0000',
+		textSize : 11
+	}, {
+		url : '<c:url value="/resources/img/maps/people55.png"/>',
+		height : 55,
+		width : 55,
+		anchor : [ 32, 0 ],
+		textColor : '#ffffff',
+		textSize : 12
+	} ], [ {
+		url : '<c:url value="/resources/img/maps/conv35.png"/>',
+		height : 27,
+		width : 30,
+		anchor : [ 3, 0 ],
+		textColor : '#ff00ff',
+		textSize : 10
+	}, {
+		url : '<c:url value="/resources/img/maps/conv40.png"/>',
+		height : 36,
+		width : 40,
+		anchor : [ 6, 0 ],
+		textColor : '#ff0000',
+		textSize : 11
+	}, {
+		url : '<c:url value="/resources/img/maps/conv50.png"/>',
+		width : 50,
+		height : 45,
+		anchor : [ 8, 0 ],
+		textSize : 12
+	} ], [ {
+		url : '<c:url value="/resources/img/maps/heart35.png"/>',
+		height : 26,
+		width : 30,
+		anchor : [ 4, 0 ],
+		textColor : '#ff00ff',
+		textSize : 10
+	}, {
+		url : '<c:url value="/resources/img/maps/heart40.png"/>',
+		height : 35,
+		width : 40,
+		anchor : [ 8, 0 ],
+		textColor : '#ff0000',
+		textSize : 11
+	}, {
+		url : '<c:url value="/resources/img/maps/heart50.png"/>',
+		width : 50,
+		height : 44,
+		anchor : [ 12, 0 ],
+		textSize : 12
+	} ] ];
+
+	var markerClusterer = null;
+	var map = null;
+	var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
+			+ 'chco=FFFFFF,008CFF,000000&ext=.png';
+	
+	
+	var long1 = "-4.287393";
+	var lat = "55.873714";
+	var myCenter = new google.maps.LatLng(lat,long1);
+	
+	function refreshMap(longitudes,latitudes,tweets) {
+		console.log(longitudes);
+		console.log(latitudes);
+		if (markerClusterer) {
+			markerClusterer.clearMarkers();
+		}
+
+		var markers = [];
+
+		var markerImage = new google.maps.MarkerImage(imageUrl,
+				new google.maps.Size(24, 32));
+
+		
+		for (var i = 0; i < latitudes.length; ++i) {
+			var latLng = new google.maps.LatLng(latitudes[i],
+					longitudes[i])
+			var marker = new google.maps.Marker({
+				position : latLng,
+				draggable : true,
+				icon : markerImage
+			});
+			markers.push(marker);
+		}
+
+		markerClusterer = new MarkerClusterer(map, markers, {
+			maxZoom : null,
+			gridSize : null,
+			styles : styles[null]
+		});
+	}
+
+	function initialize(mapElementId,longitudes,latitudes,tweets) {
+		
+		map = new google.maps.Map(document.getElementById(mapElementId), {
+			zoom : 11,
+			center : myCenter,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		});
+
+		refreshMap(longitudes,latitudes);
+	}
+
+	function clearClusters(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		markerClusterer.clearMarkers();
+	}
+
+	//google.maps.event.addDomListener(window, 'load', initialize('map',longitudes,latitudes,tweets));
+</script>
 </head>
 <body>
 
@@ -96,6 +221,38 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<form class="form-horizontal" id="add_more_form">
+					<fieldset>
+
+						<!-- Form Name -->
+						<legend>Add more tiles </legend>
+
+						<!-- Multiple Radios (inline) -->
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
+							<div class="col-md-8">
+								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="1" checked="checked"> Maps
+								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="2"> Graphs
+								</label>
+							</div>
+						</div>
+
+
+						<!-- Button -->
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="addMoreSubmit"></label>
+							<div class="col-md-4">
+								<button id="addMoreSubmit" name="addMoreSubmit" type="submit" class="btn btn-primary">Add</button>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+			</div>
+		</div>
 	</div>
 
 	<!-- -------------------------------------------- -->
@@ -104,11 +261,39 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
+	var tile_template = null;
+
 	function settingsButtonClick(clicked) {
 		var settings = $('#settings' + clicked.id);
 		settings.show();
 	}
 
+	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
+		e.preventDefault(); //prevent form from submitting
+		var data = $("#add_more_form").serializeArray();
+		console.log(data[0].value);
+		var toAdd = data[0].value;
+		if (tile_template == null) {
+			$.ajax({
+				url : '/TeamBravo/main/tile_template',
+				success : function(data) {
+					tile_template = data;
+					addTile(toAdd);
+				}
+			});
+		}
+	});
+
+	function addTile(toAdd) {
+		if (toAdd != null && tile_template != null) {
+			console.log("toAdd:" + toAdd);
+			console.log("tile_template:" + tile_template);
+			
+		} else {
+			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
+					+ tile_template);
+		}
+	}
 	$(document).ready(function() {
 		console.log("ready!");
 
@@ -172,9 +357,14 @@
 
 		function getMaps() {
 			$.ajax({
-				url : '/TeamBravo/maps/test',
+				url : '/TeamBravo/maps/test2',
 				success : function(data) {
-					$("#map").html(data);
+					console.log(data);
+					var longitudes = data['longitudes'];
+					var latitudes = data['latitudes'];
+					var tweets = data.text;
+					google.maps.event.addDomListener(window, 'load', initialize('map',longitudes,latitudes,tweets));
+					//$("#map").html(data);
 				}
 			});
 		}

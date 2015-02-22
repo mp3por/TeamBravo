@@ -3,12 +3,15 @@ package glasgow.teamproject.teamB.Maps;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -143,5 +146,41 @@ public class MapsController {
 		model.addObject("text", tweets);
 		
 		return model;
+	}
+	
+	@RequestMapping("/test2")
+	@ResponseBody
+	public Map<String,ArrayList<String>> test2(){
+		
+		
+		ArrayList<String> latitudes = new ArrayList<>();
+		ArrayList<String> longitudes = new ArrayList<>();
+		ArrayList<String> tweets = new ArrayList<>();
+		Random r = new Random();
+		double LowLat = 55.814552;
+		double HighLat = 55.919543;
+		double LowLong= -4.488351;
+		double HighLong = -4.129512;
+		
+		double LatDiff = HighLat -  LowLat ;
+		double LongDiff = HighLong - LowLong;
+		
+		for(int i = 0 ; i < 1000 ; i++ ){
+			double randLat = r.nextDouble();
+			double randLong = r.nextDouble();	
+			if(randLat <= LatDiff && randLong <= LongDiff ){
+				latitudes.add(Double.toString(LowLat + randLat));
+				longitudes.add(Double.toString(LowLong + randLong));
+				tweets.add("\"OMGOMGOMGOMG\"");
+			}
+			
+		}
+		
+		Map<String,ArrayList<String>> coordinates = new HashMap<String, ArrayList<String>>();
+		coordinates.put("longitudes", longitudes);
+		coordinates.put("latitudes", latitudes);
+		coordinates.put("text", tweets);
+		
+		return coordinates;
 	}
 }
