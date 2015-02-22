@@ -102,15 +102,12 @@
 	var map = null;
 	var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
 			+ 'chco=FFFFFF,008CFF,000000&ext=.png';
-	
-	
+
 	var long1 = "-4.287393";
 	var lat = "55.873714";
-	var myCenter = new google.maps.LatLng(lat,long1);
-	
-	function refreshMap(longitudes,latitudes,tweets) {
-		console.log(longitudes);
-		console.log(latitudes);
+	var myCenter = new google.maps.LatLng(lat, long1);
+
+	function refreshMap(longitudes, latitudes, tweets) {
 		if (markerClusterer) {
 			markerClusterer.clearMarkers();
 		}
@@ -120,10 +117,8 @@
 		var markerImage = new google.maps.MarkerImage(imageUrl,
 				new google.maps.Size(24, 32));
 
-		
 		for (var i = 0; i < latitudes.length; ++i) {
-			var latLng = new google.maps.LatLng(latitudes[i],
-					longitudes[i])
+			var latLng = new google.maps.LatLng(latitudes[i], longitudes[i])
 			var marker = new google.maps.Marker({
 				position : latLng,
 				draggable : true,
@@ -139,15 +134,15 @@
 		});
 	}
 
-	function initialize(mapElementId,longitudes,latitudes,tweets) {
-		
+	function initialize(mapElementId, longitudes, latitudes, tweets) {
+
 		map = new google.maps.Map(document.getElementById(mapElementId), {
 			zoom : 11,
 			center : myCenter,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
 
-		refreshMap(longitudes,latitudes);
+		refreshMap(longitudes, latitudes);
 	}
 
 	function clearClusters(e) {
@@ -155,8 +150,6 @@
 		e.stopPropagation();
 		markerClusterer.clearMarkers();
 	}
-
-	//google.maps.event.addDomListener(window, 'load', initialize('map',longitudes,latitudes,tweets));
 </script>
 </head>
 <body>
@@ -189,40 +182,41 @@
 	<!-- MAIN OUTLOOK TABLE  -->
 
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-6 HOLDER" id="holder_map" holder_id="1">
+		<!-- <div class="row" id="row0">
+			<div class="col-md-6 HOLDER" id="tile0" holder_id="1">
 				<div class="block">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="above_box text-center">MAP</div>
 							<div>
-								<button id="1" type="button" class="btn btn-sm" settings_button_id="1" onClick="settingsButtonClick(this)">Settings!</button>
+								<button id="0" type="button" class="btn btn-sm" onClick="settingsButtonClick(this)">Settings!</button>
 							</div>
 						</div>
 					</div>
-					<div id="settings1" class="settings" settings_div_id="1" omg="2">settings</div>
+					<div id="settings0" class="settings">settings</div>
 					<div id="map-container" class="box">
 						<div id="map"></div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6" id="holder_tweet_wall" holder_id="2">
+			<div class="col-md-6" id="tile1" holder_id="2">
 				<div class="block">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="above_box text-center">Tweets</div>
 							<div>
-								<button id="2" type="button" class="btn btn-sm" settings_button_id="2" onClick="settingsButtonClick(this)">Settings!</button>
+								<button id="1" type="button" class="btn btn-sm" onClick="settingsButtonClick(this)">Settings!</button>
 							</div>
 						</div>
 					</div>
-					<div id="settings2" class="settings" settings_div_id="2" omg="3">settings</div>
+					<div id="settings1" class="settings" omg="3">settings</div>
 					<div id="tweetwall" class="box"></div>
 				</div>
 			</div>
-		</div>
+		</div> -->
+		<div id="next"></div>
 
-		<div class="row">
+		<div class="row" id="last_row">
 			<div class="col-md-12">
 				<form class="form-horizontal" id="add_more_form">
 					<fieldset>
@@ -261,7 +255,49 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		console.log("ready!");
+
+		getTemplate();
+
+		function getTemplate() {
+			if (tile_template == null) {
+				$.ajax({
+					url : '/TeamBravo/main/tile_template',
+					success : function(data) {
+						tile_template = data;
+						initPage();
+					}
+				});
+			} else {
+				initPage();
+			}
+		}
+
+		function initPage() {
+			addTile(0);
+			current_num_of_tiles += 1;
+			addTile(1);
+			current_num_of_tiles += 1;
+		}
+
+		// extract();
+
+		function extract() {
+			//graphInit();
+			//getTweetWall();
+			getMaps();
+			//getSearchBox();
+			//getTopicsForWeek();
+			//getTopicsForMonth();
+			//getPieChart();
+			//getWordCloud();
+		}
+		;
+	});
+
 	var tile_template = null;
+	var current_num_of_tiles = 0;
 
 	function settingsButtonClick(clicked) {
 		var settings = $('#settings' + clicked.id);
@@ -278,141 +314,141 @@
 				url : '/TeamBravo/main/tile_template',
 				success : function(data) {
 					tile_template = data;
-					addTile(toAdd);
+					//addTile();
 				}
 			});
+		} else {
+			//addTile();
 		}
 	});
 
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
-			console.log("toAdd:" + toAdd);
-			console.log("tile_template:" + tile_template);
-			
+			console.log("addTile:" + toAdd);
+			var next = $('#next');
+			var c = current_num_of_tiles;
+			var unwrapped = 0;
+
+			if (next.closest('.row').length == 0) {
+				var row_index = c / 2;
+				next.append('<div id="row'+row_index+'" class="row"></div>');
+				next = $('#row' + row_index);
+				next.unwrap();
+				unwrapped = 1;
+			}
+			next.append(tile_template);
+			fixTemplate(c);
+			var tile_title = $('#tile_title' + c);
+			switch (toAdd) {
+			case 0:// add map
+				tile_title.text("Map");
+				getMaps('tile_content' + c);
+				break;
+			case 1:// add graphs
+				tile_title.text("Graphs");
+				break;
+			}
 		} else {
 			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 					+ tile_template);
 		}
 	}
-	$(document).ready(function() {
-		console.log("ready!");
-
-		/* $('.SETTINGS_BUTTON').each(function(index,element) {
-			console.log(element);
-			element.click(function(e) {
-				console.log("clicked");
-				var sender = $(e.target);
-				alert(sender.attr('settings_button_id'));
-				console.log(sender)
-				var index = sender.attr('settings_button_id');
-				var settings = $('#settings[settings_div_id=' + index + ']');
-				console.log(settings.attr('omg'));
-				settings.show();
-			})
-		}); */
-
-		$('#settings_button22').click(function(e) {
-			console.log("clicked");
-			var sender = $(e.target);
-			alert(sender.attr('settings_button_id'));
-			console.log(sender)
-			var index = sender.attr('settings_button_id');
-			var settings = $('#settings[settings_div_id=' + index + ']');
-			console.log(settings.attr('omg'));
-			settings.show();
+	function getMaps(container_id) {
+		console.log("getting maps: " + container_id);
+		$.ajax({
+			url : '/TeamBravo/maps/test2',
+			success : function(data) {
+				var longitudes = data['longitudes'];
+				var latitudes = data['latitudes'];
+				var tweets = data.text;
+				var needed = data.needed;
+				initMaps(container_id, longitudes, latitudes, tweets, needed);
+			}
 		});
+	}
 
-		extract();
+	function initMaps(container_id, longitudes, latitudes, tweets, needed) {
+		console.log("init maps");
+		$('#' + container_id).append(needed);
 
-		function extract() {
-			//graphInit();
-			//getTweetWall();
-			getMaps();
-			//getSearchBox();
-			//getTopicsForWeek();
-			//getTopicsForMonth();
-			//getPieChart();
-			//getWordCloud();
-		}
-		;
+		$('#added_map_container').attr('id',
+				'map_container' + current_num_of_tiles);
+		$('#added_map_div').attr('id', 'map' + current_num_of_tiles);
 
-		function graphInit() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphInit',
-				async : false, //Quick fix, remove later
-				success : function(data) {
-					console.log("Graphs Initialised");
-				}
-			});
-		}
+		google.maps.event.addDomListener(window, 'load', initialize('map'
+				+ current_num_of_tiles, longitudes, latitudes, tweets));
+	}
 
-		function getTweetWall() {
-			$.ajax({
-				url : '/TeamBravo/tweets/all',
-				success : function(data) {
-					$("#tweetwall").html(data);
-				}
-			});
-		}
+	function fixTemplate(c) {
+		$('#template_column_id').attr('id', 'tile' + c);
+		$('#template_title').attr('id', 'tile_title' + c);
+		$('#template_submit_button').attr('id', c);
+		$('#template_settings_div').attr('id', 'settings' + c);
+		$('#template_content').attr('id', 'tile_content' + c);
+	}
 
-		function getMaps() {
-			$.ajax({
-				url : '/TeamBravo/maps/test2',
-				success : function(data) {
-					console.log(data);
-					var longitudes = data['longitudes'];
-					var latitudes = data['latitudes'];
-					var tweets = data.text;
-					google.maps.event.addDomListener(window, 'load', initialize('map',longitudes,latitudes,tweets));
-					//$("#map").html(data);
-				}
-			});
-		}
+	function graphInit() {
+		$.ajax({
+			url : '/TeamBravo/graphs/graphInit',
+			async : false, //Quick fix, remove later
+			success : function(data) {
+				console.log("Graphs Initialised");
+			}
+		});
+	}
 
-		function getSearchBox() {
-			$.ajax({
-				url : '/TeamBravo/main/searchBox',
-				success : function(data) {
-					$("#search").html(data);
-				}
-			});
-		}
+	function getTweetWall() {
+		$.ajax({
+			url : '/TeamBravo/tweets/all',
+			success : function(data) {
+				$("#tweetwall").html(data);
+			}
+		});
+	}
 
-		function getTopicsForWeek() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphWeek',
-				success : function(data) {
-					$("#graphWeek").html(data);
-				}
-			});
-		}
+	function getSearchBox() {
+		$.ajax({
+			url : '/TeamBravo/main/searchBox',
+			success : function(data) {
+				$("#search").html(data);
+			}
+		});
+	}
 
-		function getTopicsForMonth() {
-			$.ajax({
-				url : '/TeamBravo/graphs/graphMonth',
-				success : function(data) {
-					$("#graphMonth").html(data);
-				}
-			});
-		}
+	function getTopicsForWeek() {
+		$.ajax({
+			url : '/TeamBravo/graphs/graphWeek',
+			success : function(data) {
+				$("#graphWeek").html(data);
+			}
+		});
+	}
 
-		function getPieChart() {
-			$.ajax({
-				url : '/TeamBravo/graphs/pieChart',
-				success : function(data) {
-					$("#chart").html(data);
-				}
-			});
-		}
+	function getTopicsForMonth() {
+		$.ajax({
+			url : '/TeamBravo/graphs/graphMonth',
+			success : function(data) {
+				$("#graphMonth").html(data);
+			}
+		});
+	}
 
-		function getWordCloud() {
-			$.ajax({
-				url : '/TeamBravo/graphs/wordCloud',
-				success : function(data) {
-					$("#wordCloud").html(data);
-				}
-			});
-		}
-	});
+	function getPieChart() {
+		$.ajax({
+			url : '/TeamBravo/graphs/pieChart',
+			success : function(data) {
+				$("#chart").html(data);
+			}
+		});
+	}
+
+	function getWordCloud() {
+		$.ajax({
+			url : '/TeamBravo/graphs/wordCloud',
+			success : function(data) {
+				$("#wordCloud").html(data);
+			}
+		});
+	}
 </script>
 </html>

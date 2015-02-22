@@ -175,11 +175,14 @@ public class MapsController {
 			}
 			
 		}
-		
+		String needed = "<div id='added_map_container' class='map-container'><div id='added_map_div' class='map'></div></div>";
+		ArrayList<String> need = new ArrayList<String>();
+		need.add(needed);
 		Map<String,ArrayList<String>> coordinates = new HashMap<String, ArrayList<String>>();
 		coordinates.put("longitudes", longitudes);
 		coordinates.put("latitudes", latitudes);
 		coordinates.put("text", tweets);
+		coordinates.put("needed", need);
 		
 		return coordinates;
 	}
