@@ -203,8 +203,8 @@
 						<div class="form-group">
 							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
 							<div class="col-md-8">
-								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="1" checked="checked"> Maps
-								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="2"> Graphs
+								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
+								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
 								</label>
 							</div>
 						</div>
@@ -250,24 +250,10 @@
 		}
 
 		function initPage() {
-			addTile(0);
-			addTile(1);
-			addTile(0);
+			addTile("0");
+			addTile("1");
+			addTile("0");
 		}
-
-		// extract();
-
-		function extract() {
-			//graphInit();
-			//getTweetWall();
-			getMaps();
-			//getSearchBox();
-			//getTopicsForWeek();
-			//getTopicsForMonth();
-			//getPieChart();
-			//getWordCloud();
-		}
-		;
 	});
 
 	var tile_template = null;
@@ -280,20 +266,22 @@
 	}
 
 	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
+		console.log("submit");
 		e.preventDefault(); //prevent form from submitting
 		var data = $("#add_more_form").serializeArray();
 		console.log(data[0].value);
 		var toAdd = data[0].value;
+		//debugger;
 		if (tile_template == null) {
 			$.ajax({
 				url : '/TeamBravo/main/tile_template',
 				success : function(data) {
 					tile_template = data;
-					//addTile();
+					addTile(toAdd);
 				}
 			});
 		} else {
-			//addTile();
+			addTile(toAdd);
 		}
 	});
 
@@ -318,12 +306,13 @@
 
 			fixTemplate(c);
 			var tile_title = $('#tile_title' + c);
+			//debugger;
 			switch (toAdd) {
-			case 0:// add map
+			case "0":// add map
 				tile_title.text("Map");
 				getMaps('tile_content' + c, c);
 				break;
-			case 1:// add graphs
+			case "1":// add graphs
 				tile_title.text("Graphs");
 				break;
 			}
