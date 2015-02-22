@@ -182,38 +182,7 @@
 	<!-- MAIN OUTLOOK TABLE  -->
 
 	<div class="container-fluid">
-		<!-- <div class="row" id="row0">
-			<div class="col-md-6 HOLDER" id="tile0" holder_id="1">
-				<div class="block">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="above_box text-center">MAP</div>
-							<div>
-								<button id="0" type="button" class="btn btn-sm" onClick="settingsButtonClick(this)">Settings!</button>
-							</div>
-						</div>
-					</div>
-					<div id="settings0" class="settings">settings</div>
-					<div id="map-container" class="box">
-						<div id="map"></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6" id="tile1" holder_id="2">
-				<div class="block">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="above_box text-center">Tweets</div>
-							<div>
-								<button id="1" type="button" class="btn btn-sm" onClick="settingsButtonClick(this)">Settings!</button>
-							</div>
-						</div>
-					</div>
-					<div id="settings1" class="settings" omg="3">settings</div>
-					<div id="tweetwall" class="box"></div>
-				</div>
-			</div>
-		</div> -->
+
 		<div id="next"></div>
 
 		<div class="row" id="last_row">
@@ -276,9 +245,7 @@
 
 		function initPage() {
 			addTile(0);
-			current_num_of_tiles += 1;
 			addTile(1);
-			current_num_of_tiles += 1;
 		}
 
 		// extract();
@@ -297,6 +264,7 @@
 	});
 
 	var tile_template = null;
+	var row_index = 0;
 	var current_num_of_tiles = 0;
 
 	function settingsButtonClick(clicked) {
@@ -324,25 +292,34 @@
 
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
+			current_num_of_tiles += 1;
 			console.log("addTile:" + toAdd);
+			console.log("curr:" + current_num_of_tiles);
 			var next = $('#next');
 			var c = current_num_of_tiles;
-			var unwrapped = 0;
-
-			if (next.closest('.row').length == 0) {
-				var row_index = c / 2;
+			var row = next.closest('.row');
+			console.log("row_index: "+ row_index);
+			if (row.length == 0) {
+				console.log("no row above");
 				next.append('<div id="row'+row_index+'" class="row"></div>');
 				next = $('#row' + row_index);
 				next.unwrap();
-				unwrapped = 1;
+				next.append(tile_template);
+				next.append('<div id="next"></div>');
+				row_index += 1;
+			} else {
+				console.log("row above");
+				next.append(tile_template);
+				$('#template_column_id').unwrap();
+				$('#row' + row_index).after('<div id="next"></div>');
 			}
-			next.append(tile_template);
+
 			fixTemplate(c);
 			var tile_title = $('#tile_title' + c);
 			switch (toAdd) {
 			case 0:// add map
 				tile_title.text("Map");
-				getMaps('tile_content' + c);
+				getMaps('tile_content' + c,c);
 				break;
 			case 1:// add graphs
 				tile_title.text("Graphs");
@@ -353,7 +330,8 @@
 					+ tile_template);
 		}
 	}
-	function getMaps(container_id) {
+
+	function getMaps(container_id,index) {
 		console.log("getting maps: " + container_id);
 		$.ajax({
 			url : '/TeamBravo/maps/test2',
@@ -362,24 +340,26 @@
 				var latitudes = data['latitudes'];
 				var tweets = data.text;
 				var needed = data.needed;
-				initMaps(container_id, longitudes, latitudes, tweets, needed);
+				initMaps(container_id, longitudes, latitudes, tweets, needed,index);
 			}
 		});
 	}
 
-	function initMaps(container_id, longitudes, latitudes, tweets, needed) {
+	function initMaps(container_id, longitudes, latitudes, tweets, needed,index) {
+		debugger;
 		console.log("init maps");
 		$('#' + container_id).append(needed);
 
 		$('#added_map_container').attr('id',
-				'map_container' + current_num_of_tiles);
-		$('#added_map_div').attr('id', 'map' + current_num_of_tiles);
+				'map_container' + index);
+		$('#added_map_div').attr('id', 'map' + index);
 
 		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ current_num_of_tiles, longitudes, latitudes, tweets));
+				+ index, longitudes, latitudes, tweets));
 	}
 
 	function fixTemplate(c) {
+		console.log("fixTemplate " +c );
 		$('#template_column_id').attr('id', 'tile' + c);
 		$('#template_title').attr('id', 'tile_title' + c);
 		$('#template_submit_button').attr('id', c);
