@@ -156,8 +156,13 @@ h3.box {
 	margin-bottom: 0px;
 }
 
-div.box {
+div.block {
 	background-color: #656565;
+	margin-top: 20px;
+}
+
+div.settings{
+	display: none;
 }
 
 h:FIRST-CHILD {

@@ -65,15 +65,35 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-6" id="holder_map">
-				<h3 class="box">Map</h3>
-				<div id="map-container" class="box">
-					<div id="map"></div>
+			<div class="col-md-6 HOLDER" id="holder_map" holder_id="1">
+				<div class="block">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="above_box text-center">MAP</div>
+							<div>
+								<button id="1" type="button" class="btn btn-sm" settings_button_id="1" onClick="settingsButtonClick(this)">Settings!</button>
+							</div>
+						</div>
+					</div>
+					<div id="settings1" class="settings" settings_div_id="1" omg="2">settings</div>
+					<div id="map-container" class="box">
+						<div id="map"></div>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-6 " id="holder_tweet_wall">
-				<h3 class="box">Tweets</h3>
-				<div id="tweetwall" class="box"></div>
+			<div class="col-md-6" id="holder_tweet_wall" holder_id="2">
+				<div class="block">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="above_box text-center">Tweets</div>
+							<div>
+								<button id="2" type="button" class="btn btn-sm" settings_button_id="2" onClick="settingsButtonClick(this)">Settings!</button>
+							</div>
+						</div>
+					</div>
+					<div id="settings2" class="settings" settings_div_id="2" omg="3">settings</div>
+					<div id="tweetwall" class="box"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -81,13 +101,41 @@
 	<!-- -------------------------------------------- -->
 
 </body>
-<footer>
-	footer
-</footer>
+<footer> footer </footer>
 
 <script type="text/javascript">
+	function settingsButtonClick(clicked) {
+		var settings = $('#settings' + clicked.id);
+		settings.show();
+	}
+
 	$(document).ready(function() {
 		console.log("ready!");
+
+		/* $('.SETTINGS_BUTTON').each(function(index,element) {
+			console.log(element);
+			element.click(function(e) {
+				console.log("clicked");
+				var sender = $(e.target);
+				alert(sender.attr('settings_button_id'));
+				console.log(sender)
+				var index = sender.attr('settings_button_id');
+				var settings = $('#settings[settings_div_id=' + index + ']');
+				console.log(settings.attr('omg'));
+				settings.show();
+			})
+		}); */
+
+		$('#settings_button22').click(function(e) {
+			console.log("clicked");
+			var sender = $(e.target);
+			alert(sender.attr('settings_button_id'));
+			console.log(sender)
+			var index = sender.attr('settings_button_id');
+			var settings = $('#settings[settings_div_id=' + index + ']');
+			console.log(settings.attr('omg'));
+			settings.show();
+		});
 
 		extract();
 
