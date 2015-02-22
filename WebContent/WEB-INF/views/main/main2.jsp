@@ -98,8 +98,8 @@
 		textSize : 12
 	} ] ];
 
-	var markerClusterer = null;
-	var map = null;
+	var markerClusterers = [];
+	var maps = [];
 	var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
 			+ 'chco=FFFFFF,008CFF,000000&ext=.png';
 
@@ -107,8 +107,10 @@
 	var lat = "55.873714";
 	var myCenter = new google.maps.LatLng(lat, long1);
 
-	function refreshMap(longitudes, latitudes, tweets) {
-		if (markerClusterer) {
+	function refreshMap(longitudes, latitudes, tweets,index) {
+		//debugger;
+		var marketClusterer = markerClusterers[index];
+		if (typeof markerClusterer != 'undefined') {
 			markerClusterer.clearMarkers();
 		}
 
@@ -126,23 +128,27 @@
 			});
 			markers.push(marker);
 		}
-
-		markerClusterer = new MarkerClusterer(map, markers, {
+		//debugger;
+		var map = maps[index];
+		var markerClusterer = new MarkerClusterer(map, markers, {
 			maxZoom : null,
 			gridSize : null,
 			styles : styles[null]
 		});
+		console.log(marketClusterer);
+		markerClusterers[index]=marketClusterer;
+		console.log(markerClusterers);
 	}
 
-	function initialize(mapElementId, longitudes, latitudes, tweets) {
-
-		map = new google.maps.Map(document.getElementById(mapElementId), {
+	function initialize(mapElementId, longitudes, latitudes, tweets,index) {
+		
+		var map = new google.maps.Map(document.getElementById(mapElementId), {
 			zoom : 11,
 			center : myCenter,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
-
-		refreshMap(longitudes, latitudes);
+		maps[index] = map;
+		refreshMap(longitudes, latitudes,tweets,index);
 	}
 
 	function clearClusters(e) {
@@ -183,7 +189,7 @@
 
 	<div class="container-fluid">
 
-		<div id="next"></div>
+		<div id="row0" class="row"></div>
 
 		<div class="row" id="last_row">
 			<div class="col-md-12">
@@ -246,6 +252,7 @@
 		function initPage() {
 			addTile(0);
 			addTile(1);
+			addTile(0);
 		}
 
 		// extract();
@@ -292,46 +299,42 @@
 
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
-			current_num_of_tiles += 1;
+			//debugger;
+			
 			console.log("addTile:" + toAdd);
 			console.log("curr:" + current_num_of_tiles);
 			var next = $('#next');
 			var c = current_num_of_tiles;
-			var row = next.closest('.row');
-			console.log("row_index: "+ row_index);
-			if (row.length == 0) {
-				console.log("no row above");
-				next.append('<div id="row'+row_index+'" class="row"></div>');
-				next = $('#row' + row_index);
-				next.unwrap();
-				next.append(tile_template);
-				next.append('<div id="next"></div>');
+			//var row = next.closest('.row');
+			console.log("row_index: " + row_index);
+			var row = $('#row' + row_index);
+			var children = row.children();
+			if (children.length >= 2) {
 				row_index += 1;
-			} else {
-				console.log("row above");
-				next.append(tile_template);
-				$('#template_column_id').unwrap();
-				$('#row' + row_index).after('<div id="next"></div>');
+				row.after('<div id="row'+row_index+'" class="row"></div>');
+				row = $('#row' + row_index);
 			}
+			row.append(tile_template);
 
 			fixTemplate(c);
 			var tile_title = $('#tile_title' + c);
 			switch (toAdd) {
 			case 0:// add map
 				tile_title.text("Map");
-				getMaps('tile_content' + c,c);
+				getMaps('tile_content' + c, c);
 				break;
 			case 1:// add graphs
 				tile_title.text("Graphs");
 				break;
 			}
+			current_num_of_tiles += 1;
 		} else {
 			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 					+ tile_template);
 		}
 	}
 
-	function getMaps(container_id,index) {
+	function getMaps(container_id, index) {
 		console.log("getting maps: " + container_id);
 		$.ajax({
 			url : '/TeamBravo/maps/test2',
@@ -340,26 +343,27 @@
 				var latitudes = data['latitudes'];
 				var tweets = data.text;
 				var needed = data.needed;
-				initMaps(container_id, longitudes, latitudes, tweets, needed,index);
+				initMaps(container_id, longitudes, latitudes, tweets, needed,
+						index);
 			}
 		});
 	}
 
-	function initMaps(container_id, longitudes, latitudes, tweets, needed,index) {
-		debugger;
+	function initMaps(container_id, longitudes, latitudes, tweets, needed,
+			index) {
+		//debugger;
 		console.log("init maps");
 		$('#' + container_id).append(needed);
 
-		$('#added_map_container').attr('id',
-				'map_container' + index);
+		$('#added_map_container').attr('id', 'map_container' + index);
 		$('#added_map_div').attr('id', 'map' + index);
 
 		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ index, longitudes, latitudes, tweets));
+				+ index, longitudes, latitudes, tweets,index));
 	}
 
 	function fixTemplate(c) {
-		console.log("fixTemplate " +c );
+		console.log("fixTemplate " + c);
 		$('#template_column_id').attr('id', 'tile' + c);
 		$('#template_title').attr('id', 'tile_title' + c);
 		$('#template_submit_button').attr('id', c);
