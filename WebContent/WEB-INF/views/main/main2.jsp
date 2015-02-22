@@ -135,9 +135,9 @@
 			gridSize : null,
 			styles : styles[null]
 		});
-		console.log(marketClusterer);
+		//console.log(marketClusterer);
 		markerClusterers[index]=marketClusterer;
-		console.log(markerClusterers);
+		//console.log(markerClusterers);
 	}
 
 	function initialize(mapElementId, longitudes, latitudes, tweets,index) {
