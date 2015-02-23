@@ -27,7 +27,7 @@ public class SearchController {
 	@Autowired
 	private SearchDAOImpl dao;
 	
-			
+	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
