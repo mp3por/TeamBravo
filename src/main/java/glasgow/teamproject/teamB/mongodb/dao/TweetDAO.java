@@ -1,9 +1,13 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
+=======
+import glasgow.teamproject.teamB.Search.Tweet;
+>>>>>>> fb37d3015fadff7872d6bdfeb8ad62447b290efb
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,9 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
+<<<<<<< HEAD
 import com.mongodb.BasicDBObject;
+
 
 public interface TweetDAO {
 	/**
@@ -33,17 +40,12 @@ public interface TweetDAO {
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
+		
+	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
 	
-	public BasicDBObject getNthEntry(String collectionName, int n);
-	
-	public ArrayList<Tweet> getResultList(int[] resultsDocids);
-	
-	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids);
-	
-	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
-
 	//For Terrier
 	public Queue<String> getCollection(String string);
+
 
 	// For Statistics
 	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted);
@@ -51,9 +53,13 @@ public interface TweetDAO {
 	public List<EntityCountPair> getTopEntities(Field field,
 			TimePeriod timePeriod, int numEntities);
 	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays);
+	public Set<String> getTweetsForId(int[] ids);
 	
 	// For Counting
 	public void dailyMapReduce(Date date);
 	public void mergingMapReduce(TimePeriod timePeriod);
+
+	
+
 
 }

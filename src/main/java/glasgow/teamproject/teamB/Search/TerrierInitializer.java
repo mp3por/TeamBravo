@@ -1,9 +1,8 @@
 package glasgow.teamproject.teamB.Search;
 
-import org.springframework.stereotype.Component;
 import org.terrier.utility.ApplicationSetup;
 
-@Component
+//@Component
 public class TerrierInitializer {
 	
 	private SearchMemoryIndex memoryIndex;

@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
+import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.net.UnknownHostException;
@@ -11,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,8 +31,22 @@ public class TweetController {
 		ModelAndView mv = new ModelAndView("betterAllTweets");
 		List<HashMap<String,Object>> tweets = getTweets();
 		mv.addObject("tweets",tweets);
+		mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
 		return mv;
 	}
+	
+	
+	
+	@RequestMapping("/test")
+	public ModelAndView allTweetsTest() throws UnknownHostException{
+		ModelAndView mv = new ModelAndView("only-tweets");
+		List<HashMap<String,Object>> tweets = getTweets();
+		mv.addObject("tweets",tweets);
+		//mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
+		return mv;
+	}
+	
+		
 	/**
 	 * This method will handle the connection to the db later
 	 * @throws UnknownHostException 

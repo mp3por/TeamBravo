@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.text.DateFormat;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,9 @@ public class TweetDAOImpl implements TweetDAO {
 	private MongoOperations mongoOps;
 
 	public TweetDAOImpl() {
-
+		
 	}
-
+	
 	public TweetDAOImpl(MongoOperations mongoOps) {
 		this.mongoOps = mongoOps;
 	}
@@ -55,14 +57,12 @@ public class TweetDAOImpl implements TweetDAO {
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
-		// System.out.println("OB:" + ob.toString());
-		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets
-																			// collection
+		//System.out.println("OB:" + ob.toString());
+		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
 		dbCollection.insert(ob);// stores the JSON
 
 		// Simple store as String
-		mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet
-															// as string
+		mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet as string
 
 		System.out.println("SAVE");
 	}
@@ -70,68 +70,87 @@ public class TweetDAOImpl implements TweetDAO {
 	@Override
 	public String readByTime(String time, String collectionName) {
 		Query query = new Query(Criteria.where("timestamp_ms").is(time));
-		String tweet = this.mongoOps.findOne(query, String.class,
-				collectionName);
+		String tweet = this.mongoOps.findOne(query, String.class, collectionName);
 		return tweet;
 	}
 
 	@Override
 	public List<String> getTweetsForMaps(String collectionName) {
-		List<String> results = mongoOps.find(new Query(), String.class,
-				collectionName);
+		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
 		return results;
+	}
+	
+	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
+	private double[] getCoordinate(DBObject tweet){	
+		
+		double[] coordinate = new double[2];
+//		Map<String, Object> map = tweet.getTweet();
+//		System.err.println(map);
+		if (tweet.get("coordinates") != null){
+			String pairString = tweet.get("coordinates").toString();
+//			System.err.println(pairString);
+		
+			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
+			int comma = pairString.lastIndexOf(',');
+			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
+		
+			String latitude = pairString.substring(startOfCoordinate, comma - 1);
+			String longtitude = pairString.substring(comma + 2, endOfCoordinate + 1);
+		
+		
+			coordinate[0] = Double.parseDouble(latitude);
+			coordinate[1] = Double.parseDouble(longtitude);
+		
+		
+			return coordinate;
+		}
+		else return null;
 	}
 
 	@Override
-	public boolean addNamedEntitiesById(String id, String collectionName,
-			Map<String, String> NamedEntities) {
+	public boolean addNamedEntitiesById(String id, String collectionName, Map<String, String> NamedEntities) {
 
 		// just for referance what is going on
-		/*
-		 * // gets the collection in which is the entry you will modify
-		 * DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		 * // used to get the specific tweet DBObject query = new
-		 * BasicDBObject("id_str",id); // to hold the named Entities DBObject
-		 * namedEntitiesList = new BasicDBObject(NamedEntities); // this will be
-		 * added to the entry DBObject updateObject = new
-		 * BasicDBObject("named_entities",namedEntitiesList); // the actual
-		 * updates WriteResult result = dbCollection.update(query,new
-		 * BasicDBObject("$push",updateObject)); // isUpdateOfExisting will
-		 * return true if an existing entry was updated return
-		 * result.isUpdateOfExisting();
-		 */
+		/*// gets the collection in which is the entry you will modify
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+		// used to get the specific tweet
+		DBObject query = new BasicDBObject("id_str",id);
+		// to hold the named Entities
+		DBObject namedEntitiesList = new BasicDBObject(NamedEntities);
+		// this will be added to the entry
+		DBObject updateObject = new BasicDBObject("named_entities",namedEntitiesList);
+		// the actual updates
+		WriteResult result = dbCollection.update(query,new BasicDBObject("$push",updateObject));
+		// isUpdateOfExisting will return true if an existing entry was updated
+		return result.isUpdateOfExisting();*/
 
 		Query query = new Query(Criteria.where("id_str").is(id));
 		Update update = new Update();
 		update.push("named_entities", NamedEntities);
 
-		WriteResult result = mongoOps
-				.updateFirst(query, update, collectionName);
+		WriteResult result = mongoOps.updateFirst(query, update, collectionName);
 
 		return result.isUpdateOfExisting();
 	}
 
+	
 	@Override
-	public ArrayList<HashMap<String, Object>> getLastTweets(int count,
-			String collectionName) {
+	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
-		DBCursor dbCursor = dbCollection.find().sort(
-				new BasicDBObject("timestamp_ms", -1));
-		dbCursor.next(); // this is needed as the first element is empty! Please
-							// do not touch this again.
-		ArrayList<HashMap<String, Object>> tweets = new ArrayList<>();
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1));
+		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again. 
+		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
 		// parsing gets complicated!
-		while (dbCursor.hasNext() && i < count) {
+		while(dbCursor.hasNext() && i<count){
 			BasicDBObject currentObj = (BasicDBObject) dbCursor.next();
 			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key : currentObj.keySet()) {
+			for (String key: currentObj.keySet()) {
 				if (ProjectProperties.defaultNE.contains(key)) {
 					String s = currentObj.getString(key);
-					// if s contains only "[]", return null - no need to parse
-					// an empty array
+					// if s contains only "[]", return null - no need to parse an empty array
 					if (s.length() == 2) {
 						tweet.put(key, null);
 						continue;
@@ -142,11 +161,12 @@ public class TweetDAOImpl implements TweetDAO {
 
 					HashSet<String> NEs = new HashSet<String>();
 
-					for (String NE : s.split(",")) {
+					for (String NE: s.split(",")) {
 						NEs.add(NE);
 					}
 					tweet.put(key, NEs);
-				} else {
+				}
+				else {
 					tweet.put(key, currentObj.get(key));
 				}
 			}
@@ -162,89 +182,50 @@ public class TweetDAOImpl implements TweetDAO {
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
-		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(
-				foo.size());
+		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(foo.size());
 		foo.next();
-		while (foo.hasNext()) {
+		while(foo.hasNext()){
 			tweets.add(foo.next().toString());
 		}
 		return tweets;
 	}
-
-	// For Terrier Retriving
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public BasicDBObject getNthEntry(String collectionName, int n) {
+	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids) {
+		
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
-		foo.skip(n + 1);
-		return (BasicDBObject) foo.next();
-	}
-
-	@Override
-	public ArrayList<Tweet> getResultList(int[] resultsDocids) {
-		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
-		for (int i = 0; i < resultsDocids.length; i++) {
-			currentObj = getNthEntry("tweets", resultsDocids[i]);
-			list.add(new Tweet(currentObj));
+		foo.next();
+		
+		ArrayList<Tweet> collectionList = new ArrayList<>();
+		while(foo.hasNext())
+			collectionList.add(new Tweet(foo.next().toMap()));			
+		
+		ArrayList<Tweet> resultsList = new ArrayList<>();
+		Tweet tweet;
+		for (int i = 0; i < resultsDocids.length; i++){
+			tweet = collectionList.get(resultsDocids[i]);
+			resultsList.add(tweet);
 		}
-		return list;
-	}
-
-	@Override
-	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids) {
-		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
-		for (int i = 0; i < resultsDocids.length; i++) {
-			currentObj = getNthEntry("tweets", resultsDocids[i]);
-			list.add(new Tweet(currentObj));
-		}
-		list.sort(Tweet.RetweetCountComparator);
-		return list;
-	}
-
-	@Override
-	public ArrayList<HashMap<String, Object>> getTerrierResults(
-			ArrayList<Tweet> tweets) {
-		ArrayList<HashMap<String, Object>> results = new ArrayList<>();
-		BasicDBObject currentObj;
-		for (int i = 0; i < tweets.size(); i++) {
-			currentObj = tweets.get(i).getTweet();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key : currentObj.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentObj.getString(key);
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE : s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				} else {
-					tweet.put(key, currentObj.get(key));
-				}
-			}
-			results.add(tweet);
-		}
-		return results;
+		
+		return resultsList;
 	}
 
 	@Override
 	public Queue<String> getCollection(String string) {
 		List<String> o = this.mongoOps.find(new Query(), String.class);
 		Queue<String> j = new PriorityQueue<String>();
-		for (String p : o) {
+		for (String p : o){
 			j.add(p);
 		}
 		return j;
+	}
+
+	@Override
+	public Set<String> getTweetsForId(int[] ids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -634,5 +615,13 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 	
 	
+
+
+
+	@Override
+	public Set<String> getTweetsForId(int[] ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
