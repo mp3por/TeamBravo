@@ -50,7 +50,9 @@
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.UserID}">
-
+					<c:set var="UserIDTemplate" scope="page" value="<a href='http://en.wikipedia.org/w/index.php?search='>Something</a>"/>
+					<% /*${fn:replace(tweet.text, ${NE}, ${UserIDTemplate})}*/ %>
+					
 					<img src=<c:url value="resources/img/at2.png"/> class="icon_img" />
 					<div class="xTooltip" title=${NE}>
 						<a href="http://twitter.com/${NE}">${NE}</a>
@@ -58,6 +60,7 @@
 					<div class="UserIDTooltip" title=${NE
 						} style="visibility: hidden; display: none;"></div>
 					<br />
+					
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.URL}">
 					<img src=<c:url value="resources/img/external1.png"/>

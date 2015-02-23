@@ -29,6 +29,18 @@ public class TweetController {
 		ModelAndView mv = new ModelAndView("betterAllTweets");
 		List<HashMap<String,Object>> tweets = getTweets();
 		mv.addObject("tweets",tweets);
+		mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
+		return mv;
+	}
+	
+	
+	
+	@RequestMapping("/test")
+	public ModelAndView allTweetsTest() throws UnknownHostException{
+		ModelAndView mv = new ModelAndView("only-tweets");
+		List<HashMap<String,Object>> tweets = getTweets();
+		mv.addObject("tweets",tweets);
+		//mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
 		return mv;
 	}
 	/**

@@ -157,6 +157,148 @@
 		markerClusterer.clearMarkers();
 	}
 </script>
+
+<script type="text/javascript" id="TooltipsForNEs">
+$(document)
+.ready(
+		function() {
+
+			$('.NETooltip').each(function() {
+				console.log($(this).text());
+				console.debug($(this));
+				$(this).qtip({
+					content : {
+						text : $(this).context.innerText
+					}
+				})
+			});
+
+			$('.UserIDTooltip').each(function() {
+				console.log($(this).text());
+				console.debug($(this));
+				$(this).qtip({
+					content : {
+						text : $(this).context.innerText
+					}
+				})
+			});
+
+			$('.URLTooltip').each(function() {
+				console.log($(this).text());
+				console.debug($(this));
+				$(this).qtip({
+					content : {
+						text : $(this).context.innerText
+					}
+				})
+			});
+
+			$('.HashtagTooltip').each(function() {
+				console.log($(this).text());
+				console.debug($(this));
+				$(this).qtip({
+					content : {
+						text : $(this).context.innerText
+					}
+				})
+			});
+
+			// Grab all elements with the class "hasTooltip"
+			$('.xTooltip')
+					.each(
+							function() { // Notice the .each() loop, discussed below
+								$(this)
+										.qtip(
+												{
+													content : {
+														text : $(
+																this)
+																.next(
+																		'div')
+													// Use the "div" element next to this for the content
+													},
+													style : {
+														width : 250,
+														classes : 'qtip-blue qtip-shadow qtip-rounded',
+														tip : {
+															corner : true,
+														}
+													}
+
+												});
+							});
+
+			$('.NETest').each(function() {
+				text = getWikiBox($(this).attr("title"));
+				console.log("For each: " + $(this).attr("title"));
+				console.log(text);
+				$(this).html("blah" + "\n" + text);
+			});
+
+			$('.URLTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is an URL. Click on it to open it")
+							});
+
+			$('.HashtagTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is a hashtag. Click on it to search for this hashtag in Twitter");
+
+							});
+
+			$('.UserIDTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is a mentioned user on Twitter. Click to see the profile");
+							});
+
+			$('.LocationTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is a location. Click to search for this place in Google Maps");
+
+							});
+			$('.PersonTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is a Person. Click to search for this place in Wikipedia");
+
+							});
+
+			$('.OrganizationTooltip')
+					.each(
+							function() {
+								title = $(this).attr("title");
+								$(this)
+										.html(
+												title
+														+ " is an Organization. Click to search for this place in Wikipedia");
+
+							});
+		});
+</script>
 </head>
 <body>
 
@@ -204,8 +346,11 @@
 							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
 							<div class="col-md-8">
 								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-								</label>
+									</label> 
+								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+									</label>
+								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+									</label>
 							</div>
 						</div>
 
@@ -253,6 +398,7 @@
 			addTile("0");
 			addTile("1");
 			addTile("0");
+			addTile("2");
 		}
 	});
 
@@ -315,6 +461,11 @@
 			case "1":// add graphs
 				tile_title.text("Graphs");
 				break;
+			case "2":// add tweetwall
+				console.log ("add tweetwall");
+				tile_title.text("Tweet Wall" + c);
+				getTweetwall("TweetWall" + c, c);
+				break;
 			}
 			current_num_of_tiles += 1;
 		} else {
@@ -337,7 +488,7 @@
 			}
 		});
 	}
-
+	
 	function initMaps(container_id, longitudes, latitudes, tweets, needed,
 			index) {
 		//debugger;
@@ -349,6 +500,40 @@
 
 		google.maps.event.addDomListener(window, 'load', initialize('map'
 				+ index, longitudes, latitudes, tweets,index));
+	}
+	
+	function initWall(container_id, data, index) {
+		//debugger;
+		$('#tile_content'+index).append(data);
+		console.log("init wall");
+		//console.log(tweets);
+		
+		/*
+		console.log("container_id: " + container_id);
+		console.log("index: " + index);
+		
+		$('#' + container_id).append(needed);
+		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
+		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
+		
+		*/
+	}
+	
+	function getTweetwall(container_id, index) {
+		console.log("Getting tweetwall: " + container_id);
+		$.ajax({
+			url : '/TeamBravo/tweets/test',
+			success : function(data) {
+				//debugger;
+				//console.log("consoler:");
+				//console.log(data);
+				//var tweets = null;
+				//var needed = null;
+				//console.log (data);
+				console.log("Success for tweetwall");
+				initWall(container_id, data, index);
+			}
+		});
 	}
 
 	function fixTemplate(c) {
