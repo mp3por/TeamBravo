@@ -1,6 +1,5 @@
 package glasgow.teamproject.teamB.Search;
 
-import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
@@ -28,8 +27,6 @@ public class SearchController {
 	@Autowired
 	private SearchDAOImpl dao;
 	
-	@Autowired
-	private MapsController maps;
 			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
