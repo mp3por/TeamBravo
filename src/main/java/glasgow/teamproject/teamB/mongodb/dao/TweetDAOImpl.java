@@ -614,14 +614,4 @@ public class TweetDAOImpl implements TweetDAO {
 		return tweet;
 	}
 	
-	
-
-
-
-	@Override
-	public Set<String> getTweetsForId(int[] ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
