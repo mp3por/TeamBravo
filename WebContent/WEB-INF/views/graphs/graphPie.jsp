@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/include.jsp"%>
 <script>
 	var pieTweets = ${TweetsForPie};
-	//console.log(pieTweets);
 	var chart = c3.generate({
 		data : {
 			columns : [ 
