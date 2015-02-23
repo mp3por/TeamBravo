@@ -354,7 +354,8 @@ $(document)
 									</label>
 								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
 									</label>
-
+								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+									</label>
 							</div>
 						</div>
 
@@ -475,12 +476,29 @@ $(document)
 				tile_title.text("Tweet Wall" + c);
 				getTweetwall("TweetWall" + c, c);
 				break;
+			case "3":
+				tile_title.text("Stats");
+				getStastics("tile_content" + c,c);
+				break;
 			}
 			current_num_of_tiles += 1;
 		} else {
 			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 					+ tile_template);
 		}
+	}
+	
+	function getStastics(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/counter/test',
+			success : function(data) {
+				initStatistics(data,index);
+			}
+		});
+	}
+	
+	function initStatistics(data,index){
+		$('#tile_content'+index).html(data);
 	}
 
 	function getMaps(container_id, index) {
