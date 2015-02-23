@@ -20,13 +20,13 @@ import org.terrier.realtime.memory.MemoryIndex;
  *
  */
 
-public class TweetsRetriver {
+public class TweetsRetriever {
 		
 	private TweetDAO tweetSaver;
 	private ArrayList<Tweet> resultsList;
 	private boolean alreadyRunQuery = false;
 	
-	public TweetsRetriver(TweetDAO tweetSaver){		
+	public TweetsRetriever(TweetDAO tweetSaver){		
 		this.tweetSaver = tweetSaver;
 		alreadyRunQuery = false;
 	}
