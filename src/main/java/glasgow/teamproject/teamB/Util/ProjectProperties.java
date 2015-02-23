@@ -13,7 +13,7 @@ public class ProjectProperties {
 	
 	public static final String TWEET_COLLECTION = "tweets";
 	
-	public final static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID", "Emoticon"));
+	public final static HashSet<String> defaultNE = new HashSet<String>(Arrays.asList("Location", "Organization", "Person", "Hashtag", "URL", "UserID"));
 	
 
 }

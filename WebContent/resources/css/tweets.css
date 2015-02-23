@@ -22,13 +22,13 @@
 }
  
 .username {
-	font-size: 2em;
+	font-size: 1.5em;
 	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
 	
 }
  
 .tweet {
-  width: 60%;
+  width: 95%;
   overflow: auto;
   border: dashed 1px blue;
   margin-left: 5px;
@@ -40,41 +40,21 @@
 	background: #282828;
 	cursor: pointer;
 }
- 
- 
-.qtip-wiki{
-    max-width: 385px;
-}
 
-.qtip-wiki p{
-    margin: 0 0 6px;
-}
-
-.qtip-wiki h1{
-    font-size: 20px;
-    line-height: 1.1;
-    margin: 0 0 5px;
-}
-
-.qtip-wiki img{
-    float: left;
-    margin: 10px 10px 10px 0;
-}
-
-.qtip-wiki .info{
-    overflow: hidden;
-}
-
-.qtip-wiki p.note{
-    font-weight: 700;
-} 
-
-
-
-.qtip-content {
-	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
+.tweetText {
 	font-weight: 300;
 	font-size: 2em;
 	line-height: 2em;
 	color: #000000;
 }
+
+
+
+a.tooltip {outline:none; }
+a.tooltip strong {line-height:30px;}
+a.tooltip:hover {text-decoration:none;}
+a.tooltip span { z-index:10;display:none; padding:14px 20px; margin-top:-30px; margin-left:28px; width:240px; line-height:16px; }
+a.tooltip:hover span{ display:inline; position:absolute; color:#111; border:1px solid #DCA; background:#fffAF0;}
+.callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
+/*CSS3 extras*/
+a.tooltip span { border-radius:4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; -moz-box-shadow: 5px 5px 8px #CCC; -webkit-box-shadow: 5px 5px 8px #CCC; box-shadow: 5px 5px 8px #CCC; }
