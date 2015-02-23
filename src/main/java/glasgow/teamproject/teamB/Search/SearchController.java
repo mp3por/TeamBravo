@@ -30,14 +30,6 @@ public class SearchController {
 	@Autowired
 	private SearchDAOImpl dao;
 	
-	/* All the controllers */
-//	@Autowired
-//	private MapsController maps;
-//	@Autowired
-//	private GraphsController graphs;
-//	@Autowired
-//	private TweetController tweets;
-			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
