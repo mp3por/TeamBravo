@@ -1,7 +1,9 @@
 package glasgow.teamproject.teamB.Search;
 
+import glasgow.teamproject.teamB.Graphs.GraphsController;
 import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
+import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.Date;
@@ -28,8 +30,13 @@ public class SearchController {
 	@Autowired
 	private SearchDAOImpl dao;
 	
-	@Autowired
-	private MapsController maps;
+	/* All the controllers */
+//	@Autowired
+//	private MapsController maps;
+//	@Autowired
+//	private GraphsController graphs;
+//	@Autowired
+//	private TweetController tweets;
 			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
@@ -40,25 +47,26 @@ public class SearchController {
 		return mv;
 	}
 	
-	@RequestMapping("/terrier/{mode}/{query}")
-	public ModelAndView search(@PathVariable Map<String, String> pathVar){
-
-		String mode = pathVar.get("mode");
-		String query = pathVar.get("query");
+	@RequestMapping("/terrier/{query}")
+	public ModelAndView search(@PathVariable("query") String query){		
 		
-		
-    	Set<String> resultSet = dao.getTweetsForQuery(query);
-
-    	//TODO : vili find a way to do this AspectOriented
+//    	Set<String> resultSet = dao.getTweetsForQuery(query);
+    	String now = (new Date()).toString();
+    	// TODO : vili find a way to do this AspectOriented
     	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
+    	// String resultTweetWall = tweetWall.getResultsForSetOfTweets(tweetsSet);
+    	// String resultGraphs = graphs.getResultsForSetOfTweets(tweetSet);
     	
-    	System.err.println(dao.getResultsList().get(2).toString());
+//    	System.err.println(dao.getResultsList().get(2).toString());
     	
-    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+//    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
     	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
+//		modelandview.addObject("tweets", tweets);
+//		
+//		modelandview.addObject("count", tweets.size());
+		modelandview.addObject("query", query);
+		modelandview.addObject("serverTime", now);
 		
 		return modelandview;
 	}
