@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Search;
 
+import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ public class SearchController {
 	
 	@Autowired
 	private SearchDAOImpl dao;
+	
+	@Autowired
+	private MapsController maps;
 			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
@@ -42,8 +47,10 @@ public class SearchController {
 		String query = pathVar.get("query");
 		
 		
-    	dao.runQuery(mode, query);
-    	System.err.println(mode + " "+ query);
+    	Set<String> resultSet = dao.getTweetsForQuery(query);
+
+    	//TODO : vili find a way to do this AspectOriented
+    	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
     	
     	System.err.println(dao.getResultsList().get(2).toString());
     	
@@ -55,4 +62,6 @@ public class SearchController {
 		
 		return modelandview;
 	}
+	
+	
 }

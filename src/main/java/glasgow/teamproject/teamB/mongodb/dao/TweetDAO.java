@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public interface TweetDAO {
@@ -32,11 +33,7 @@ public interface TweetDAO {
 	
 	//For Terrier
 	public Queue<String> getCollection(String string);
-	
-	public ArrayList<Double> latitudesForMaps(String collectionName);
-	
-	public ArrayList<Double> longtitudesForMaps(String collectionName);
 
-	
+	public Set<String> getTweetsForId(int[] ids);
 
 }

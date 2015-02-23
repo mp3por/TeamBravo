@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,40 +97,6 @@ public class TweetDAOImpl implements TweetDAO {
 			return coordinate;
 		}
 		else return null;
-	}
-	
-	@Override
-	public ArrayList<Double> latitudesForMaps(String collectionName){
-		
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		DBCursor foo = dbCollection.find();
-		
-		ArrayList<Double> latitudes = new ArrayList<>();
-		double[] coordinate;
-		while (foo.hasNext()){
-			coordinate = this.getCoordinate(foo.next());
-			if (coordinate != null)
-				latitudes.add(coordinate[0]);
-		}
-//		System.err.println("latitudes list created");
-		return latitudes;
-	}
-	
-	@Override
-	public ArrayList<Double> longtitudesForMaps(String collectionName){
-		
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		DBCursor foo = dbCollection.find();
-		
-		ArrayList<Double> longtitudes = new ArrayList<>();
-		double[] coordinate;
-		while (foo.hasNext()){
-			coordinate = this.getCoordinate(foo.next());
-			if (coordinate != null)
-				longtitudes.add(coordinate[1]);
-		}
-//		System.err.println(longtitudes);
-		return longtitudes;
 	}
 
 	@Override
@@ -245,5 +212,11 @@ public class TweetDAOImpl implements TweetDAO {
 			j.add(p);
 		}
 		return j;
+	}
+
+	@Override
+	public Set<String> getTweetsForId(int[] ids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

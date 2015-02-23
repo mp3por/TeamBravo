@@ -6,10 +6,10 @@ import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+
 //import org.terrier.realtime.memory.MemoryIndex;
 
 /**
@@ -45,10 +46,9 @@ public class SearchDAOImpl {
 	// this.tweetSaver = tweetSaver;
 	// alreadyRunQuery = false;
 	// }
-	
-	
+
 	@PostConstruct
-	public void setUp(){
+	public void setUp() {
 		queryManager = new Manager(index);
 	}
 
@@ -61,12 +61,12 @@ public class SearchDAOImpl {
 			return this.resultsList;
 	}
 
-//	public void sortResults(Comparator<Tweet> cmp) {
-//		this.resultsList.sort(cmp);
-//	}
+	// public void sortResults(Comparator<Tweet> cmp) {
+	// this.resultsList.sort(cmp);
+	// }
 
 	public void runQuery(String mode, String query) {
-		
+
 		System.err.println("Running search for " + query);
 		StringBuffer sb = new StringBuffer();
 		sb.append(CollectionEnrichment.normaliseString(query));
@@ -85,22 +85,46 @@ public class SearchDAOImpl {
 		int[] resultsDocids = srq.getResultSet().getDocids();
 		this.resultsList = this.tweetSaver.getResultsList(
 				ProjectProperties.TWEET_COLLECTION, resultsDocids);
-		
-		switch(mode)
-		{		
-			case "retweeted":
-				this.resultsList.sort(Tweet.RetweetCountComparator);
-				break;
-				
-			case "recent":
-				this.resultsList.sort(Tweet.PostedTimeComparator);
-				break;
-				
-			case "normal":
-				break;
+
+		switch (mode) {
+		case "retweeted":
+			this.resultsList.sort(Tweet.RetweetCountComparator);
+			break;
+
+		case "recent":
+			this.resultsList.sort(Tweet.PostedTimeComparator);
+			break;
+
+		case "normal":
+			break;
 		}
-		
+
 		this.alreadyRunQuery = true;
+	}
+
+	public Set<String> getTweetsForQuery(String query) {
+
+		String mode = "normal";
+		
+		
+		System.err.println("Running search for " + query);
+		StringBuffer sb = new StringBuffer();
+		sb.append(CollectionEnrichment.normaliseString(query));
+		SearchRequest srq = queryManager.newSearchRequest("query",
+				sb.toString());
+		/* What matching model should I set? */
+		/* Study searchRequest class and matching model. */
+		srq.addMatchingModel("Matching", "DirichletLM");
+		srq.setOriginalQuery(sb.toString());
+		srq.setControl("decorate", "on");
+		queryManager.runPreProcessing(srq);
+		queryManager.runMatching(srq);
+		queryManager.runPostProcessing(srq);
+		queryManager.runPostFilters(srq);
+
+		int[] resultsDocids = srq.getResultSet().getDocids();
+		this.alreadyRunQuery = true;
+		return tweetSaver.getTweetsForId(resultsDocids);
 	}
 
 	/*
