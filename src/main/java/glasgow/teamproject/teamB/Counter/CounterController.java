@@ -1,10 +1,12 @@
 package glasgow.teamproject.teamB.Counter;
 
-import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
-import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,11 +21,11 @@ public class CounterController {
 	@Autowired
 	private TweetDAO DBHelper;
 
-	Counter c = null;
-
 	@RequestMapping("/stat")
 	public ModelAndView getStat() {
 		ModelAndView model = new ModelAndView("statistics");
+		
+		DBHelper.dailyMapReduce(new Date());
 	
 		// TODO
 		Calendar stCal = Calendar.getInstance();
@@ -48,17 +50,26 @@ public class CounterController {
 		model.addObject("most_fav_tweet", most_fav.get("text"));
 		model.addObject("most_fav_tweet_user", most_fav.get("user"));
 		
+		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(Field.HASHTAG, TimePeriod.PASTDAY, 1);
+		if( !most_pop_hashtag.isEmpty() ) model.addObject("most_pop_hashtag", most_pop_hashtag.get(0).getID());
+		
+		List<EntityCountPair> most_pop_location =  DBHelper.getTopEntities(Field.LOCATION, TimePeriod.PASTDAY, 1);
+		if( !most_pop_location.isEmpty() ) model.addObject("most_pop_location", most_pop_location.get(0).getID());
+		
+		List<EntityCountPair> most_pop_person =  DBHelper.getTopEntities(Field.PERSON, TimePeriod.PASTDAY, 1);
+		if( !most_pop_person.isEmpty() ) model.addObject("most_pop_person", most_pop_person.get(0).getID());
+		
 		return model;
 	}
 
-	@RequestMapping("/test")
-	public ModelAndView getCount() {
-
-		if (c == null)
-			c = new Counter();
-
-		Calendar today = Calendar.getInstance();
-		c.dailyMapReduce(today.getTime());
+//	@RequestMapping("/test")
+//	public ModelAndView getCount() {
+//
+//		if (c == null)
+//			c = new Counter();
+//
+//		Calendar today = Calendar.getInstance();
+//		c.dailyMapReduce(today.getTime());
 		// today.add(Calendar.DATE, -1);
 		// c.dailyMapReduce(today.getTime());
 		// today.add(Calendar.DATE, -4);
@@ -66,29 +77,29 @@ public class CounterController {
 		// today.add(Calendar.DATE, -2);
 		// c.dailyMapReduce(today.getTime());
 
-		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
+//		c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
+//
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("Top Entities<br>");
+//		List<EntityCountPair> l = c.getTopEntities(Counter.Field.PERSON,
+//				Counter.TimePeriod.PASTWEEK, 20);
+//		for (EntityCountPair e : l) {
+//			sb.append(e.getID() + " : " + e.getCount().intValue() + "<br>");
+//		}
+//		sb.append("<br><br>");
+//
+//		ModelAndView model = new ModelAndView("counter");
+//		model.addObject("output1", sb.toString());
+//
+//		StringBuilder sb2 = new StringBuilder();
+//		sb2.append("Entity Search \"rain\"<br>");
+//		List<DateCountPair> l2 = c.getEntitiyTrend("rain", 7);
+//		for (DateCountPair e : l2) {
+//			sb2.append(e.getDate() + " : " + e.getCount() + "<br>");
+//		}
+//		model.addObject("output2", sb2.toString());
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("Top Entities<br>");
-		List<EntityCountPair> l = c.getTopEntities(Counter.Field.PERSON,
-				Counter.TimePeriod.PASTWEEK, 20);
-		for (EntityCountPair e : l) {
-			sb.append(e.getID() + " : " + e.getCount().intValue() + "<br>");
-		}
-		sb.append("<br><br>");
-
-		ModelAndView model = new ModelAndView("counter");
-		model.addObject("output1", sb.toString());
-
-		StringBuilder sb2 = new StringBuilder();
-		sb2.append("Entity Search \"rain\"<br>");
-		List<DateCountPair> l2 = c.getEntitiyTrend("rain", 7);
-		for (DateCountPair e : l2) {
-			sb2.append(e.getDate() + " : " + e.getCount() + "<br>");
-		}
-		model.addObject("output2", sb2.toString());
-
-		return model;
-	}
+//		return model;
+//	}
 
 }

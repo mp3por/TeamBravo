@@ -30,12 +30,13 @@ public class Counter {
 	private DB db;
 
 	/** collection names */
+	public static final String TWEETS_COLLECT = "tweets";
 	public static final String DAILY_COLLECT_NAME = "DCNT";
 	public static final String WEEKLY_COLLECT_NAME = "WCNT";
 	public static final String MONTHLY_COLLECT_NAME = "MCNT";
 
 	private static final String COUNTER_DATE_FORMAT = "yyyy-MM-dd";
-	private DateFormat counterDateFormat;
+	private static DateFormat counterDateFormat = new SimpleDateFormat(COUNTER_DATE_FORMAT);
 
 	public enum Field {
 		HASHTAG {
