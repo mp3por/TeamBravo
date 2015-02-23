@@ -1,8 +1,9 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Graphs.TopicWrapper;
+import glasgow.teamproject.teamB.Counter.Counter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +11,6 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.mongodb.BasicDBObject;
-
-
-import org.json.JSONArray;
 
 public interface TweetDAO {
 	/**
@@ -44,6 +42,8 @@ public interface TweetDAO {
 	//For Terrier
 	public Queue<String> getCollection(String string);
 
-	
+	// For Statistics
+	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted);
+	public HashMap<String, Object> getMostPopularTweet(Date stDate, Date edDate, String compareKey);
 
 }

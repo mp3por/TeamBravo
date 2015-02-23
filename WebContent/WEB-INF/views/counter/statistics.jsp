@@ -17,6 +17,9 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	
+<script type="text/javascript">
+</script>
 
 </head>
 
@@ -27,14 +30,14 @@
 
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-6">
-					<h4>
-						<small>TOTAL TWEETS</small><br> 3625
-					</h4>
+					<h5>
+						<small>TOTAL TWEETS</small><br> ${total_tweets}
+					</h5>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-6">
-					<h4>
-						<small>TOTAL RETWEETED TWEETS</small><br> 1500
-					</h4>
+					<h5>
+						<small>TOTAL RETWEETS</small><br> ${total_retweets}
+					</h5>
 				</div>
 			</div>
 
@@ -44,17 +47,17 @@
 				<div class="col-md-6 col-sm-6 col-xs-6">
 					<img src=<c:url value="resources/img/user91.png"/>
 						class="user_icon" />
-					<h4>
-						<small>MOST ACTIVE USER</small><br> TEMP_USERNAME
-					</h4>
+					<h5>
+						<small>MOST ACTIVE USER</small><br> ${most_active_user}
+					</h5>
 				</div>
 
 				<div class="col-md-6 col-sm-6 col-xs-6">
 					<img src=<c:url value="resources/img/user91.png"/>
 						class="user_icon" />
-					<h4>
-						<small>MOST MENTIONED USER</small><br> TEMP_USERNAME
-					</h4>
+					<h5>
+						<small>MOST MENTIONED USER</small><br> ${most_mentioned_user}
+					</h5>
 				</div>
 			</div>
 
@@ -62,29 +65,29 @@
 
 			<div class="row">
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					<h4 class="mini stat_general_topic">
+					<h5 class="mini stat_general_topic">
 						<small>MOST POPULAR</small><br>
-					</h4>
+					</h5>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<h4 class="subtopic">
-						<small>HASHTAG </small><br> TEMP_HASHTAG
-					</h4>
+					<h5 class="subtopic">
+						<small>HASHTAG </small><br> ${most_pop_hashtag}
+					</h5>
 				</div>
 
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<h4 class="subtopic">
-						<small>LOCATION</small><br> TEMP_LOCATION
-					</h4>
+					<h5 class="subtopic">
+						<small>LOCATION</small><br> ${most_pop_location}
+					</h5>
 				</div>
 
 				<div class="col-md-4 col-sm-4 col-xs-4">
-					<h4 class="subtopic">
-						<small>PERSON</small><br> TEMP_PERSON
-					</h4>
+					<h5 class="subtopic">
+						<small>PERSON</small><br> ${most_pop_person}
+					</h5>
 				</div>
 			</div>
 
@@ -94,13 +97,12 @@
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<img src=<c:url value="resources/img/smiling36.png"/>
 						class="stat_icon" />
-					<h4 class="mini">
-						<small>MOST FAVOURITED TWEET</small>
-					</h4>
+					<h5 class="mini">
+						<small>MOST RETWEETED TWEET</small>
+					</h5>
 					<blockquote class="mini">
-						<p class="mini">02:38 listening to Never Shout Never's and
-							drinking hot chocolate</p>
-						<footer>temp_username</footer>
+						<p class="mini">${most_retweeted_tweet}</p>
+						<footer>${most_retweeted_tweet_user}</footer>
 					</blockquote>
 				</div>
 			</div>
@@ -111,13 +113,12 @@
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<img src=<c:url value="resources/img/smiling36.png"/>
 						class="stat_icon" />
-					<h4 class="mini">
+					<h5 class="mini">
 						<small>MOST FAVOURITED TWEET</small>
-					</h4>
+					</h5>
 					<blockquote class="mini">
-						<p class="mini">Let's get rich and build a house on a moutain
-							making every body looks like ant. You and I :)</p>
-						<footer>temp_username</footer>
+						<p class="mini">${most_fav_tweet}</p>
+						<footer>${most_fav_tweet_user}</footer>
 					</blockquote>
 				</div>
 			</div>

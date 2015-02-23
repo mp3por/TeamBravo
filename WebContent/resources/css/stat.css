@@ -26,17 +26,22 @@ p.mini {
 	margin-bottom: 0px;
 }
 
-h4.mini {
+h5.mini {
 	margin-top: 10px;
 	margin-bottom: 0px;
 }
 
-h4.subtopic {
+h5.subtopic {
 	margin-top: 0px;
 	margin-bottom: 10px;
 }
 
+footer.mini {
+	font-size: 75%;
+}
+
 blockquote.mini {
+	font-size: 14px;
 	margin: 0px;
 	padding: 0px;
 }

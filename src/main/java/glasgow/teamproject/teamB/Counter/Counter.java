@@ -98,12 +98,8 @@ public class Counter {
 	 * of the day up to the current time (replace documents of the same date in
 	 * the outCollection).
 	 * 
-	 * @param field
-	 *            : the type of entity
 	 * @param date
 	 *            : tweet's created_at date
-	 * @param outCollection
-	 *            : name of output file
 	 */
 	public void dailyMapReduce(Date date) {
 
