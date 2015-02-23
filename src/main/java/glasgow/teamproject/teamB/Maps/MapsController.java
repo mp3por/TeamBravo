@@ -1,11 +1,13 @@
 package glasgow.teamproject.teamB.Maps;
 
+import glasgow.teamproject.teamB.Main.SearchResultsInterface;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class MapsController {
+public class MapsController implements SearchResultsInterface {
 	
 	@Autowired
 	private TweetDAO tweetSaver;
@@ -185,5 +187,11 @@ public class MapsController {
 		coordinates.put("needed", need);
 		
 		return coordinates;
+	}
+
+	@Override
+	public String getResultsForSetOfTweets(Set<String> tweetsSet) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

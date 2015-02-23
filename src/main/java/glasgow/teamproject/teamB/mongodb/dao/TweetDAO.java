@@ -1,18 +1,14 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Graphs.TopicWrapper;
+import glasgow.teamproject.teamB.Search.Tweet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-
-import com.mongodb.BasicDBObject;
-
-
-import org.json.JSONArray;
 
 public interface TweetDAO {
 	/**
@@ -32,18 +28,12 @@ public interface TweetDAO {
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
+		
+	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
 	
-	public BasicDBObject getNthEntry(String collectionName, int n);
-	
-	public ArrayList<Tweet> getResultList(int[] resultsDocids);
-	
-	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids);
-	
-	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
-
 	//For Terrier
 	public Queue<String> getCollection(String string);
 
-	
+	public Set<String> getTweetsForId(int[] ids);
 
 }

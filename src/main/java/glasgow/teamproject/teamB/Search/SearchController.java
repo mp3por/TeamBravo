@@ -1,10 +1,14 @@
 package glasgow.teamproject.teamB.Search;
 
+import glasgow.teamproject.teamB.Maps.MapsController;
+import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-//@RequestMapping("/search")
 public class SearchController {
 	
 	@Autowired
@@ -21,13 +24,13 @@ public class SearchController {
 	
 	@Autowired
 	private TweetsIndexer indexer;
-		
-	@RequestMapping("/terrier")
-	public ModelAndView Search(){
-		ModelAndView modelandview = new ModelAndView("Terrier");	
-		return modelandview;
-	}
 	
+	@Autowired
+	private SearchDAOImpl dao;
+	
+	@Autowired
+	private MapsController maps;
+			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
@@ -37,29 +40,28 @@ public class SearchController {
 		return mv;
 	}
 	
-	@RequestMapping("/terrier/{query}")
-	public ModelAndView Search(@PathVariable("query") String query){
+	@RequestMapping("/terrier/{mode}/{query}")
+	public ModelAndView search(@PathVariable Map<String, String> pathVar){
+
+		String mode = pathVar.get("mode");
+		String query = pathVar.get("query");
 		
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getResultList(retriver.getResultSet().getDocids()));
 		
+    	Set<String> resultSet = dao.getTweetsForQuery(query);
+
+    	//TODO : vili find a way to do this AspectOriented
+    	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
+    	
+    	System.err.println(dao.getResultsList().get(2).toString());
+    	
+    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+    	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
 		modelandview.addObject("tweets", tweets);
 		modelandview.addObject("count", tweets.size());
+		
 		return modelandview;
 	}
 	
-	@RequestMapping("/terrier/{query}/rank")
-	public ModelAndView RankedSearch(@PathVariable("query") String query){
-		
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getRankedResultList(retriver.getResultSet().getDocids()));
-		
-		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
-		return modelandview;
-	}
+	
 }

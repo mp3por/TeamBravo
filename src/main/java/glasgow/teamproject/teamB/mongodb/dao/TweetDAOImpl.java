@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
+import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.util.ArrayList;
@@ -7,9 +8,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,33 @@ public class TweetDAOImpl implements TweetDAO {
 	public List<String> getTweetsForMaps(String collectionName) {
 		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
 		return results;
+	}
+	
+	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
+	private double[] getCoordinate(DBObject tweet){	
+		
+		double[] coordinate = new double[2];
+//		Map<String, Object> map = tweet.getTweet();
+//		System.err.println(map);
+		if (tweet.get("coordinates") != null){
+			String pairString = tweet.get("coordinates").toString();
+//			System.err.println(pairString);
+		
+			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
+			int comma = pairString.lastIndexOf(',');
+			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
+		
+			String latitude = pairString.substring(startOfCoordinate, comma - 1);
+			String longtitude = pairString.substring(comma + 2, endOfCoordinate + 1);
+		
+		
+			coordinate[0] = Double.parseDouble(latitude);
+			coordinate[1] = Double.parseDouble(longtitude);
+		
+		
+			return coordinate;
+		}
+		else return null;
 	}
 
 	@Override
@@ -153,73 +181,28 @@ public class TweetDAOImpl implements TweetDAO {
 		}
 		return tweets;
 	}
-
-	// For Terrier Retriving
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public BasicDBObject getNthEntry(String collectionName, int n) {
+	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids) {
+		
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
-		foo.skip(n + 1);
-		return (BasicDBObject) foo.next();
-	}
-	
-	@Override
-	public ArrayList<Tweet> getResultList(int[] resultsDocids) {
-		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
+		foo.next();
+		
+		ArrayList<Tweet> collectionList = new ArrayList<>();
+		while(foo.hasNext())
+			collectionList.add(new Tweet(foo.next().toMap()));			
+		
+		ArrayList<Tweet> resultsList = new ArrayList<>();
+		Tweet tweet;
 		for (int i = 0; i < resultsDocids.length; i++){
-			currentObj = getNthEntry("tweets", resultsDocids[i]);
-			list.add(new Tweet(currentObj));
+			tweet = collectionList.get(resultsDocids[i]);
+			resultsList.add(tweet);
 		}
-		return list;
+		
+		return resultsList;
 	}
-
-	@Override
-	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids) {
-		ArrayList<Tweet> list = new ArrayList<>();
-		BasicDBObject currentObj;
-		for (int i = 0; i < resultsDocids.length; i++){
-			currentObj = getNthEntry("tweets", resultsDocids[i]);
-			list.add(new Tweet(currentObj));
-		}
-		list.sort(Tweet.RetweetCountComparator);
-		return list;
-	}
-
-
-	@Override
-	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets) {
-		ArrayList<HashMap<String,Object>> results = new ArrayList<>(); 
-		BasicDBObject currentObj;
-		for (int i = 0; i < tweets.size(); i++){
-			currentObj = tweets.get(i).getTweet();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key: currentObj.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentObj.getString(key);
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE: s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				}
-				else {
-					tweet.put(key, currentObj.get(key));
-				}
-			}
-			results.add(tweet);
-		}
-		return results;
-	}	
 
 	@Override
 	public Queue<String> getCollection(String string) {
@@ -229,5 +212,11 @@ public class TweetDAOImpl implements TweetDAO {
 			j.add(p);
 		}
 		return j;
+	}
+
+	@Override
+	public Set<String> getTweetsForId(int[] ids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
