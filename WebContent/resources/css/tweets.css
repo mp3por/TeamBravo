@@ -28,7 +28,7 @@
 }
  
 .tweet {
-  width: 60%;
+  width: 95%;
   overflow: auto;
   border: dashed 1px blue;
   margin-left: 5px;
