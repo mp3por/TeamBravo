@@ -138,35 +138,40 @@ public class TweetDAOImpl implements TweetDAO {
 		// parsing gets complicated!
 		while(dbCursor.hasNext() && i<count){
 			BasicDBObject currentObj = (BasicDBObject) dbCursor.next();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key: currentObj.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentObj.getString(key);
-					// if s contains only "[]", return null - no need to parse an empty array
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE: s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				}
-				else {
-					tweet.put(key, currentObj.get(key));
-				}
-			}
+			HashMap<String, Object> tweet = parseDBObject(currentObj);
 			tweets.add(tweet);
 			i++;
 			dbCursor.next();
 		}
 		return tweets;
+	}
+
+	private HashMap<String, Object> parseDBObject(BasicDBObject currentObj) {
+		HashMap<String, Object> tweet = new HashMap<>();
+		for (String key: currentObj.keySet()) {
+			if (ProjectProperties.defaultNE.contains(key)) {
+				String s = currentObj.getString(key);
+				// if s contains only "[]", return null - no need to parse an empty array
+				if (s.length() == 2) {
+					tweet.put(key, null);
+					continue;
+				}
+
+				s = s.replace("[", "");
+				s = s.replace("]", "");
+
+				HashSet<String> NEs = new HashSet<String>();
+
+				for (String NE: s.split(",")) {
+					NEs.add(NE.trim());
+				}
+				tweet.put(key, NEs);
+			}
+			else {
+				tweet.put(key, currentObj.get(key));
+			}
+		}
+		return tweet;
 	}
 
 	// For Terrier indexing
@@ -215,7 +220,7 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 
 	@Override
-	public Set<String> getTweetsForId(int[] ids) {
+	public ArrayList<HashMap<String,Object>> getTweetsForId(int[] ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

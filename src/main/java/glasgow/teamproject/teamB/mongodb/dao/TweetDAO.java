@@ -34,6 +34,6 @@ public interface TweetDAO {
 	//For Terrier
 	public Queue<String> getCollection(String string);
 
-	public Set<String> getTweetsForId(int[] ids);
+	public ArrayList<HashMap<String,Object>> getTweetsForId(int[] ids);
 
 }

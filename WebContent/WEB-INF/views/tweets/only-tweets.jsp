@@ -14,144 +14,102 @@
 
 
 <script type="text/javascript">
-$(function () {
-    $("[rel='tooltip']").tooltip();
-});
+	$(function() {
+		$("[rel='tooltip']").tooltip();
+	});
 
 	//Create the tooltips only when document ready
-	
+
 	$(document)
 			.ready(
 					function() {
+						$('.tweetwall_tweet')
+								.each(
+										function() {
 
-											$('.URLTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is an URL. Click on it to open it")
-															});
+											text = $(this).attr("text");
+											console.log(text);
 
-											$('.HashtagTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is a hashtag. Click on it to search for this hashtag in Twitter");
+											var tooltipValues = [
+													$(this).attr("person"),
+													$(this).attr("location"),
+													$(this)
+															.attr(
+																	"organization"),
+													$(this).attr("userID"),
+													$(this).attr("hashtag"),
+													$(this).attr("URL") ];
+											console.log(tooltipValues);
 
-															});
+											var tooltipTexts = [
+													" is a person. Click to search for this place in Wikipedia",
+													" is a location. Click to search for this place in Google Maps",
+													" is an organization. Click to search for this place in Wikipedia",
+													" is a mentioned user on Twitter. Click to see the profile",
+													" is a hashtag. Click on it to search for this hashtag in Twitter",
+													" is an URL. Click on it to open it" ];
+											var tooltipImgs = [
+													"glyphicon glyphicon-user",
+													"glyphicon glyphicon-map-marker",
+													"glyphicon glyphicon-briefcase",
+													"glyphicon glyphicon-share-alt",
+													"glyphicon glyphicon-tag",
+													"glyphicon glyphicon-link" ];
+											var tooltipLinks = [
+													"http://en.wikipedia.org/w/index.php?search=",
+													"https://www.google.co.uk/maps/search/",
+													"http://en.wikipedia.org/w/index.php?search=",
+													"http://twitter.com/",
+													"https://twitter.com/hashtag/",
+													"" ];
+											for (i = 0; i < tooltipValues.length; i++) {
+												tooltipValues[i] = tooltipValues[i]
+														.replace("[", "");
+												tooltipValues[i] = tooltipValues[i]
+														.replace("]", "");
+												tooltipValues[i] = tooltipValues[i]
+														.split(",");
+												for (s in tooltipValues[i]) {
+													if (tooltipValues[i][s]
+															.trim()) {
+														var toReplace = tooltipValues[i][s]
+																.trim();
+														if (i == 3) {
+															toReplace = "@"
+																	+ toReplace;
+														}
+														console.log(text);
+														text = text
+																.replace(
+																		toReplace,
+																		"<a href='"+tooltipLinks[i]+toReplace+"' data-toggle='tooltip' title='"+
+							toReplace+tooltipTexts[i]+"'>"
+																				+ "<span class='"+tooltipImgs[i]+"'></span>"
+																				+ toReplace
+																				+ "</a>");
+														//toReplace+tooltipTexts[i]+"'><img src=<c:url value='"+tooltipImgs[i]+"'/> class='icon_img' />"+toReplace+"</a>");
+														console.log(text);
+													}
 
-											$('.UserIDTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is a mentioned user on Twitter. Click to see the profile");
-															});
+													/*						tooltipValues[s] = tooltipValues[s].replace("[", "");
+													 tooltipValues[s] = tooltipValues[s].replace("]", "");
+													 console.log("this");
+													 console.log(tooltipValues[s]);
+													 console.log(tooltipValues[s].length);*/
+													//text=text.replace(s, "<a href='"+tooltipLinks[i]+s+"' data-toggle='tooltip' title='"+
+						//s+tooltipTexts[i]+"'><img class='icon_img' src=<c:url value='"+tooltipImgs[i]+"'/>"+s+"</a>");
+												}
+											}
+											$(this).html("<br/>"+"<p class=tweetText>"+text+"</p>");
+										});
+						$("body").tooltip({
+							selector : '[data-toggle=tooltip]'
+						});
 
-											$('.LocationTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is a location. Click to search for this place in Google Maps");
-
-															});
-											$('.PersonTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is a Person. Click to search for this place in Wikipedia");
-
-															});
-
-											$('.OrganizationTooltip')
-													.each(
-															function() {
-																title = $(this)
-																		.attr(
-																				"title");
-																$(this)
-																		.html(
-																				title
-																						+ " is an Organization. Click to search for this place in Wikipedia");
-
-															});
-	$('.tweetwall_tweet').each(
-			function() {
-				
-				text = $(this).attr("text");
-				console.log(text);
-				
-				var tooltipValues = [
-					$(this).attr("person"),
-					$(this).attr("location"),
-					$(this).attr("organization"),
-					$(this).attr("userID"),
-					$(this).attr("hashtag"),
-					$(this).attr("URL")
-				];
-				console.log(tooltipValues);
-				
-				
-				var tooltipTexts = [
-					" is a person. Click to search for this place in Wikipedia",
-					" is a location. Click to search for this place in Google Maps",  
-					" is an organization. Click to search for this place in Wikipedia",
-					" is a mentioned user on Twitter. Click to see the profile",
-					" is a hashtag. Click on it to search for this hashtag in Twitter",
-					" is an URL. Click on it to open it"
-					];
-				var tooltipImgs = [
-					"resources/img/user91.png",
-					"resources/img/world90.png",
-					"resources/img/factory6.png",
-					"resources/img/at2.png",
-					"resources/img/internet60.png",
-					"resources/img/external1.png"
-				];
-				var tooltipLinks = [
-					"http://en.wikipedia.org/w/index.php?search=",
-					"https://www.google.co.uk/maps/search/",
-					"http://en.wikipedia.org/w/index.php?search=",
-					"http://twitter.com/",
-					"https://twitter.com/hashtag/",
-					""
-				];
-				randomText = '<a href="#" data-toggle="tooltip" title="Title Here">Hyperlink Text</a>'; 
-				$(this).html(randomText + " Zis " + text);
-			}
-			);
-    $("body").tooltip({ selector: '[data-toggle=tooltip]' } );
-		
 					});
-	
 </script>
 
 
-
-<a href="http://www.google.com" class="yTooltip" title="Google">Hey</a>
 <ul>
 	<!-- Loop over the tweets  -->
 
@@ -160,21 +118,14 @@ $(function () {
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
 			class="avatar" /> <!-- Loop over the elements of the tweet --> <c:if
 				test="${tweet.containsKey('user')}">
-				<p class="Username" id="tweets_wall_username_id">${tweet.user.screen_name}</p>
+				<h3>${tweet.user.screen_name}</h3>
 			</c:if> <c:if test="${tweet.containsKey('created_at')}">
-				<b>${fn:substringBefore(tweet.created_at,'+')}</b>
-			</c:if> 
-			 <c:if test="${tweet.containsKey('text')}">
-				<div class="tweetwall_tweet"
-					text="${tweet.text}"
-					person="${tweet.Person}"
-					location="${tweet.Location}"
-					organization="${tweet.Organization}"
-					userID="${tweet.UserID}"
-					hashtag="${tweet.Hashtag}"
-					URL="${tweet.URL}"
-					>
-				</div>
-			</c:if> </li>
+				<h4><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
+			</c:if> <c:if test="${tweet.containsKey('text')}">
+				<div class="tweetwall_tweet" text="${tweet.text}"
+					person="${tweet.Person}" location="${tweet.Location}"
+					organization="${tweet.Organization}" userID="${tweet.UserID}"
+					hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>
+			</c:if></li>
 	</c:forEach>
 </ul>
