@@ -1,12 +1,12 @@
 package glasgow.teamproject.teamB.Search;
 
-import glasgow.teamproject.teamB.Search.dao.SearchDAO;
+import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-//@RequestMapping("/search")
 public class SearchController {
 	
 	@Autowired
@@ -23,13 +22,10 @@ public class SearchController {
 	
 	@Autowired
 	private TweetsIndexer indexer;
-		
-	@RequestMapping("/terrier")
-	public ModelAndView search(){
-		ModelAndView modelandview = new ModelAndView("Terrier");	
-		return modelandview;
-	}
 	
+	@Autowired
+	private SearchDAOImpl dao;
+			
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
@@ -39,52 +35,24 @@ public class SearchController {
 		return mv;
 	}
 	
-	@RequestMapping("/terrier/{query}")
-	public ModelAndView search(@PathVariable("query") String query){
+	@RequestMapping("/terrier/{mode}/{query}")
+	public ModelAndView search(@PathVariable Map<String, String> pathVar){
 
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getResultList(retriver.getResultSet().getDocids()));    			
-
+		String mode = pathVar.get("mode");
+		String query = pathVar.get("query");
+		
+		
+    	dao.runQuery(mode, query);
+    	System.err.println(mode + " "+ query);
+    	
+    	System.err.println(dao.getResultsList().get(2).toString());
+    	
+    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+    	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
 		modelandview.addObject("tweets", tweets);
 		modelandview.addObject("count", tweets.size());
 		
 		return modelandview;
 	}
-	
-	@RequestMapping("/terrier/{query}/rank")
-	public ModelAndView rankedSearch(@PathVariable("query") String query){
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getRankedResultList(retriver.getResultSet().getDocids()));
-		
-		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
-		return modelandview;
-	}
-	
-    @RequestMapping("/terrier/{query}/maps")
-    public ModelAndView searchMap(@PathVariable("query") String query){
-    	
-    	TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-
-    	ModelAndView modelandview = new ModelAndView("search_map");
-    	ArrayList<Tweet> results = tweetSaver.getResultList(retriver.getResultSet().getDocids());
-    	ArrayList<Double> lats = tweetSaver.latitudesForMaps(results);
-    	ArrayList<Double> lons = tweetSaver.longtitudesForMaps(results);
-    	
-    	
-    	modelandview.addObject("longitude", "-4.287393");
-		modelandview.addObject("latitude", "55.873714");
-    	modelandview.addObject("latitudes", lats);
-		modelandview.addObject("longtitudes", lons);
-		modelandview.addObject("numOfTweets", lats.size());
-		
-		
-    	return modelandview;
-    }
 }

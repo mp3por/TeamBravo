@@ -27,21 +27,15 @@ public interface TweetDAO {
 	
 	// For Terrier
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
+		
+	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
 	
-	public Map<String, Object> getNthEntry(String collectionName, int n);
-	
-	public ArrayList<Tweet> getResultList(int[] resultsDocids);
-	
-	public ArrayList<Tweet> getRankedResultList(int[] resultsDocids);
-	
-	public ArrayList<HashMap<String, Object>> getTerrierResults(ArrayList<Tweet> tweets);
-
 	//For Terrier
 	public Queue<String> getCollection(String string);
 	
-	public ArrayList<Double> latitudesForMaps(ArrayList<Tweet> tweets);
+	public ArrayList<Double> latitudesForMaps(String collectionName);
 	
-	public ArrayList<Double> longtitudesForMaps(ArrayList<Tweet> tweets);
+	public ArrayList<Double> longtitudesForMaps(String collectionName);
 
 	
 

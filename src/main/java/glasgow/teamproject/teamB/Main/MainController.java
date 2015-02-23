@@ -42,4 +42,9 @@ public class MainController {
 		ModelAndView mv = new ModelAndView("specificTopic");
 		return mv;
 	}
+	
+	@RequestMapping("/tile_template")
+	public String getTeplate(){
+		return "tile_template";
+	}
 }

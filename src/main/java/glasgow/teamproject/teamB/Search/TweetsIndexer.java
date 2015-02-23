@@ -26,9 +26,10 @@ public class TweetsIndexer {
 	@Autowired
 	private TwitterMongoDAOCollection tweets;
 
-	@Autowired
-	private TerrierInitializer terrier;
+//	@Autowired
+//	private TerrierInitializer terrier;
 	
+	@Autowired
 	private SearchMemoryIndex index;
 
 	public TwitterMongoDAOCollection getTweets() {
@@ -39,6 +40,10 @@ public class TweetsIndexer {
 		return this.index;
 	}
 
+	
+	/**
+	 * To be called from TweeterStreaming
+	 * */
 	public void indexTweet(String tweet) {
 		try {
 			index.indexDocument(new TwitterJSONDocument(tweet));
@@ -49,7 +54,7 @@ public class TweetsIndexer {
 
 	@PostConstruct
 	private void init() {
-		this.index = terrier.getMemoryIndex();
+//		this.index = terrier.getMemoryIndex();
 		indexTweets();
 	}
 

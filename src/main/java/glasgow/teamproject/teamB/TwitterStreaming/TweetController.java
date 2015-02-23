@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
+import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.net.UnknownHostException;
@@ -20,7 +21,7 @@ public class TweetController {
 	
 	@Autowired
 	private TweetDAO tweetSaver;
-	
+		
 	protected final Log logger = LogFactory.getLog(getClass());
 	
 	

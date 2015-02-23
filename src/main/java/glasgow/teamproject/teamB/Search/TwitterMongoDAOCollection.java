@@ -6,24 +6,24 @@ package glasgow.teamproject.teamB.Search;
 
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
+//import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
+//import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
+//import org.springframework.data.mongodb.core.MongoOperations;
+//import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Collection;
 import org.terrier.indexing.Document;
 import org.terrier.indexing.TwitterJSONDocument;
 
-import com.mongodb.MongoClient;
+//import com.mongodb.MongoClient;
 
 @Component
 public class TwitterMongoDAOCollection implements Collection{

@@ -31,5 +31,16 @@ public class Tweet implements Comparable<Tweet>{
 			return retweet_count2 - retweet_count1;
 		}
 	};
+	
+	public static Comparator<Tweet> PostedTimeComparator = new Comparator<Tweet>(){
+			
+			public int compare(Tweet tweet1, Tweet tweet2){
+			
+			int posted_time1 = Integer.parseInt(tweet1.getTweet().get("timestamp").toString());
+			int posted_time2 = Integer.parseInt(tweet2.getTweet().get("timestamp").toString());
+			
+			return posted_time2 - posted_time1;
+		}
+	};
 
 }
