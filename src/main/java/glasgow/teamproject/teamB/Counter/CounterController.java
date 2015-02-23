@@ -34,7 +34,7 @@ public class CounterController {
 		stCal.set(Calendar.MINUTE, 0);
 		stCal.set(Calendar.SECOND, 0);
 		stCal.set(Calendar.MILLISECOND, 0);
-		edCal.set(Calendar.HOUR_OF_DAY, 12);
+		edCal.set(Calendar.HOUR_OF_DAY, 15);
 		edCal.set(Calendar.MINUTE, 0);
 		edCal.set(Calendar.SECOND, 0);
 		edCal.set(Calendar.MILLISECOND, 0);

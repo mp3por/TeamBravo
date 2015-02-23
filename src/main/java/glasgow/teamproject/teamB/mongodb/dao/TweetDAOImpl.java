@@ -1,9 +1,5 @@
 package glasgow.teamproject.teamB.mongodb.dao;
 
-import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
-import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
-import glasgow.teamproject.teamB.Counter.Counter.Field;
-import glasgow.teamproject.teamB.Counter.Counter.TimePeriod;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 
 import java.text.DateFormat;
@@ -632,7 +628,7 @@ public class TweetDAOImpl implements TweetDAO {
 		HashMap<String, Object> tweet = new HashMap<>();
 		tweet.put("text", obj.get("text"));
 		DBObject user = (DBObject) obj.get("user");
-		tweet.put("user", user.get("screen_name"));
+		tweet.put("user", user.get("name") + " @" + user.get("screen_name"));
 		
 		return tweet;
 	}
