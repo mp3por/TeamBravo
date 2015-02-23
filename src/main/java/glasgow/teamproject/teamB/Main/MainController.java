@@ -31,7 +31,7 @@ public class MainController {
 	@RequestMapping("/home")
 	public ModelAndView Main(){
 		String now = (new Date()).toString();
-		String viewName = "main";
+		String viewName = "main2";
 		ModelAndView mv = new ModelAndView(viewName);
 		mv.addObject("serverTime", now);
 		return mv;
