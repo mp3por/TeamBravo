@@ -34,8 +34,8 @@ public class CounterController {
 		stCal.set(Calendar.MINUTE, 0);
 		stCal.set(Calendar.SECOND, 0);
 		stCal.set(Calendar.MILLISECOND, 0);
-		edCal.set(Calendar.HOUR_OF_DAY, 15);
-		edCal.set(Calendar.MINUTE, 0);
+		edCal.set(Calendar.HOUR_OF_DAY, 17);
+		edCal.set(Calendar.MINUTE, 50);
 		edCal.set(Calendar.SECOND, 0);
 		edCal.set(Calendar.MILLISECOND, 0);
 		
@@ -44,11 +44,26 @@ public class CounterController {
 		
 		HashMap<String,Object> most_retweeted = DBHelper.getMostPopularTweet(stCal.getTime(), edCal.getTime(), "retweet_count");
 		model.addObject("most_retweeted_tweet", most_retweeted.get("text"));
-		model.addObject("most_retweeted_tweet_user", most_retweeted.get("user"));
+		String most_retweeted_link = most_retweeted.get("screen_name") + " <a href=\"https://twitter.com/" + most_retweeted.get("username") 
+				+ "\">@" + most_retweeted.get("username") + "</a>";
+		model.addObject("most_retweeted_tweet_user", most_retweeted_link);
 		
 		HashMap<String,Object> most_fav = DBHelper.getMostPopularTweet(stCal.getTime(), edCal.getTime(), "favorite_count");
 		model.addObject("most_fav_tweet", most_fav.get("text"));
-		model.addObject("most_fav_tweet_user", most_fav.get("user"));
+		String most_fav_link = most_fav.get("screen_name") + " <a href=\"https://twitter.com/" + most_fav.get("username") 
+				+ "\">@" + most_fav.get("username") + "</a>";
+		model.addObject("most_fav_tweet_user", most_fav_link);
+		
+		String most_active = DBHelper.getMostActiveUser(stCal.getTime(), edCal.getTime());
+		String most_active_link = "<a href=\"https://twitter.com/" + most_active + "\">@" + most_active + "</a>";
+		model.addObject("most_active_user", most_active_link);
+		
+		List<EntityCountPair> most_pop_user = DBHelper.getTopEntities(Field.USERID, TimePeriod.PASTDAY, 1);
+		if( !most_pop_user.isEmpty() ) {
+			String username = most_pop_user.get(0).getID();
+			String link = "<a href=\"https://twitter.com/" + username + "\">@" + username + "</a>";
+			model.addObject("most_mentioned_user", link);
+		}
 		
 		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(Field.HASHTAG, TimePeriod.PASTDAY, 1);
 		if( !most_pop_hashtag.isEmpty() ) model.addObject("most_pop_hashtag", most_pop_hashtag.get(0).getID());

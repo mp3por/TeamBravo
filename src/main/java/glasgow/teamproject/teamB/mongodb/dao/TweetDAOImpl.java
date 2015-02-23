@@ -609,9 +609,42 @@ public class TweetDAOImpl implements TweetDAO {
 		HashMap<String, Object> tweet = new HashMap<>();
 		tweet.put("text", obj.get("text"));
 		DBObject user = (DBObject) obj.get("user");
-		tweet.put("user", user.get("name") + " @" + user.get("screen_name"));
+		tweet.put("username", user.get("name"));
+		tweet.put("screen_name", user.get("screen_name"));
 		
 		return tweet;
 	}
 	
+	public String getMostActiveUser(Date stDate, Date edDate) {
+		
+		DBCollection tweets = mongoOps.getCollection("tweets");
+		
+		DBObject query = QueryBuilder.start().put("timestamp_ms")
+				.greaterThanEquals(Long.toString(stDate.getTime()))
+				.lessThanEquals(Long.toString(edDate.getTime())).get();
+		
+		// create pipeline operations, first with the $match
+		DBObject match = new BasicDBObject("$match", query);
+
+		// build the $projection operation
+		DBObject fields = new BasicDBObject("user.screen_name", 1);
+		DBObject project = new BasicDBObject("$project", fields);
+
+		// the $group operation
+		DBObject groupFields = new BasicDBObject("_id", "$user.screen_name");
+		groupFields.put("count", new BasicDBObject("$sum", 1));
+		DBObject group = new BasicDBObject("$group", groupFields);
+
+		// Finally the $sort operation
+		DBObject sort = new BasicDBObject("$sort", new BasicDBObject("count", -1));
+
+		List<DBObject> pipeline = Arrays.asList(match, project, group, sort);
+		AggregationOutput output = tweets.aggregate(pipeline);
+		
+		for (DBObject result : output.results()) {
+			return (String) result.get("_id");
+		}
+		
+		return null;
+	}
 }
