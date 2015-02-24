@@ -25,6 +25,7 @@ public class TweetController implements SearchResultsInterface {
 	@Autowired
 	private TweetDAO tweetSaver;
 	
+	private final int TWEETS_TO_RECEIVE = 20;
 	protected final Log logger = LogFactory.getLog(getClass());
 	
 	
@@ -55,7 +56,7 @@ public class TweetController implements SearchResultsInterface {
 	 * */
 	private ArrayList<HashMap<String,Object>> getTweets() throws UnknownHostException {
 				
-		ArrayList<HashMap<String,Object>> t = tweetSaver.getLastTweets(6, "tweets");		
+		ArrayList<HashMap<String,Object>> t = tweetSaver.getLastTweets(TWEETS_TO_RECEIVE, "tweets");		
 		return t;
 	
 	}

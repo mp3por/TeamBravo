@@ -9,8 +9,7 @@
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/imagesloaded.pkg.min.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/jquery.qtip.js" />"></script>
+
 
 
 <script type="text/javascript">
@@ -23,12 +22,13 @@
 	$(document)
 			.ready(
 					function() {
+						
 						$('.tweetwall_tweet')
 								.each(
 										function() {
 
 											text = $(this).attr("text");
-											console.log(text);
+											
 
 											var tooltipValues = [
 													$(this).attr("person"),
@@ -39,7 +39,7 @@
 													$(this).attr("userID"),
 													$(this).attr("hashtag"),
 													$(this).attr("URL") ];
-											console.log(tooltipValues);
+											
 
 											var tooltipTexts = [
 													" is a person. Click to search for this place in Wikipedia",
@@ -78,7 +78,7 @@
 															toReplace = "@"
 																	+ toReplace;
 														}
-														console.log(text);
+														
 														text = text
 																.replace(
 																		toReplace,
@@ -88,16 +88,7 @@
 																				+ toReplace
 																				+ "</a>");
 														//toReplace+tooltipTexts[i]+"'><img src=<c:url value='"+tooltipImgs[i]+"'/> class='icon_img' />"+toReplace+"</a>");
-														console.log(text);
 													}
-
-													/*						tooltipValues[s] = tooltipValues[s].replace("[", "");
-													 tooltipValues[s] = tooltipValues[s].replace("]", "");
-													 console.log("this");
-													 console.log(tooltipValues[s]);
-													 console.log(tooltipValues[s].length);*/
-													//text=text.replace(s, "<a href='"+tooltipLinks[i]+s+"' data-toggle='tooltip' title='"+
-						//s+tooltipTexts[i]+"'><img class='icon_img' src=<c:url value='"+tooltipImgs[i]+"'/>"+s+"</a>");
 												}
 											}
 											$(this).html("<br/>"+"<p class=tweetText>"+text+"</p>");
@@ -105,27 +96,27 @@
 						$("body").tooltip({
 							selector : '[data-toggle=tooltip]'
 						});
-
 					});
 </script>
 
-
+<br/>
+<div id="" style="overflow-y: scroll; height:400px;">
 <ul>
 	<!-- Loop over the tweets  -->
 
 	<c:forEach var="tweet" items="${tweets}">
 		<li class="tweet"><img
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
-			class="avatar" /> <!-- Loop over the elements of the tweet --> <c:if
-				test="${tweet.containsKey('user')}">
+			class="avatar" /> <!-- Loop over the elements of the tweet --> 
 				<h3>${tweet.user.screen_name}</h3>
-			</c:if> <c:if test="${tweet.containsKey('created_at')}">
+			
 				<h4><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
-			</c:if> <c:if test="${tweet.containsKey('text')}">
+			
 				<div class="tweetwall_tweet" text="${tweet.text}"
 					person="${tweet.Person}" location="${tweet.Location}"
 					organization="${tweet.Organization}" userID="${tweet.UserID}"
 					hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>
-			</c:if></li>
+			</li>
 	</c:forEach>
 </ul>
+</div>
