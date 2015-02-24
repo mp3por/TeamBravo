@@ -291,6 +291,11 @@
 			addTile(toAdd);
 		}
 	});
+	
+	function settingsButtonClick(clicked) {
+		var settings = $('#settings' + clicked.id);
+		settings.show();
+	}
 
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
