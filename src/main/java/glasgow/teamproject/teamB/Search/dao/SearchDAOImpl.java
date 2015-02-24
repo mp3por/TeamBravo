@@ -195,27 +195,27 @@ public class SearchDAOImpl {
 			return null;
 	}
 
-	public ArrayList<Double> latitudesForMaps() {
+	public ArrayList<String> latitudesForMaps() {
 
-		ArrayList<Double> latitudes = new ArrayList<>();
+		ArrayList<String> latitudes = new ArrayList<>();
 		double[] coordinate;
 		for (int i = 0; i < this.resultsList.size(); i++) {
 			coordinate = this.getCoordinate(this.resultsList.get(i));
 			if (coordinate != null)
-				latitudes.add(coordinate[0]);
+				latitudes.add(Double.toString(coordinate[0]));
 		}
 		// System.err.println("latitudes list created");
 		return latitudes;
 	}
 
-	public ArrayList<Double> longtitudesForMaps() {
+	public ArrayList<String> longtitudesForMaps() {
 
-		ArrayList<Double> longtitudes = new ArrayList<>();
+		ArrayList<String> longtitudes = new ArrayList<>();
 		double[] coordinate;
 		for (int i = 0; i < this.resultsList.size(); i++) {
 			coordinate = this.getCoordinate(this.resultsList.get(i));
 			if (coordinate != null)
-				longtitudes.add(coordinate[1]);
+				longtitudes.add(Double.toString(coordinate[1]));
 		}
 		// System.err.println(longtitudes);
 		return longtitudes;

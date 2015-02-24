@@ -208,16 +208,37 @@
 	}
 		
 	function getTweetwall(container_id, index) {
-		var img = document.createElement("img");
-		img.src = 
-			"https://dl-web.dropbox.com/get/fake_tweetwall.png?_subject_uid=96006775&w=AAApjl53-8X1SK9x-1kDdBDe_VRil3oMN56aCsnbUUyUvQ";
+		console.log("Getting tweetwall: " + container_id);
+		$.ajax({
+			url : '/TeamBravo/search/terrier/tweetwall/${query}',
+			success : function(data) {
+				//debugger;
+				//console.log("consoler:");
+				//console.log(data);
+				//var tweets = null;
+				//var needed = null;
+				//console.log (data);
+				console.log("Success for tweetwall");
+				initWall(container_id, data, index);
+			}
+		});	
+	}
+	
+	function initWall(container_id, data, index) {
+		//debugger;
+		$('#tile_content'+index).append(data);
+		console.log("init wall");
+		//console.log(tweets);
 		
-		img.style.height = '450px';
-	    img.style.width = '610px';
+		/*
+		console.log("container_id: " + container_id);
+		console.log("index: " + index);
 		
-		var src = document.getElementById("tile2");
-		src.appendChild(img);
+		$('#' + container_id).append(needed);
+		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
+		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
 		
+		*/
 	}
 
 	function fixTemplate(c) {

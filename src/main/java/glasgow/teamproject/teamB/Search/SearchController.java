@@ -1,16 +1,13 @@
 package glasgow.teamproject.teamB.Search;
 
-//import glasgow.teamproject.teamB.Graphs.GraphsController;
-//import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
-//import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
+
 import java.util.Date;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +40,7 @@ public class SearchController {
 	public ModelAndView search(@PathVariable("query") String query){		
 		
 		dao.runQuery("normal", query);
-		
+	
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);
     	// TODO : vili find a way to do this AspectOriented
     	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
@@ -63,5 +60,15 @@ public class SearchController {
 		return modelandview;
 	}
 	
+	@RequestMapping("/terrier/tweetwall/{query}")
+	public ModelAndView tweetWallSearch(@PathVariable("query") String query){
+		
+		dao.runQuery("normal", query);
+		List<HashMap<String, Object>> tweets = dao.getTweetsForTweetWall();
+		ModelAndView mv = new ModelAndView("search_tweetwall_test");
+		
+		mv.addObject("tweets", tweets);	
+		return mv;	
+	}	
 	
 }
