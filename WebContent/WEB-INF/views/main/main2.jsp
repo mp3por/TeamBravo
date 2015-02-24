@@ -264,21 +264,13 @@
 			addTile("1");
 			addTile("0");
 			addTile("2");
+			getSearchBox();
 		}
 	});
 
 	var tile_template = null;
 	var row_index = 0;
 	var current_num_of_tiles = 0;
-
-	function getSearchBox() {
-		$.ajax({
-			url : '/TeamBravo/Search/searchBox',
-			success : function(data) {
-				$("#search").html(data);
-			}
-		});
-	}
 
 	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
 		console.log("submit");
@@ -451,7 +443,7 @@
 
 	function getSearchBox() {
 		$.ajax({
-			url : '/TeamBravo/main/searchBox',
+			url : '/TeamBravo/search/searchBox',
 			success : function(data) {
 				$("#search").html(data);
 			}
