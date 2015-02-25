@@ -236,13 +236,12 @@ public class TweetDAOImpl implements TweetDAO {
 	// ------------------------------------------------------------------------
 	// Counting Section
 	/** collection names */
-	public static final String TWEETS_COLLECT = "tweets";
-	public static final String DAILY_COLLECT_NAME = "DCNT";
-	public static final String WEEKLY_COLLECT_NAME = "WCNT";
-	public static final String MONTHLY_COLLECT_NAME = "MCNT";
+	String DAILY_COLLECT_NAME = ProjectProperties.DAILY_COLLECT_NAME;
+	String WEEKLY_COLLECT_NAME = ProjectProperties.WEEKLY_COLLECT_NAME;
+	String MONTHLY_COLLECT_NAME = ProjectProperties.MONTHLY_COLLECT_NAME;
 
-	private static final String COUNTER_DATE_FORMAT = "yyyy-MM-dd";
-	private static DateFormat counterDateFormat = new SimpleDateFormat(COUNTER_DATE_FORMAT);
+	String COUNTER_DATE_FORMAT = ProjectProperties.COUNTER_DATE_FORMAT;
+	private DateFormat counterDateFormat = new SimpleDateFormat(COUNTER_DATE_FORMAT);
 	
 	public enum Field {
 		HASHTAG {
@@ -297,7 +296,7 @@ public class TweetDAOImpl implements TweetDAO {
 	 */
 	public void dailyMapReduce(Date date) {
 
-		DBCollection tweets = mongoOps.getCollection(TWEETS_COLLECT);
+		DBCollection tweets = mongoOps.getCollection(ProjectProperties.TWEET_COLLECTION);
 
 		// convert date to twitter created_at format
 		String twitterFormatDateStr = new SimpleDateFormat("EEE MMM dd").format(date);
