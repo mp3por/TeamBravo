@@ -1,4 +1,4 @@
-package glasgow.teamproject.teamB.TwitterStreaming;
+package glasgow.teamproject.teamB.Util;
 
 import org.springframework.stereotype.Component;
 

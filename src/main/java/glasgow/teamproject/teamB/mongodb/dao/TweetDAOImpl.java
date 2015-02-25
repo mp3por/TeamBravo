@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,19 +36,22 @@ import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 
 @Component
-public class TweetDAOImpl implements TweetDAO {
+public class TweetDAOImpl extends TweetDAOAbstract {
 
 	@Autowired
 	private MongoOperations mongoOps;
+	
+	public TweetDAOImpl(MongoOperations mongoOps2) {
+		// TODO Auto-generated constructor stub
+		mongoOps = mongoOps2;
+	}
 
-	public TweetDAOImpl() {
-		
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		addTweet((String)arg, ProjectProperties.TWEET_COLLECTION);
 	}
 	
-	public TweetDAOImpl(MongoOperations mongoOps) {
-		this.mongoOps = mongoOps;
-	}
-
 	@Override
 	public void addTweet(String tweet, String collectionName) {
 		tweet = tweet.replace("\"id\":", "\"tweet_id\":");
@@ -109,20 +112,6 @@ public class TweetDAOImpl implements TweetDAO {
 
 	@Override
 	public boolean addNamedEntitiesById(String id, String collectionName, Map<String, String> NamedEntities) {
-
-		// just for referance what is going on
-		/*// gets the collection in which is the entry you will modify
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		// used to get the specific tweet
-		DBObject query = new BasicDBObject("id_str",id);
-		// to hold the named Entities
-		DBObject namedEntitiesList = new BasicDBObject(NamedEntities);
-		// this will be added to the entry
-		DBObject updateObject = new BasicDBObject("named_entities",namedEntitiesList);
-		// the actual updates
-		WriteResult result = dbCollection.update(query,new BasicDBObject("$push",updateObject));
-		// isUpdateOfExisting will return true if an existing entry was updated
-		return result.isUpdateOfExisting();*/
 
 		Query query = new Query(Criteria.where("id_str").is(id));
 		Update update = new Update();
@@ -651,4 +640,6 @@ public class TweetDAOImpl implements TweetDAO {
 		
 		return null;
 	}
+
+	
 }

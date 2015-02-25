@@ -34,6 +34,34 @@ public class TwitIE implements NamedEntityExtractor {
 	public void addNE (String s) {
 		interestedNE.add(s);
 	}
+	
+	public void init() {
+		try {
+			if (interestedNE.isEmpty()) {
+				interestedNE.addAll(defaultNE);
+			}
+
+			// Only god knows how it works
+			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
+			System.out.println(currentDir);
+
+			File f = new File(currentDir);
+			Gate.setGateHome(f);
+
+			Gate.init();
+			String pathToApplication =currentDir+"/"+"applicationState.xgapp";
+			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File(pathToApplication));
+			corpus = Factory.newCorpus("Tweet corpus");
+		} catch (GateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}		
+	}
+
 
 	public synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
 		
@@ -83,31 +111,5 @@ public class TwitIE implements NamedEntityExtractor {
 	}
 
 
-	public void init() {
-		try {
-			if (interestedNE.isEmpty()) {
-				interestedNE.addAll(defaultNE);
-			}
-
-			// Only god knows how it works
-			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
-			System.out.println(currentDir);
-
-			File f = new File(currentDir);
-			Gate.setGateHome(f);
-
-			Gate.init();
-			String pathToApplication =currentDir+"/"+"applicationState.xgapp";
-			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File(pathToApplication));
-			corpus = Factory.newCorpus("Tweet corpus");
-		} catch (GateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}		
-	}
-
+	
 }
