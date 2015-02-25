@@ -16,7 +16,7 @@ public class ScheduledCounter {
 	private TweetDAO tweetSaver;
 	
 	
-	@Scheduled(cron="0 /30 * * * ?")
+	@Scheduled(cron="0 0/30 * * * ?")
     public void dailyMapReduce()
     {
 		tweetSaver.dailyMapReduce(new Date());
