@@ -41,11 +41,11 @@ public class StreamReaderService {
 	@PostConstruct
 	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
-		System.out.println("\n\n\n");
+		/*System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
 		twitIE.init();
 		readTwitterFeed();
-		System.out.println("\n\n\n");
+		System.out.println("\n\n\n");*/
 	}
 
 	/**

@@ -15,19 +15,20 @@
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 
-<!-- graphs -->
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
-
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- bootstrap -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- graphs -->
+<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
+<script src="<c:url value="/resources/js/timeButtons.js" />"></script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -159,7 +160,6 @@
 </script>
 </head>
 <body>
-
 	<!--------------------------- BAR ------------------------------------>
 	<header>
 		<div id='logo'>
@@ -264,11 +264,6 @@
 	var row_index = 0;
 	var current_num_of_tiles = 0;
 
-	function settingsButtonClick(clicked) {
-		var settings = $('#settings' + clicked.id);
-		settings.show();
-	}
-
 	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
 		console.log("submit");
 		e.preventDefault(); //prevent form from submitting
@@ -318,7 +313,7 @@
 				break;
 			case "1":// add graphs
 				tile_title.text("Graphs");
-				showBarChart("WEEK", c);
+				showBarChart(c);
 				break;
 			}
 			current_num_of_tiles += 1;
