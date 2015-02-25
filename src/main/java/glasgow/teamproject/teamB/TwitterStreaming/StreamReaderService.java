@@ -44,9 +44,7 @@ public class StreamReaderService {
 		System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
 		twitIE.init();
-
 		readTwitterFeed();
-
 		System.out.println("\n\n\n");
 	}
 

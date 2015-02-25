@@ -31,25 +31,20 @@ public class MainController {
 	@RequestMapping("/home")
 	public ModelAndView Main(){
 		String now = (new Date()).toString();
-		String viewName = "main";
+		String viewName = "main2";
 		ModelAndView mv = new ModelAndView(viewName);
 		mv.addObject("serverTime", now);
 		return mv;
 	}
-	
-	@RequestMapping("/searchBox")
-	public ModelAndView searchBox(){
-		String now = (new Date()).toString();
-		String viewName = "search_box";
-		ModelAndView mv = new ModelAndView(viewName);
-		mv.addObject("serverTime", now);
-		return mv;
-	}
-
 	
 	@RequestMapping("/specificTopic")
 	public ModelAndView specificTopic(){
 		ModelAndView mv = new ModelAndView("specificTopic");
 		return mv;
+	}
+	
+	@RequestMapping("/tile_template")
+	public String getTeplate(){
+		return "tile_template";
 	}
 }

@@ -70,14 +70,11 @@
 			+ 'chco=FFFFFF,008CFF,000000&ext=.png';
 	
 	
-	var long1 = ${longitude};
-	var lat = ${latitude};
+	var long1 = "-4.287393";
+	var lat = "55.873714";
 	var myCenter = new google.maps.LatLng(lat,long1);
-	var latitudes = ${latitudes};
-	var longitudes = ${longitudes};
-	var text = ${text};
 	
-	function refreshMap() {
+	function refreshMap(longitudes,latitudes) {
 		if (markerClusterer) {
 			markerClusterer.clearMarkers();
 		}
@@ -89,7 +86,6 @@
 
 		
 		for (var i = 0; i < latitudes.length; ++i) {
-			//console.log("lat:" +latitudes[i]+ ",long:"+longitudes[i]);
 			var latLng = new google.maps.LatLng(latitudes[i],
 					longitudes[i])
 			var marker = new google.maps.Marker({
@@ -107,15 +103,15 @@
 		});
 	}
 
-	function initialize() {
+	function initialize(mapElementId,longitudes,latitudes) {
 		
-		map = new google.maps.Map(document.getElementById('map'), {
+		map = new google.maps.Map(document.getElementById(mapElementId), {
 			zoom : 11,
 			center : myCenter,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
 
-		refreshMap();
+		refreshMap(longtitudes,latitudes);
 	}
 
 	function clearClusters(e) {
@@ -124,7 +120,7 @@
 		markerClusterer.clearMarkers();
 	}
 
-	google.maps.event.addDomListener(window, 'load', initialize);
+	google.maps.event.addDomListener(window, 'load', initialize('map',longitudes,latitudes));
 </script>
 
 <div>

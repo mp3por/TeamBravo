@@ -3,16 +3,16 @@
 /*-- Chart --*/
 
 .c3 svg {
-  font: 10px sans-serif;
+  font: 10px sans-serif !important;
 }
 .c3 path, .c3 line {
-  fill: none;
-  stroke: #000;
+  fill: none !important;
+  stroke: #000 !important;
 }
 .c3 text {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+          user-select: none !important;
 }
 
 .c3-legend-item-tile,
@@ -20,16 +20,16 @@
 .c3-ygrid,
 .c3-event-rect,
 .c3-bars path {
-  shape-rendering: crispEdges;
+  shape-rendering: crispEdges !important;
 }
 
 .c3-chart-arc path {
-  stroke: #fff;
+  stroke: #fff !important;
 
 }
 .c3-chart-arc text {
-  fill: #fff;
-  font-size: 13px;
+  fill: #fff !important;
+  font-size: 13px !important;
 }
 
 /*-- Axis --*/
@@ -52,13 +52,13 @@
 /*-- Grid --*/
 
 .c3-grid line {
-  stroke: #aaa;
+  stroke: #aaa !important;
 }
 .c3-grid text {
-  fill: #aaa;
+  fill: #aaa !important;
 }
 .c3-xgrid, .c3-ygrid {
-  stroke-dasharray: 3 3;
+  stroke-dasharray: 3 3 !important;
 }
 .c3-xgrid-focus {
 }
@@ -69,49 +69,49 @@
 }
 
 .c3-text.c3-empty {
-  fill: #808080;
-  font-size: 2em;
+  fill: #808080 !important;
+  font-size: 2em !important;
 }
 
 /*-- Line --*/
 
 .c3-line {
-  stroke-width: 1px;
+  stroke-width: 1px !important;
 }
 /*-- Point --*/
 
 .c3-circle._expanded_ {
-  stroke-width: 1px;
-  stroke: white;
+  stroke-width: 1px !important;
+  stroke: white !important;
 }
 .c3-selected-circle {
-  fill: white;
-  stroke-width: 2px;
+  fill: white !important;
+  stroke-width: 2px !important;
 }
 
 /*-- Bar --*/
 
 .c3-bar {
-  stroke-width: 0;
+  stroke-width: 0 !important;
 }
 .c3-bar._expanded_ {
-  fill-opacity: 0.75;
+  fill-opacity: 0.75 !important;
 }
 
 /*-- Arc --*/
 
 .c3-chart-arcs-title {
-  dominant-baseline: middle;
-  font-size: 1.3em;
+  dominant-baseline: middle !important;
+  font-size: 1.3em !important;
 }
 
 /*-- Focus --*/
 
 .c3-target.c3-focused {
-  opacity: 1;
+  opacity: 1 !important;
 }
 .c3-target.c3-focused path.c3-line, .c3-target.c3-focused path.c3-step {
-  stroke-width: 2px;
+  stroke-width: 2px !important;
 }
 .c3-target.c3-defocused {
   opacity: 0.3 !important;
@@ -121,14 +121,14 @@
 /*-- Region --*/
 
 .c3-region {
-  fill: steelblue;
-  fill-opacity: .1;
+  fill: steelblue !important;
+  fill-opacity: .1 !important;
 }
 
 /*-- Brush --*/
 
 .c3-brush .extent {
-  fill-opacity: .1;
+  fill-opacity: .1 !important;
 }
 
 /*-- Select - Drag --*/
@@ -139,83 +139,83 @@
 /*-- Legend --*/
 
 .c3-legend-item {
-  font-size: 12px;
-  fill: #FFFFFF;
+  font-size: 12px !important;
+  fill: #FFFFFF !important;
 }
 .c3-legend-item-hidden {
-  opacity: 0.15;
+  opacity: 0.15 !important;
 }
 
 .c3-legend-background {
-  opacity: 0.75;
-  fill: white;
-  stroke: lightgray;
-  stroke-width: 1
+  opacity: 0.75 !important;
+  fill: white !important;
+  stroke: lightgray !important;
+  stroke-width: 1 !important;
 }
 
 /*-- Tooltip --*/
 
 .c3-tooltip-container {
-  z-index: 10;
+  z-index: 10 !important;
 }
 .c3-tooltip {
-  border-collapse:collapse;
-  border-spacing:0;
-  background-color:#fff;
-  empty-cells:show;
-  -webkit-box-shadow: 7px 7px 12px -9px rgb(119,119,119);
-     -moz-box-shadow: 7px 7px 12px -9px rgb(119,119,119);
-          box-shadow: 7px 7px 12px -9px rgb(119,119,119);
-  opacity: 0.9;
+  border-collapse:collapse !important;
+  border-spacing:0 !important;
+  background-color:#fff !important;
+  empty-cells:show !important;
+  -webkit-box-shadow: 7px 7px 12px -9px rgb(119,119,119) !important;
+     -moz-box-shadow: 7px 7px 12px -9px rgb(119,119,119) !important;
+          box-shadow: 7px 7px 12px -9px rgb(119,119,119) !important;
+  opacity: 0.9 !important;
 }
 .c3-tooltip tr {
-  border:1px solid #CCC;
+  border:1px solid #CCC !important;
 }
 .c3-tooltip th {
-  background-color: #aaa;
-  font-size:14px;
-  padding:2px 5px;
-  text-align:left;
-  color:#FFF;
+  background-color: #aaa !important;
+  font-size:14px !important;
+  padding:2px 5px !important;
+  text-align:left !important;
+  color:#FFF !important;
 }
 .c3-tooltip td {
-  font-size:13px;
-  font-family: "Exo 2";
-  padding: 3px 6px;
-  background-color:#fff;
-  border-left:1px dotted #999;
+  font-size:13px !important;
+  font-family: "Exo 2" !important;
+  padding: 3px 6px !important;
+  background-color:#fff !important;
+  border-left:1px dotted #999 !important;
 }
 .c3-tooltip td > span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin-right: 6px !important;
 }
 .c3-tooltip td.value{
-  text-align: right;
+  text-align: right !important;
 }
 
 .c3-area {
-  stroke-width: 0;
-  opacity: 0.2;
+  stroke-width: 0 !important;
+  opacity: 0.2 !important;
 }
 
 .c3-chart-arcs .c3-chart-arcs-background {
-  fill: #e0e0e0;
-  stroke: none;
+  fill: #e0e0e0 !important;
+  stroke: none !important;
 }
 .c3-chart-arcs .c3-chart-arcs-gauge-unit {
-  fill: #000;
-  font-size: 16px;
+  fill: #000 !important;
+  font-size: 16px !important;
 }
 .c3-chart-arcs .c3-chart-arcs-gauge-max {
-  fill: #777;
+  fill: #777 !important;
 }
 .c3-chart-arcs .c3-chart-arcs-gauge-min {
-  fill: #777;
+  fill: #777 !important;
 }
 
 .c3-chart-arc .c3-gauge-value {
-  fill: #000;
+  fill: #000 !important;
 /*  font-size: 28px !important;*/
 }

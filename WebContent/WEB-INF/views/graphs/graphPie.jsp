@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/include.jsp"%>
+<div id='chart_container${TileNumber}' class='chart-container'>
+	<div id='chart${TileNumber}' class='chart'>
 <script>
-	var pieTweets = ${TweetsForPie};
+	/*var pieTweets = ${TweetsForPie};
 	var chart = c3.generate({
 		data : {
 			columns : [ 
@@ -16,5 +18,7 @@
 		color : {
 			pattern : [ '#C01E11', '#92B710', '#134C7C' ]
 		}
-	});
+	});*/
 </script>
+</div>
+</div>
