@@ -2,6 +2,7 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
+import glasgow.teamproject.teamB.Util.StreamReaderService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -41,21 +41,21 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	@Autowired
 	private MongoOperations mongoOps;
 	
-	public TweetDAOImpl(MongoOperations mongoOps2) {
-		// TODO Auto-generated constructor stub
-		mongoOps = mongoOps2;
-	}
+	///Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
+//	public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
+//		super(s);
+//		mongoOps = mongoOps2;
+//	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		System.out.println("TweetDAOImpl");
 		addTweet((String)arg, ProjectProperties.TWEET_COLLECTION);
 	}
 	
 	@Override
 	public void addTweet(String tweet, String collectionName) {
 		tweet = tweet.replace("\"id\":", "\"tweet_id\":");
-		System.out.println(tweet);
 
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
@@ -65,9 +65,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		dbCollection.insert(ob);// stores the JSON
 
 		// Simple store as String
-		mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet as string
+		// mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet as string
 
-		System.out.println("SAVE");
+		System.out.println("SAVED in DB: " + tweet);
 	}
 
 	@Override
@@ -111,8 +111,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	}
 
 	@Override
-	public boolean addNamedEntitiesById(String id, String collectionName, Map<String, String> NamedEntities) {
-
+	public boolean addNamedEntitiesById(String id, String collectionName, HashMap<String, ArrayList<String>> NamedEntities) {
+		
 		Query query = new Query(Criteria.where("id_str").is(id));
 		Update update = new Update();
 		update.push("named_entities", NamedEntities);

@@ -26,14 +26,28 @@ public class StreamReaderService extends Observable {
 	private StreamReaderService serv;
 
 	private TwitterStream stream;
+	
+	
+	/**
+	 * Just for testings
+	 * */
+//	public StreamReaderService(ProjectProperties pr , TwitterStreamBuilderUtil ts) {
+//		this.twitterStreamBuilder = ts;
+//		this.projectProperties = pr;
+//		try {
+//			run();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	@PostConstruct
-	// same as init-method in .xml but with annotations
 	public void run() throws IOException {
 		serv = this;
 		System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
-		//twitIE.init();
+		
 		readTwitterFeed();
 
 		System.out.println("\n\n\n");
@@ -59,6 +73,7 @@ public class StreamReaderService extends Observable {
 
 			@Override
 			public void onMessage(String rawString) {
+				System.out.println("twitterStreamer: " + rawString);
 				serv.setChanged();
 				serv.notifyObservers(rawString);
 			}

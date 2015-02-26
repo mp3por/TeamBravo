@@ -24,9 +24,7 @@ import org.terrier.indexing.TwitterJSONDocument;
 
 @Component
 public class TweetsIndexer implements Observer {
-	/* Shall be changed to TwitterMongoDBCollection shortly */
-	//	private TwitterJSONCollection tweets;
-
+	
 	@Autowired
 	private TwitterMongoDAOCollection tweets;
 
@@ -85,8 +83,9 @@ public class TweetsIndexer implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		indexTweet((String) arg);
+		String tweet = (String) arg;
+		System.out.println("Index tweet: " +  tweet);
+		indexTweet(tweet);
 	}
 
 }

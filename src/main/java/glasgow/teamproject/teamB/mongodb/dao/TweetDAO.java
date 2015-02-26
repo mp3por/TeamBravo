@@ -26,7 +26,7 @@ public interface TweetDAO {
 	
 	public String readByTime(String time, String collectionName);
 	
-	public boolean addNamedEntitiesById(String id, String collectionName, Map<String,String> NamedEntities);
+	public boolean addNamedEntitiesById(String id, String collectionName, HashMap<String, ArrayList<String>> NamedEntities);
 	
 	public ArrayList<HashMap<String, Object>> getLastTweets(int count, String collectionName);
 	
