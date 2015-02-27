@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,16 +37,24 @@ public class GraphsController {
 	}
 
 	
-	//RETURN LISTS FOR GRAPHS---------------------------------------------------------------------------------------->>
+	//RETURN LISTS FOR GRAPH DATA------------------------------------------------------------------------------------>>
 	
 	//WORD CLOUD LIST
-	public List<HashMap<String,String>> getTopicsForWordCloudList(){
+	public List<HashMap<String,String>> getCloudList(String timePeriod){
 		
 		List<HashMap<String,String>> unhashedTopics = new ArrayList<HashMap<String,String>>();
 		//Get top 10 topics for the past week
-		List<EntityCountPair> topTopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
+		List<EntityCountPair> topics = new ArrayList<EntityCountPair>();
 		
-		for(EntityCountPair e: topTopicsPastWeek){
+		if(timePeriod.equals("WEEK")){
+			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
+		}else if(timePeriod.equals("MONTH")){
+			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 14);
+		}else{
+			System.err.print("Error: " + timePeriod + " Not a valid time period.");
+		}
+		
+		for(EntityCountPair e: topics){
 			HashMap<String,String> topic = new HashMap<String,String>();
 			String topicDirty = e.getID().replace("[", "");
 			String topicClean = topicDirty.replace("]", "");
@@ -58,48 +67,76 @@ public class GraphsController {
 	}
 	
 	//PIE CHART LIST
-	public List<HashMap<String,String>> getPieChartList(){
+	public List<HashMap<String,String>> getPieChartList(String timePeriod){
+		
+		List<HashMap<String,String>> tweets = new ArrayList<>();
+		List<EntityCountPair> topics = null;
 
-		List<HashMap<String,String>> tweetsForPie = new ArrayList<>();
-		//Get top 3 topics for the past week
-		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
-		System.out.println(top3TopicsPastWeek);
-		//Clean up the strings removing "[" and "]" characters and disregard first 3 values
-		String topic1 = top3TopicsPastWeek.get(2).getID().replace("[", "");
-		String topic1Clean = topic1.replace("]", "");
-		String topic2 = top3TopicsPastWeek.get(4).getID().replace("[", "");
-		String topic2Clean = topic2.replace("]", "");
-		String topic3 = top3TopicsPastWeek.get(6).getID().replace("[", "");
-		String topic3Clean = topic3.replace("]", "");
+		//For removing "[]"
+		String topic1Clean = "";
+		String topic2Clean = "";
+		String topic3Clean = "";
+		String topic4Clean = "";
+		String topic5Clean = "";
+		
+		if(timePeriod.equals("WEEK")){
+			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
+			//Get top three values and clean up strings, removing []
+			String topic1 = topics.get(0).getID().replace("[", "");
+			topic1Clean = topic1.replace("]", "");
+			String topic2 = topics.get(1).getID().replace("[", "");
+			topic2Clean = topic2.replace("]", "");
+			String topic3 = topics.get(2).getID().replace("[", "");
+			topic3Clean = topic3.replace("]", "");
+			String topic4 = topics.get(3).getID().replace("[", "");
+			topic4Clean = topic4.replace("]", "");
+			String topic5 = topics.get(4).getID().replace("[", "");
+			topic5Clean = topic5.replace("]", "");
+			
+		}else if(timePeriod.equals("MONTH")){
+			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 11);
+			//Get top three values and clean up strings, removing []
+			String topic1 = topics.get(1).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
+			topic1Clean = topic1.replace("]", "");
+			String topic2 = topics.get(2).getID().replace("[", "");
+			topic2Clean = topic2.replace("]", "");
+			String topic3 = topics.get(3).getID().replace("[", "");
+			topic3Clean = topic3.replace("]", "");
+			String topic4 = topics.get(4).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
+			topic4Clean = topic4.replace("]", "");
+			String topic5 = topics.get(5).getID().replace("[", "");
+			topic5Clean = topic5.replace("]", "");
+
+		}else{
+			System.err.print("Error: " + timePeriod + " Not a valid time period.");
+		}
 		
 		HashMap<String,String> top1 = new HashMap<String,String>();
 		HashMap<String,String> top2 = new HashMap<String,String>();
 		HashMap<String,String> top3 = new HashMap<String,String>();
-		
-		//Construct json objects for json array - {"Topic": value, "Tweets": value}
+		HashMap<String,String> top4 = new HashMap<String,String>();
+		HashMap<String,String> top5 = new HashMap<String,String>();
+
+		//Construct map objects for list - {"Topic": value, "Tweets": value}
 		top1.put("Topic", topic1Clean);
-		top1.put("Tweets", Integer.toString(top3TopicsPastWeek.get(2).getCount().intValue()));
+		top1.put("Tweets", Integer.toString(topics.get(0).getCount().intValue()));
 		top2.put("Topic", topic2Clean);
-		top2.put("Tweets", Integer.toString(top3TopicsPastWeek.get(4).getCount().intValue()));
+		top2.put("Tweets", Integer.toString(topics.get(1).getCount().intValue()));
 		top3.put("Topic", topic3Clean);
-		top3.put("Tweets", Integer.toString(top3TopicsPastWeek.get(6).getCount().intValue()));
+		top3.put("Tweets", Integer.toString(topics.get(2).getCount().intValue()));
+		top4.put("Topic", topic4Clean);
+		top4.put("Tweets", Integer.toString(topics.get(3).getCount().intValue()));
+		top5.put("Topic", topic5Clean);
+		top5.put("Tweets", Integer.toString(topics.get(4).getCount().intValue()));
 		
-		//Add top 3 topic jsons to array
-		tweetsForPie.add(top1);
-		tweetsForPie.add(top2);
-		tweetsForPie.add(top3);
+		//Add top 3 topics to list
+		tweets.add(top1);
+		tweets.add(top2);
+		tweets.add(top3);
+		tweets.add(top4);
+		tweets.add(top5);
 		
-		return tweetsForPie;
-	}
-	
-	//Get Pie Chart - This may not be needed - used for testing c3 in new layout
-	@RequestMapping("/graphPie")
-	public ModelAndView getPieChart(){
-		List<HashMap<String, String>> TweetsForPie = new ArrayList<HashMap<String, String>>();
-		TweetsForPie = getPieChartList();
-		ModelAndView mv = new ModelAndView("graphPie");
-		mv.addObject("TweetsForPie", TweetsForPie);
-		return mv;
+		return tweets;
 	}
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
@@ -125,16 +162,16 @@ public class GraphsController {
 			noOfDays = 7;
 			
 			//Get top three values and clean up strings, removing []
-			String topic1 = topics.get(1).getID().replace("[", "");
+			String topic1 = topics.get(0).getID().replace("[", "");
 			topic1Clean = topic1.replace("]", "");
-			String topic2 = topics.get(2).getID().replace("[", "");
+			String topic2 = topics.get(1).getID().replace("[", "");
 			topic2Clean = topic2.replace("]", "");
-			String topic3 = topics.get(3).getID().replace("[", "");
+			String topic3 = topics.get(2).getID().replace("[", "");
 			topic3Clean = topic3.replace("]", "");
 
-			topic1Dates = c.getEntitiyTrend(topic1Clean,7);
-			topic2Dates = c.getEntitiyTrend(topic2Clean,7);
-			topic3Dates = c.getEntitiyTrend(topic3Clean,7);
+			topic1Dates = c.getEntitiyTrend(topic1Clean,noOfDays);
+			topic2Dates = c.getEntitiyTrend(topic2Clean,noOfDays);
+			topic3Dates = c.getEntitiyTrend(topic3Clean,noOfDays);
 			
 		}else if(timePeriod.equals("MONTH")){
 			
@@ -142,16 +179,16 @@ public class GraphsController {
 			noOfDays = 30;
 			
 			//Get top three values and clean up strings, removing []
-			String topic1 = topics.get(2).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
+			String topic1 = topics.get(1).getID().replace("[", ""); //Starts with get(1) as get(0) is "[]" empty.
 			topic1Clean = topic1.replace("]", "");
-			String topic2 = topics.get(3).getID().replace("[", "");
+			String topic2 = topics.get(2).getID().replace("[", "");
 			topic2Clean = topic2.replace("]", "");
-			String topic3 = topics.get(4).getID().replace("[", "");
+			String topic3 = topics.get(3).getID().replace("[", "");
 			topic3Clean = topic3.replace("]", "");
 			
-			topic1Dates = c.getEntitiyTrend(topic1Clean,30);
-			topic2Dates = c.getEntitiyTrend(topic2Clean,30);
-			topic3Dates = c.getEntitiyTrend(topic3Clean,30);
+			topic1Dates = c.getEntitiyTrend(topic1Clean,noOfDays);
+			topic2Dates = c.getEntitiyTrend(topic2Clean,noOfDays);
+			topic3Dates = c.getEntitiyTrend(topic3Clean,noOfDays);
 			
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
@@ -220,11 +257,9 @@ public class GraphsController {
 		
 		List<HashMap<String,String>> tweetsForPie = new ArrayList<HashMap<String,String>>();
 		if(timeScale.equals("WEEK")){
-			tweetsForPie = getPieChartList();
+			tweetsForPie = getPieChartList("WEEK");
 		}else if(timeScale.equals("MONTH")){
-			tweetsForPie = getPieChartList();
-			//TODO change this so that you can specify week or month with pie data
-			//Add tweetsForPieMonthList
+			tweetsForPie = getPieChartList("MONTH");
 		}
 		return tweetsForPie;
 	}
@@ -236,10 +271,9 @@ public class GraphsController {
 		
 		List<HashMap<String,String>> tweetsForCloud = new ArrayList<HashMap<String,String>>();
 		if(timeScale.equals("WEEK")){
-			tweetsForCloud = getTopicsForWordCloudList();
+			tweetsForCloud = getCloudList("WEEK");
 		}else if(timeScale.equals("MONTH")){
-			tweetsForCloud = getTopicsForWordCloudList();
-			//TODO change this so that you can specify week or month with pie data
+			tweetsForCloud = getCloudList("MONTH");
 		}
 		return tweetsForCloud;
 	}
@@ -253,284 +287,15 @@ public class GraphsController {
 		return view;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//OLD----------------------------------------------->>
-	
-	/*public JSONArray getTopicsForWordCloud(){
-	
-	JSONArray unhashedTopics = new JSONArray();
-	//Get top 10 topics for the past week
-	List<EntityCountPair> topTopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
-	
-	for(EntityCountPair e: topTopicsPastWeek){
-		JSONObject topic = new JSONObject();
-		String topicDirty = e.getID().replace("[", "");
-		String topicClean = topicDirty.replace("]", "");
-		topic.put("Name", topicClean);
-		topic.put("Tweets", e.getCount().intValue());
-		unhashedTopics.put(topic);
+	@RequestMapping("/settings/{tileNo}")
+	@ResponseBody
+	public Map<String,String> getSettingsDivs(@PathVariable("tileNo") int tileNo){
+		Map<String,String> divs = new HashMap<String, String>();
+		String settingsForm = "<form id='settingsForm'><select id='component" + tileNo +"'><option value='map'>Map</option><option value='barChart'>Bar Chart</option><option value='lineGraph'>Line Graph</option><option value='pieChart'>Pie Chart</option><option value='wordCloud'>Word Cloud</option></select><select id='timeScale" + tileNo +"'><option value='WEEK'>Week</option><option value='MONTH'>Month</option></select> <button id='settingsFormButton' data-tileNo='" + tileNo +"' type='button'>Show</button><input id='hiddenTileNo'type='hidden' value='" + tileNo +"'></form>";
+		
+		
+		
+		divs.put("settingsDivs", settingsForm);
+		return divs;
 	}
-	
-	 return WordCloudHash.gethashedFrequencies(unhashedTopics);
-}*/
-
-/*
-//Get Word Cloud JSP
-@RequestMapping("/wordCloud")
-public ModelAndView getWordCloud(){
-	JSONArray frequencyList = getTopicsForWordCloud();
-	ModelAndView model = new ModelAndView("WordCloud");
-	model.addObject("wordCloudList", frequencyList);
-	return model;
-}*/
-
-/*
-public JSONArray getGraphWeekData(){
-
-	JSONArray tweetsForWeek = new JSONArray();
-	//Get top 3 topics for the past week
-	System.out.println("Getting top 3 entities from counter");
-	List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
-	System.out.println(top3TopicsPastWeek.toString());
-	
-	//Clean up the strings removing "[" and "]" characters and disregard first 3 values [get 3,4,7]
-	String topic1 = top3TopicsPastWeek.get(2).getID().replace("[", "");
-	String topic1Clean = topic1.replace("]", "");
-	String topic2 = top3TopicsPastWeek.get(4).getID().replace("[", "");
-	String topic2Clean = topic2.replace("]", "");
-	String topic3 = top3TopicsPastWeek.get(6).getID().replace("[", "");
-	String topic3Clean = topic3.replace("]", "");
-	
-	//Get lists of past week number of tweets for each topic)
-	List<DateCountPair> topic1PastWeek = c.getEntitiyTrend(topic1Clean,7);
-	List<DateCountPair> topic2PastWeek = c.getEntitiyTrend(topic2Clean,7);
-	List<DateCountPair> topic3PastWeek = c.getEntitiyTrend(topic3Clean,7);
-	
-	//Add "topic" in each object and add to seperate lists
-	List<JSONObject> topic1List = new ArrayList<JSONObject>();
-	List<JSONObject> topic2List = new ArrayList<JSONObject>();
-	List<JSONObject> topic3List = new ArrayList<JSONObject>();
-	
-	for(DateCountPair t1 : topic1PastWeek){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t1.getDate());
-		topicValue.put("Tweets",t1.getCount());
-		topicValue.put("Topic", topic1Clean);
-		topic1List.add(topicValue);
-	}
-	
-	for(DateCountPair t2 : topic2PastWeek){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t2.getDate());
-		topicValue.put("Tweets",t2.getCount());
-		topicValue.put("Topic", topic2Clean);
-		topic2List.add(topicValue);
-	}
-	
-	for(DateCountPair t3 : topic3PastWeek){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t3.getDate());
-		topicValue.put("Tweets",t3.getCount());
-		topicValue.put("Topic", topic3Clean);
-		topic3List.add(topicValue);
-	}
-	
-	//Construct JSON Array in correct format for graph
-	for(int i = 0; i < 7; i++){
-		tweetsForWeek.put(topic1List.get(i));
-		tweetsForWeek.put(topic2List.get(i));
-		tweetsForWeek.put(topic3List.get(i));
-	}
-	
-	return tweetsForWeek;
-}
-
-//Get graphWeek graph
-@RequestMapping("/graphWeek")
-public ModelAndView getGraphWeek(){
-	JSONArray tweetsForWeek = getGraphWeekData();
-	ModelAndView mv = new ModelAndView("graphWeek");
-	mv.addObject("tweetsForWeek", tweetsForWeek);
-	return mv;
-}*/
-
-/*
-public JSONArray getGraphMonthData(){
-
-	JSONArray tweetsForMonth = new JSONArray();
-	//Get top 3 topics for the past week
-	List<EntityCountPair> top3TopicsPastMonth = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 10);
-	
-	//Clean up the strings removing "[" and "]" characters and disregard first 3 values
-	String topic1 = top3TopicsPastMonth.get(2).getID().replace("[", "");
-	String topic1Clean = topic1.replace("]", "");
-	String topic2 = top3TopicsPastMonth.get(4).getID().replace("[", "");
-	String topic2Clean = topic2.replace("]", "");
-	String topic3 = top3TopicsPastMonth.get(6).getID().replace("[", "");
-	String topic3Clean = topic3.replace("]", "");
-	
-	//Get lists of past month number of tweets for each topic)
-	List<DateCountPair> topic1PastMonth = c.getEntitiyTrend(topic1Clean,30);
-	List<DateCountPair> topic2PastMonth = c.getEntitiyTrend(topic2Clean,30);
-	List<DateCountPair> topic3PastMonth = c.getEntitiyTrend(topic3Clean,30);
-	
-	//Add "topic" in each object and add to seperate lists
-	List<JSONObject> topic1List = new ArrayList<JSONObject>();
-	List<JSONObject> topic2List = new ArrayList<JSONObject>();
-	List<JSONObject> topic3List = new ArrayList<JSONObject>();
-	
-	for(DateCountPair t1 : topic1PastMonth){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t1.getDate());
-		topicValue.put("Tweets",t1.getCount());
-		topicValue.put("Topic", topic1Clean);
-		topic1List.add(topicValue);
-	}
-	
-	for(DateCountPair t2 : topic2PastMonth){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t2.getDate());
-		topicValue.put("Tweets",t2.getCount());
-		topicValue.put("Topic", topic2Clean);
-		topic2List.add(topicValue);
-	}
-	
-	for(DateCountPair t3 : topic3PastMonth){
-		JSONObject topicValue = new JSONObject();
-		topicValue.put("Day", t3.getDate());
-		topicValue.put("Tweets",t3.getCount());
-		topicValue.put("Topic", topic3Clean);
-		topic3List.add(topicValue);
-	}
-	
-	//Construct JSON Array in correct format for graph
-	for(int i = 0; i < 30; i++){
-		tweetsForMonth.put(topic1List.get(i));
-		tweetsForMonth.put(topic2List.get(i));
-		tweetsForMonth.put(topic3List.get(i));
-	}
-	
-	return tweetsForMonth ;
-}
-
-//Get month graph
-@RequestMapping("/graphMonth")
-public ModelAndView getGraphMonth(){
-	JSONArray tweetsForMonth = getGraphMonthData();
-	ModelAndView mv = new ModelAndView("graphMonth");
-	mv.addObject("tweetsForMonth", tweetsForMonth);
-	return mv;
-}*/
-
-/*
-public JSONArray getPieChartData(){
-
-	JSONArray tweetsForPie = new JSONArray();
-	//Get top 3 topics for the past week
-	List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
-	
-	//Clean up the strings removing "[" and "]" characters and disregard first 3 values
-	String topic1 = top3TopicsPastWeek.get(2).getID().replace("[", "");
-	String topic1Clean = topic1.replace("]", "");
-	String topic2 = top3TopicsPastWeek.get(4).getID().replace("[", "");
-	String topic2Clean = topic2.replace("]", "");
-	String topic3 = top3TopicsPastWeek.get(6).getID().replace("[", "");
-	String topic3Clean = topic3.replace("]", "");
-	
-	JSONObject top1 = new JSONObject();
-	JSONObject top2 = new JSONObject();
-	JSONObject top3 = new JSONObject();
-	
-	//Construct json objects for json array - {"Topic": value, "Tweets": value}
-	top1.put("Topic", topic1Clean);
-	top1.put("Tweets", top3TopicsPastWeek.get(2).getCount().intValue());
-	top2.put("Topic", topic2Clean);
-	top2.put("Tweets", top3TopicsPastWeek.get(4).getCount().intValue());
-	top3.put("Topic", topic3Clean);
-	top3.put("Tweets", top3TopicsPastWeek.get(6).getCount().intValue());
-	
-	//Add top 3 topic jsons to array
-	tweetsForPie.put(top1);
-	tweetsForPie.put(top2);
-	tweetsForPie.put(top3);
-	
-	return tweetsForPie;
-}*/
-	
-	/*
-	//For adding default graph
-	@RequestMapping("/bar/{timeScale}")
-	public ModelAndView getBarTime(@PathVariable String timeScale){
-		if(timeScale.equals("WEEK")){
-			JSONArray tweetsForWeek = getGraphWeekData();
-			ModelAndView mv = new ModelAndView("graphWeek");
-			mv.addObject("tweetsForWeek", tweetsForWeek);
-			System.out.println(tweetsForWeek.toString());
-			return mv;
-		}else{
-			System.out.println("Time scale not recognised");
-			return null;
-		}
-	}*/
-	
-	/*
-	//For adding default graph test
-	@RequestMapping("/bar/{tileNumber}/{timeScale}")
-	public ModelAndView getBarTimeWithIndex(@PathVariable("tileNumber") String tileNumber, @PathVariable("timeScale") String timeScale){
-		if(timeScale.equals("WEEK")){
-			JSONArray tweetsForWeek = getGraphWeekData();
-			ModelAndView mv = new ModelAndView("graphWeek");
-			mv.addObject("tweetsForWeek", tweetsForWeek);
-			mv.addObject("TileNumber", tileNumber);
-			System.out.println(tweetsForWeek.toString());
-			return mv;
-		}else{
-			System.out.println("Time scale not recognised");
-			return null;
-		}
-	}*/
-	
-	
-	/*
-	private Calendar today;
-	private Calendar end;
-	
-	//Map reduce week
-	today = Calendar.getInstance();
-	today.add(Calendar.DATE, -1);
-	end = Calendar.getInstance();
-	end.add(Calendar.DATE, -2);
-	c = new Counter();
-	c.dailyMapReduce(today.getTime());
-	c.dailyMapReduce(end.getTime());
-	end.add(Calendar.DATE, -2);
-	c.dailyMapReduce(end.getTime());
-	c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

@@ -18,7 +18,7 @@ $(function() {
 	}
 });
 
-//INITIALISE GLOBAL DATA FOR GRAPHS -----------------------------------------
+//INITIALISE GLOBAL DATA FOR GRAPHS --------------------------------------------------------------------------->>
 var dataForDimpleWeek;
 var dataForDimpleMonth;
 var dataForPieWeek;
@@ -26,7 +26,19 @@ var dataForPieMonth;
 var dataForCloudWeek;
 var dataForCloudMonth;
 
-//Initialisation methods -------------------------------------------->>
+//Default Colours
+var colour1 = new dimple.color("#134C7C");
+var colour2 = new dimple.color("#C01E11");
+var colour3 = new dimple.color("#92B710");
+var colour4 = new dimple.color("#FFE758");
+var colour5 = new dimple.color("#A002F1");
+colour1.opacity = 1;
+colour2.opacity = 1;
+colour3.opacity = 1;
+colour4.opacity = 1;
+colour5.opacity = 1;
+
+//Initialisation methods -------------------------------------------------------------------------------------->>
 function initDimple(timeScale){
 	
 	if(timeScale == "WEEK"){
@@ -44,6 +56,7 @@ function initDimple(timeScale){
 		//Only init data if it hasn't already been set
 		if(dataForDimpleMonth == null){
 			$.ajax({
+				async: false,
 				url : '/TeamBravo/graphs/dimple/MONTH',
 				success : function(data) {
 					dataForDimpleMonth = data;
@@ -60,6 +73,7 @@ function initPie(timeScale){
 		//Only init data if it hasn't already been set
 		if(dataForPieWeek == null){
 			$.ajax({
+				async: false,
 				url : '/TeamBravo/graphs/pie/WEEK',
 				success : function(data) {
 					dataForPieWeek = data;
@@ -70,6 +84,7 @@ function initPie(timeScale){
 		//Only init data if it hasn't already been set
 		if(dataForPieMonth == null){
 			$.ajax({
+				async: false,
 				url : '/TeamBravo/graphs/pie/MONTH',
 				success : function(data) {
 					dataForPieMonth = data;
@@ -85,7 +100,8 @@ function initCloud(timeScale){
 		//Only init data if it hasn't already been set
 		if(dataForCloudWeek == null){
 			$.ajax({
-				url : '/TeamBravo/graphs/cloud/MONTH',
+				async: false,
+				url : '/TeamBravo/graphs/cloud/WEEK',
 				success : function(data) {
 					dataForCloudWeek = data;
 				}
@@ -95,6 +111,7 @@ function initCloud(timeScale){
 		//Only init data if it hasn't already been set
 		if(dataForCloudMonth == null){
 			$.ajax({
+				async: false,
 				url : '/TeamBravo/graphs/cloud/MONTH',
 				success : function(data) {
 					dataForCloudMonth = data;
@@ -104,8 +121,9 @@ function initCloud(timeScale){
 	}
 }
 
-//Show chart methods --------------------------------------------------------------->>
+//Show chart methods--------------------------------------------------------------------------------------------->>
 
+//BARCHART------------------------------------------------------------------------------------------->>
 function showBarChart(tileNo){ //Change this to showChart(type) to just load default chart at first
 	$.ajax({
 		aync : false,
@@ -115,13 +133,13 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			//reSet component's class
 			var chartClass = $('#chart' + tileNo).attr('class');
 			$('#chart' + tileNo).attr('class','bar' + chartClass);
-			drawBarChart(tileNo, "SINGLE", "WEEK");
+			drawBarChart(tileNo, "WEEK");
 		}
 	});
 }
 
-function drawBarChart(tileNo, scope, timeScale){
-
+function drawBarChart(tileNo, timeScale){
+	
 	initDimple(timeScale);
 	//Set data source week or month
 	var src;
@@ -131,195 +149,211 @@ function drawBarChart(tileNo, scope, timeScale){
 		src = dataForDimpleMonth;
 	}
 	
-	var colour1 = new dimple.color("#134C7C");
-	var colour2 = new dimple.color("#C01E11");
-	var colour3 = new dimple.color("#92B710");
-	colour1.opacity = 1;
-	colour2.opacity = 1;
-	colour3.opacity = 1;
-	if(scope== "SINGLE"){
-		var chartId = "#chart" + tileNo;
-		var svgBar = dimple.newSvg(chartId, 550, 320);
-		var barChart = new dimple.chart(svgBar, src);
-		var x = barChart.addCategoryAxis("x", [ "Day", "Topic" ]);
-		x.addOrderRule("Day");
-		var myAxis = barChart.addMeasureAxis("y", "Tweets");
-		barChart.addSeries("Topic", dimple.plot.bar);
-		var myLegend = barChart.addLegend(25, 10, 400, 20, "right");
-		myLegend.fontSize = "14px"
-		barChart.defaultColors = [
-			colour1,
-			colour2,
-			colour3
-		];
-		barChart.width = 450;
-		barChart.height = 220;
-		barChart.draw();
-		myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
-	}else if(scope == "ALL"){
-		//debugger;
-		var chartIds = document.getElementsByClassName('barChart');
-		for(i = 0; i < chartIds.length; i++){
-			var svgBar = dimple.newSvg(chartIds[i], 550, 320);
-			var barChart = new dimple.chart(svgBar, src);
-			var x = barChart.addCategoryAxis("x", [ "Day", "Topic" ]);
-			x.addOrderRule("Day");
-			var myAxis = barChart.addMeasureAxis("y", "Tweets");
-			barChart.addSeries("Topic", dimple.plot.bar);
-			var myLegend = barChart.addLegend(25, 10, 400, 20, "right");
-			myLegend.fontSize = "14px"
-			barChart.defaultColors = [
-				colour1,
-				colour2,
-				colour3
-			];
-			barChart.width = 450;
-			barChart.height = 220;
-			barChart.draw();
-			myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
+	//Get id and append SVG
+	var chartId = "#chart" + tileNo;
+	var svgBar = dimple.newSvg(chartId, "100%", "57%");
+	
+	var barChart = new dimple.chart(svgBar, src);
+	barChart.setBounds("10%", "20%", "80%", "60%");
+	
+	var x = barChart.addCategoryAxis("x", [ "Day", "Topic" ]);
+	x.addOrderRule("Day");
+	
+	barChart.addMeasureAxis("y", "Tweets");
+	barChart.addSeries("Topic", dimple.plot.bar);
+	
+	var myLegend = barChart.addLegend("10%", "5%", "100%", "10%", "left");
+	myLegend.fontSize = "14px"
+	barChart.defaultColors = [
+		colour1,
+		colour2,
+		colour3
+	];
+
+	barChart.draw();
+	myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
+}
+
+//LINEGRAPH------------------------------------------------------------------------------------------->>
+function showLineGraph(tileNo){
+	$.ajax({
+		aync : false,
+		url : '/TeamBravo/graphs/graphView/' + tileNo,
+		success : function(data) {
+			$("#tile_content" + tileNo).html(data);
+			//reSet component's class
+			var chartClass = $('#chart' + tileNo).attr('class');
+			$('#chart' + tileNo).attr('class','line' + chartClass);
+			drawLineGraph(tileNo,"WEEK");
 		}
-	}
-	
+	});
 }
 
-
-function redrawGraph(tileNo, scope, graphType, timeScale){
-	
-
-	
-	switch(graphType) {
-    case "ALL":
-    	//Remove any old SVG
-    	d3.selectAll('.barChart').select("svg").remove(); //will need to select only UNLOCKED
-        drawBarChart(tileNo, scope, timeScale);
-        break;
-    case "LINEGRAPH":
-        //code block
-        break;
-    case "BARCHART":
-
-        break;
-    case "PIECHART":
-        //code block
-        break;
-    case "WORDCLOUD":
-        //code block
-        break;
-    default:
-        //default code block
-	} 
-	
-}
-
-
-
-
-
-
-
-
-
-function showLineGraph(timeScale, tileNo){
+function drawLineGraph(tileNo,timeScale){
 	
 	initDimple(timeScale);
-	
-	var srcLine; //= [{"Day":"Mon","Topic":"IndyRef","Tweets":40000},{"Day":"Mon","Topic":"SNP","Tweets":50000},{"Day":"Mon","Topic":"Nicola Sturgeon","Tweets":50000},{"Day":"Tues","Topic":"IndyRef","Tweets":20000},{"Day":"Tues","Topic":"SNP","Tweets":10000},{"Day":"Tues","Topic":"Nicola Sturgeon","Tweets":50000},{"Day":"Wed","Topic":"IndyRef","Tweets":90000},{"Day":"Wed","Topic":"SNP","Tweets":30000},{"Day":"Wed","Topic":"Nicola Sturgeon","Tweets":90000},{"Day":"Thur","Topic":"IndyRef","Tweets":70000},{"Day":"Thur","Topic":"SNP","Tweets":80000},{"Day":"Thur","Topic":"Nicola Sturgeon","Tweets":60000},{"Day":"Fri","Topic":"IndyRef","Tweets":70000},{"Day":"Fri","Topic":"SNP","Tweets":30000},{"Day":"Fri","Topic":"Nicola Sturgeon","Tweets":80000},{"Day":"Sat","Topic":"IndyRef","Tweets":10000},{"Day":"Sat","Topic":"SNP","Tweets":60000},{"Day":"Sat","Topic":"Nicola Sturgeon","Tweets":20000},{"Day":"Sun","Topic":"IndyRef","Tweets":40000},{"Day":"Sun","Topic":"SNP","Tweets":30000},{"Day":"Sun","Topic":"Nicola Sturgeon","Tweets":70000},];;
+	var srcLine;
 	if(timeScale == "WEEK"){
 		srcLine = dataForDimpleWeek;
 	}else{
 		srcLine = dataForDimpleMonth;
 	}
 	
+		
+	var LinechartId = "#chart" + tileNo;
+	var svg1 = dimple.newSvg(LinechartId, "100%", "57%");
+	
+	var myChart = new dimple.chart(svg1, srcLine);
+	myChart.setBounds("10%", "20%", "80%", "60%");
+	  
+	var x = myChart.addCategoryAxis("x", "Day");
+	x.addOrderRule("Day");
+	  
+	myChart.addMeasureAxis("y", "Tweets");
+	  
+	var s = myChart.addSeries("Topic", dimple.plot.line);
+	s.interpolation = "linear"; //make interpolation "cardinal" for curved lines
+	  
+	var legend = myChart.addLegend("10%", "5%", "100%", "10%", "left");
+	legend.fontSize = "14px"
+	myChart.defaultColors = [
+	                  		colour1,
+	                  		colour2,
+	                  		colour3
+	                  	];
+		
+	myChart.draw();
+
+}
+
+//PIECHART------------------------------------------------------------------------------------------->>
+function showPieChart(tileNo){
+	
 	$.ajax({
 		aync : false,
 		url : '/TeamBravo/graphs/graphView/' + tileNo,
 		success : function(data) {
 			$("#tile_content" + tileNo).html(data);
-			drawLineGraph(tileNo);
+			//reSet component's class
+			var chartClass = $('#chart' + tileNo).attr('class');
+			$('#chart' + tileNo).attr('class','pie' + chartClass);
+			drawPieChart(tileNo, "SINGLE","WEEK"); //default
 		}
 	});
-	
-	function drawLineGraph(tileNo){
-		
-		var LinechartId = "#chart" + tileNo;
-		var svg1 = dimple.newSvg(LinechartId, 550, 320);
-		
-		var myChart = new dimple.chart(svg1, srcLine);
-		myChart.setBounds(60, 30, 450, 190);
-		  
-		var x = myChart.addCategoryAxis("x", "Day");
-		x.addOrderRule("Day");
-		  
-		myChart.addMeasureAxis("y", "Tweets");
-		  
-		var s = myChart.addSeries("Topic", dimple.plot.line);
-		s.interpolation = "linear"; //make interpolation "cardinal" for curved lines
-		  
-		var legend = myChart.addLegend(25, 10, 400, 20, "right");
-		legend.fontSize = "14px"
-		myChart.assignColor(srcLine[0].Topic, "#134C7C",null,1);
-		myChart.assignColor(srcLine[1].Topic, "#C01E11",null,1);
-		myChart.assignColor(srcLine[2].Topic, "#92B710",null,1);
-		myChart.draw();
-	}
-
 }
 
-function showPieChart(timeScale, tileNo){
-	//debugger;
-	/*initPie(timeScale);
+function drawPieChart(tileNo,timeScale){
 	
+	initPie(timeScale);
 	var srcPie;
 	if(timeScale == "WEEK"){
 		srcPie = dataForPieWeek;
 	}else{
 		srcPie = dataForPieMonth;
-	}*/
+	}
 	
-	//To be fixed. Maybe just use Dimple!
+	var pieChartId = "#chart" + tileNo;
+	var svgPie = dimple.newSvg(pieChartId, 550, 320);
 	
+	var myChart = new dimple.chart(svgPie, srcPie);
+	myChart.setBounds(1, 30, 500, 250)
+	myChart.addMeasureAxis("p", "Tweets");
+	myChart.addSeries("Topic", dimple.plot.pie);
+	var legend = myChart.addLegend(400, 20, 100, 300, "left");
+	legend.fontSize = "16px";
+	myChart.defaultColors = [
+		                  		colour1,
+		                  		colour2,
+		                  		colour3,
+		                  		colour4,
+		                  		colour5
+		                  	];
+    myChart.draw()
+}
+
+//WORDCLOUD------------------------------------------------------------------------------------------->>
+function showWordCloud(tileNo){
 	$.ajax({
 		aync : false,
-		url : '/TeamBravo/graphs/' + tileNo + '/dimpleView',
+		url : '/TeamBravo/graphs/graphView/' + tileNo,
 		success : function(data) {
 			$("#tile_content" + tileNo).html(data);
-			var script = document.createElement( 'script' );
-			script.type = 'text/javascript';
-			var $script = $(script).html("var pieTweets = srcPie;var chart = c3.generate({data : {columns : [ ['SNP', 20000],['IndyRef', 30000],['Nicola Sturgeon', 90000], ],type : 'pie',},legend : {position : 'bottom'},color : {pattern : [ '#C01E11', '#92B710', '#134C7C' ]}});");
-
-			var chartId = "#chart" + tileNo;
-			var $target = $data.find(chartId);
-			$target.append($script);
+			//reSet component's class
+			var chartClass = $('#chart' + tileNo).attr('class');
+			$('#chart' + tileNo).attr('class','cloud' + chartClass);
+			drawWordCloud(tileNo,"WEEK");
 		}
 	});
-	
-	//drawPieChart();
-	
-	/*function drawPieChart(){
-		var pieTweets = ${TweetsForPie};
-		var chart = c3.generate({
-			data : {
-				columns : [ 
-				            ["SNP", 20000],["IndyRef", 30000],["Nicola Sturgeon", 90000],
-						],
-				type : 'pie',
-			},
-			legend : {
-				position : 'bottom'
-			},
-			color : {
-				pattern : [ '#C01E11', '#92B710', '#134C7C' ]
-			}
-		});
-		
-		//var $script = $(script).html("var pieTweets = srcPie;var chart = c3.generate({data : {columns : [ [pieTweets[0].Topic, pieTweets[0].Tweets],[pieTweets[1].Topic, pieTweets[1].Tweets],[pieTweets[2].Topic, pieTweets[2].Tweets], ],type : 'pie',},legend : {position : 'bottom'},color : {pattern : [ '#C01E11', '#92B710', '#134C7C' ]}});");
-
-	}*/
 }
 
-function showWordCloud(timeScale, tileNo){
+function drawWordCloud(tileNo,timeScale){
+	
 	initCloud(timeScale);
+	var srcCloud;
+	if(timeScale == "WEEK"){
+		srcCloud = dataForCloudWeek;
+	}else{
+		srcCloud = dataForCloudMonth;
+	}
+  	
+  	var color = d3.scale.linear()
+    .domain([0,1,2,3,4,5,6,10,15,20,100])
+    .range(["#C54040", "#C496B0","#8A2E60","#CCA352","#FFCC66","#95B15D","#7A9E35","#97ADB9","#7D99A7"]);
 	
+	d3.layout.cloud().size([420, 340]) //Change back to 400,400 if they get cut off
+	    .words(srcCloud)
+	    .rotate(0)
+		.text(function(d) { return d.Name; })
+	    .fontSize(function(d) { return d.Tweets; })
+	    .on("end", draw)
+	    .start();
+	
+	function draw(words) {
+			var cloudId = "#chart" + tileNo;
+			d3.select(cloudId).append("svg")
+	        .attr("width", 520)
+	        .attr("height", 320)
+	        .attr("class", "wordcloud")
+	        .append("g")
+	        // without the transform, words would get cut off to the left and top, they would
+	        // appear outside of the SVG area
+	        .attr("transform", "translate(200,175)") //(from left, from top) size(445,340) transform(110,175) worked
+	        .selectAll("text")
+	        .data(words)
+	        .enter().append("text")
+	        .style("font-size", function(d) { return d.Tweets + "px"; })
+	        .style("fill", function(d, i) { return color(i); })
+	        .attr("transform", function(d) {
+	            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+	        })
+	        .text(function(d) { return d.Name; })
+			.on("click", function (d, i){
+				window.open("/TeamBravo/topic/specific/", "_blank");
+			});
+		}
 }
 
-
+//RE-DRAW GRAPHS------------------------------------------------------------------------------------------->>
+function reDrawGraph(tileNo, graphType, timeScale){
+	
+	switch(graphType) {
+    case "LINEGRAPH":
+    	d3.select('#chart' + tileNo).select("svg").remove();
+    	drawLineGraph(tileNo, timeScale);
+        break;
+    case "BARCHART":
+    	d3.select('#chart'+ tileNo).select("svg").remove();
+    	drawBarChart(tileNo, timeScale);
+        break;
+    case "PIECHART":
+    	d3.select('#chart' + tileNo).select("svg").remove();
+    	drawPieChart(tileNo, timeScale);
+        break;
+    case "WORDCLOUD":
+    	d3.select('#chart' + tileNo).select("svg").remove();
+    	drawWordCloud(tileNo, timeScale);
+        break;
+    default:
+        //Add other components
+	} 	
+}

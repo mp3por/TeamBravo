@@ -31,16 +31,18 @@ public class TestRun {
 		//c.dailyMapReduce(new Date());
 		//c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
 		
-		List<EntityCountPair> top3TopicsPastWeek = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
-		for(EntityCountPair e : top3TopicsPastWeek){
+		List<EntityCountPair> topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
+		for(EntityCountPair e : topics){
 			System.out.println("Topic: " + e.getID() + "\nTweets: " + e.getCount().intValue());
 		}
 		
-		List<DateCountPair> topic1PastWeek = c.getEntitiyTrend("tattoo",4);
+		
+		
+		/*List<DateCountPair> topic1PastWeek = c.getEntitiyTrend("tattoo",4);
 		System.out.println("\nResults for 'Tattoo' in past 4 days:\n");
 		for(DateCountPair d : topic1PastWeek){
 			System.out.println("Date: " + d.getDate() + "\nTweets :" + d.getCount());
-		}
+		}*/
 	}
 
 }
