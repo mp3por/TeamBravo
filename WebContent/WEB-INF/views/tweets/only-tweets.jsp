@@ -10,12 +10,12 @@
 <script type="text/javascript"
 	src="<c:url value="/resources/js/imagesloaded.pkg.min.js" />"></script>
 
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
 
+ 
 
 <script type="text/javascript">
-	$(function() {
-		$("[rel='tooltip']").tooltip();
-	});
 
 	//Create the tooltips only when document ready
 
@@ -23,7 +23,7 @@
 			.ready(
 					function() {
 						
-						$('.tweetwall_tweet')
+						$('.tweetText')
 								.each(
 										function() {
 
@@ -91,7 +91,7 @@
 													}
 												}
 											}
-											$(this).html("<br/>"+"<p class=tweetText>"+text+"</p>");
+											$(this).html("<br/>"+"<p class='tweetText' id='tweetText'>"+text+"</p>");
 										});
 						$("body").tooltip({
 							selector : '[data-toggle=tooltip]'
@@ -100,23 +100,26 @@
 </script>
 
 <br/>
+
+
+
 <div id="" style="overflow-y: scroll; height:400px;">
 <ul>
 	<!-- Loop over the tweets  -->
 
 	<c:forEach var="tweet" items="${tweets}">
-		<li class="tweet"><img
+		<div class="tweet" class="added_tweetwall_li"><img
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
-			class="avatar" /> <!-- Loop over the elements of the tweet --> 
-				<h3>${tweet.user.screen_name}</h3>
+			id="avatar" class="added_tweetwall_avatar" /> <!-- Loop over the elements of the tweet --> 
+				<h3 class="added_tweetwall_h3">${tweet.user.screen_name}</h3>
 			
-				<h4><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
+				<h4 class="added_tweetwall_h4"><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
 			
-				<div class="tweetwall_tweet" text="${tweet.text}"
+				<div class="tweetText" text="${tweet.text}"
 					person="${tweet.Person}" location="${tweet.Location}"
 					organization="${tweet.Organization}" userID="${tweet.UserID}"
 					hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>
-			</li>
+			</div>
 	</c:forEach>
 </ul>
 </div>

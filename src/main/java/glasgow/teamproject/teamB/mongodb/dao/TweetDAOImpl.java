@@ -163,11 +163,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	private ArrayList<HashMap<String, Object>> traverseTheQuery (DBCursor dbCursor, int count) {
 		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
-		System.out.println(dbCursor.curr());
+		System.out.println("DBCursor length:" + dbCursor);
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
 		// parsing gets complicated!
-		while(dbCursor.hasNext() && i<count){
+		while(dbCursor.hasNext() && i<=count){
 			BasicDBObject currentObj = (BasicDBObject) dbCursor.curr();
 			HashMap<String, Object> tweet = parseDBObject(currentObj);
 			tweets.add(tweet);
@@ -185,7 +185,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		//DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
 	    BasicDBObject getQuery = new BasicDBObject();
 	    getQuery.put("created_at", new BasicDBObject("$gt", dateFrom).append("$lt", dateTo));
-	    DBCursor dbCursor = dbCollection.find(getQuery);
+	    DBCursor dbCursor = dbCollection.find(getQuery).limit(count+1);
 
 		
 		return traverseTheQuery(dbCursor, count);
@@ -195,7 +195,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
-		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count+1);
 		
 		return traverseTheQuery(dbCursor, count);
 	}

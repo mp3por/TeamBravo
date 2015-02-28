@@ -352,6 +352,39 @@
 		});
 	}
 	
+	
+	function submitTweetwallSettings (deb) {
+		console.log(deb);
+		var index = deb.getAttribute('index');
+		var count = document.getElementById('tweetwallTweetNumber').value;
+		$.ajax({
+			url : '/TeamBravo/tweets/tweetWall/'+count+'/0/0',
+			success : function(data) {
+				initWall("tile_content"+index, data, index);
+			}
+		});
+	}
+	
+	function makeUserIDLarger(index, inc) {
+		var i = index.getAttribute('index');
+		$('.tweetwall_h3_'+i).each( function () {
+			 var size = parseFloat($(this).css("font-size"));
+
+			$(this).css('font-size', size+15*inc+"px");
+		});
+	}
+	
+	function makeAvatarLarger(index, inc) {
+		var i = index.getAttribute('index');
+		console.log(index);
+		$('.avatar_'+i).each( function () {
+			 var size = parseFloat($(this).css("width"));
+
+			$(this).css('width', size+50*inc+"px");
+		});
+	}
+
+	
 	function initStatistics(data,index){
 		$('#tile_content'+index).html(data);
 	}
@@ -385,35 +418,80 @@
 	}
 	
 	function initWall(container_id, data, index) {
-		//debugger;
-		$('#tile_content'+index).append(data);
-		console.log("init wall");
-		//console.log(tweets);
+		$('#tile_content'+index).html(data);
 		
-		/*
-		console.log("container_id: " + container_id);
-		console.log("index: " + index);
+		$('#settings'+index).html('<p>Number of tweets to show:</p>'+
+					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'+
+					'<script>$("input[name=demo3_22]").TouchSpin({'+
+						'initval:40,min:1,max:100}'+
+						')'+';'+' </sc'+'ript>'+
+						'<br/>'+
+					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
+					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'+
+					'<br/><br/><button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger">Make User ID larger</button>'+
+					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller">Make User ID smaller</button>'+
+					'<br/><br />'+
+					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index">Make User Avatar larger</button>'+
+					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index ">Make User Avatar smaller</button>)<br/><br/>');
+				
+		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
 		
-		$('#' + container_id).append(needed);
-		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
-		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
+		$('#added_submitTweetwallSettings').attr('index', index);
 		
-		*/
-	}
+		$('.added_tweetwall_h3').each(function () {
+			console.log("I am here at h3");
+			$(this).attr('class', 'tweetwall_h3_'+index);
+		});
+		
+		$('.added_tweetwall_h4').each(function () {
+			$(this).attr('class', 'tweetwall_h4_'+index);
+		});
+		
+		$('.added_tweetwall_avatar').each(function () {
+			$(this).attr('class', 'avatar_'+index);
+		});
+
+		$('.added_tweetwall_tweet').each(function () {	
+			$(this).attr('class', 'tweetwall_tweet_'+index);
+		});
+		
+		$('#added_makeUserIDLarger').each( function () {
+			$(this).attr("index", index);
+		});
+		$('#added_makeUserIDSmaller').each( function () {
+			$(this).attr("index", index);
+		});
+		
+		$('#added_smaller_avatar_index').each( function () {
+			$(this).attr("index", index);
+		});
+
+		$('#added_larger_avatar_index').each( function () {
+			$(this).attr("index", index);
+		});
+		
+		$('#added_Submit_index').each(function (){
+			$(this).attr('index', index);
+		});
+		
+		$('.added_tweetwall_li').each(function () {
+			$(this).attr('class', 'tweetwall_li_'+index);
+		});
+		
 	
+		
+		console.log("init wall");
+		
+
+	}
+	//initial tweetWall with latest tweets and 25 tweets in the wall
 	function getTweetwall(container_id, index) {
-		console.log("Getting tweetwall: " + container_id);
 		$.ajax({
 			url : '/TeamBravo/tweets/tweetWall/25/0/0',
 			success : function(data) {
-				//debugger;
-				//console.log("consoler:");
-				//console.log(data);
-				//var tweets = null;
-				//var needed = null;
-				//console.log (data);
-				console.log("Success for tweetwall");
-				initWall(container_id, data, index);
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content"+index, data, index);
 			}
 		});
 	}
@@ -426,22 +504,13 @@
 		$('#template_settings_div').attr('id', 'settings' + c);
 		$('#template_content').attr('id', 'tile_content' + c);
 	}
-
+	
 	function graphInit() {
 		$.ajax({
 			url : '/TeamBravo/graphs/graphInit',
 			async : false, //Quick fix, remove later
 			success : function(data) {
 				console.log("Graphs Initialised");
-			}
-		});
-	}
-
-	function getTweetWall() {
-		$.ajax({
-			url : '/TeamBravo/tweets/all',
-			success : function(data) {
-				$("#tweetwall").html(data);
 			}
 		});
 	}
