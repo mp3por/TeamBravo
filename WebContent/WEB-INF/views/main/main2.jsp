@@ -13,7 +13,7 @@
 
 <!-- maps -->
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
-<script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
+<script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
 <!-- graphs -->
