@@ -18,9 +18,11 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
@@ -79,7 +81,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	@Override
 	public List<String> getTweetsForMaps(String collectionName) {
-		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
+		//TODO:get only last 1000 tweets
+		Query q = new Query();
+		q.addCriteria(Criteria.where("coordinates").ne(null));
+		List<String> results = mongoOps.find(q, String.class, collectionName);
 		return results;
 	}
 	

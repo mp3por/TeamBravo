@@ -2,7 +2,11 @@ package glasgow.teamproject.teamB.Search;
 
 //import glasgow.teamproject.teamB.Graphs.GraphsController;
 //import glasgow.teamproject.teamB.Maps.MapsController;
+import glasgow.teamproject.teamB.Counter.CounterController;
+import glasgow.teamproject.teamB.Graphs.GraphsController;
+import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
+import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 //import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
@@ -11,6 +15,10 @@ import java.util.Date;
 //import java.util.List;
 //import java.util.Map;
 //import java.util.Set;
+
+
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +37,18 @@ public class SearchController {
 	
 	@Autowired
 	private SearchDAOImpl dao;
+//	
+//	@Autowired
+//	private MapsController maps;
+//	
+//	@Autowired
+//	private TweetController tweets;
+	
+//	@Autowired
+//	private GraphsController graphs;
+	
+	@Autowired
+	private CounterController counter;
 	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
