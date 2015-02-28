@@ -55,6 +55,9 @@ public interface TweetDAO {
 	public void dailyMapReduce(Date date);
 	public void mergingMapReduce(TimePeriod timePeriod);
 
+	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
+			String dateFrom, String dateTo, String collectionName);
+
 	
 
 

@@ -404,7 +404,7 @@
 	function getTweetwall(container_id, index) {
 		console.log("Getting tweetwall: " + container_id);
 		$.ajax({
-			url : '/TeamBravo/tweets/test',
+			url : '/TeamBravo/tweets/tweetWall/25/0/0',
 			success : function(data) {
 				//debugger;
 				//console.log("consoler:");

@@ -122,20 +122,13 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return result.isUpdateOfExisting();
 	}
 
-	
-	@Override
-	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
-		System.out.println("Number of tweets to show: " + count);
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-
-		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+	private ArrayList<HashMap<String, Object>> traverseTheQuery (DBCursor dbCursor, int count) {
 		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
 		System.out.println(dbCursor.curr());
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
 		// parsing gets complicated!
 		while(dbCursor.hasNext() && i<count){
-			System.out.println(dbCursor.curr());
 			BasicDBObject currentObj = (BasicDBObject) dbCursor.curr();
 			HashMap<String, Object> tweet = parseDBObject(currentObj);
 			tweets.add(tweet);
@@ -143,6 +136,29 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			dbCursor.next();
 		}
 		return tweets;
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
+			String dateFrom, String dateTo, String collectionName) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+
+		//DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+	    BasicDBObject getQuery = new BasicDBObject();
+	    getQuery.put("created_at", new BasicDBObject("$gt", dateFrom).append("$lt", dateTo));
+	    DBCursor dbCursor = dbCollection.find(getQuery);
+
+		
+		return traverseTheQuery(dbCursor, count);
+	}
+	
+	@Override
+	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+		
+		return traverseTheQuery(dbCursor, count);
 	}
 
 	private HashMap<String, Object> parseDBObject(BasicDBObject currentObj) {
@@ -642,6 +658,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		return null;
 	}
+
+	
 
 	
 }
