@@ -166,147 +166,6 @@
 	}
 </script>
 
-<script type="text/javascript" id="TooltipsForNEs">
-$(document)
-.ready(
-		function() {
-
-			$('.NETooltip').each(function() {
-				console.log($(this).text());
-				console.debug($(this));
-				$(this).qtip({
-					content : {
-						text : $(this).context.innerText
-					}
-				})
-			});
-
-			$('.UserIDTooltip').each(function() {
-				console.log($(this).text());
-				console.debug($(this));
-				$(this).qtip({
-					content : {
-						text : $(this).context.innerText
-					}
-				})
-			});
-
-			$('.URLTooltip').each(function() {
-				console.log($(this).text());
-				console.debug($(this));
-				$(this).qtip({
-					content : {
-						text : $(this).context.innerText
-					}
-				})
-			});
-
-			$('.HashtagTooltip').each(function() {
-				console.log($(this).text());
-				console.debug($(this));
-				$(this).qtip({
-					content : {
-						text : $(this).context.innerText
-					}
-				})
-			});
-
-			// Grab all elements with the class "hasTooltip"
-			$('.xTooltip')
-					.each(
-							function() { // Notice the .each() loop, discussed below
-								$(this)
-										.qtip(
-												{
-													content : {
-														text : $(
-																this)
-																.next(
-																		'div')
-													// Use the "div" element next to this for the content
-													},
-													style : {
-														width : 250,
-														classes : 'qtip-blue qtip-shadow qtip-rounded',
-														tip : {
-															corner : true,
-														}
-													}
-
-												});
-							});
-
-			$('.NETest').each(function() {
-				text = getWikiBox($(this).attr("title"));
-				console.log("For each: " + $(this).attr("title"));
-				console.log(text);
-				$(this).html("blah" + "\n" + text);
-			});
-
-			$('.URLTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is an URL. Click on it to open it")
-							});
-
-			$('.HashtagTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is a hashtag. Click on it to search for this hashtag in Twitter");
-
-							});
-
-			$('.UserIDTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is a mentioned user on Twitter. Click to see the profile");
-							});
-
-			$('.LocationTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is a location. Click to search for this place in Google Maps");
-
-							});
-			$('.PersonTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is a Person. Click to search for this place in Wikipedia");
-
-							});
-
-			$('.OrganizationTooltip')
-					.each(
-							function() {
-								title = $(this).attr("title");
-								$(this)
-										.html(
-												title
-														+ " is an Organization. Click to search for this place in Wikipedia");
-
-							});
-		});
-</script>
 </head>
 <body>
 
@@ -354,7 +213,8 @@ $(document)
 									</label>
 								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
 									</label>
-
+								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+									</label>
 							</div>
 						</div>
 
@@ -404,21 +264,13 @@ $(document)
 			addTile("1");
 			addTile("0");
 			addTile("2");
+			getSearchBox();
 		}
 	});
 
 	var tile_template = null;
 	var row_index = 0;
 	var current_num_of_tiles = 0;
-
-	function getSearchBox() {
-		$.ajax({
-			url : '/TeamBravo/Search/searchBox',
-			success : function(data) {
-				$("#search").html(data);
-			}
-		});
-	}
 
 	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
 		console.log("submit");
@@ -439,6 +291,11 @@ $(document)
 			addTile(toAdd);
 		}
 	});
+	
+	function settingsButtonClick(clicked) {
+		var settings = $('#settings' + clicked.id);
+		settings.show();
+	}
 
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
@@ -471,9 +328,12 @@ $(document)
 				tile_title.text("Graphs");
 				break;
 			case "2":// add tweetwall
-				console.log ("add tweetwall");
-				tile_title.text("Tweet Wall" + c);
-				getTweetwall("TweetWall" + c, c);
+				tile_title.text("Tweet Wall");
+				getTweetwall("tile_content" + c, c);
+				break;
+			case "3":
+				tile_title.text("Stats");
+				getStastics("tile_content" + c,c);
 				break;
 			}
 			current_num_of_tiles += 1;
@@ -481,6 +341,19 @@ $(document)
 			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 					+ tile_template);
 		}
+	}
+	
+	function getStastics(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/counter/test',
+			success : function(data) {
+				initStatistics(data,index);
+			}
+		});
+	}
+	
+	function initStatistics(data,index){
+		$('#tile_content'+index).html(data);
 	}
 
 	function getMaps(container_id, index) {
@@ -575,7 +448,7 @@ $(document)
 
 	function getSearchBox() {
 		$.ajax({
-			url : '/TeamBravo/main/searchBox',
+			url : '/TeamBravo/search/searchBox',
 			success : function(data) {
 				$("#search").html(data);
 			}

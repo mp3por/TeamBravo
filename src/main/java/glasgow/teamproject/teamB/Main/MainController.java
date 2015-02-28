@@ -1,12 +1,18 @@
 package glasgow.teamproject.teamB.Main;
 
+import glasgow.teamproject.teamB.Util.StreamReaderService;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
@@ -18,6 +24,18 @@ import com.mongodb.MongoClient;
 
 @Controller
 public class MainController {
+	
+	
+//	@Autowired
+//	private StreamReaderService serv;
+//	
+//	
+//	@PostConstruct
+//	private void test(){
+//		System.out.println("OMGOMGOMGOMG");
+//		serv.addObserver(this);
+//		System.out.println("OMGOMGOMGOMG: " + serv.countObservers());
+//	}
 	
 	@RequestMapping("/hello")
 	public ModelAndView Hello(){
@@ -47,4 +65,10 @@ public class MainController {
 	public String getTeplate(){
 		return "tile_template";
 	}
+
+//	@Override
+//	public void update(Observable o, Object arg) {
+//		// TODO Auto-generated method stub
+//		System.out.println("main: " + arg);
+//	}
 }

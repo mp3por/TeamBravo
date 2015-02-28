@@ -1,13 +1,16 @@
 package glasgow.teamproject.teamB.Search;
 
+//import glasgow.teamproject.teamB.Graphs.GraphsController;
+//import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
+//import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +30,6 @@ public class SearchController {
 	@Autowired
 	private SearchDAOImpl dao;
 	
-	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
@@ -37,26 +39,27 @@ public class SearchController {
 		return mv;
 	}
 	
-	@RequestMapping("/terrier/{mode}/{query}")
-	public ModelAndView search(@PathVariable Map<String, String> pathVar){
-
-		String mode = pathVar.get("mode");
-		String query = pathVar.get("query");
+	@RequestMapping("/terrier/{query}")
+	public ModelAndView search(@PathVariable("query") String query){		
 		
+		dao.runQuery("normal", query);
 		
-    	Set<String> resultSet = dao.getTweetsForQuery(query);
-
-    	//TODO : vili find a way to do this AspectOriented
+//    	Set<String> resultSet = dao.getTweetsForQuery(query);
+    	// TODO : vili find a way to do this AspectOriented
     	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
+    	// String resultTweetWall = tweetWall.getResultsForSetOfTweets(tweetsSet);
+    	// String resultGraphs = graphs.getResultsForSetOfTweets(tweetSet);
     	
-    	System.err.println(dao.getResultsList().get(2).toString());
+//    	System.err.println(dao.getResultsList().get(2).toString());
     	
-    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+//    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
     	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
-		
+//		modelandview.addObject("tweets", tweets);
+//		
+//		modelandview.addObject("count", tweets.size());
+		modelandview.addObject("numberOfTweets", dao.getResultsList().size());
+		modelandview.addObject("query", query);		
 		return modelandview;
 	}
 	

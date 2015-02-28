@@ -6,6 +6,8 @@
 <body>
 
 	<P>  ${output1} </P>
+	
+	<P>  ${output2} </P>
 
 </body>
 </html>

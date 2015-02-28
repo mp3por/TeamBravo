@@ -1,324 +1,233 @@
 <%@ include file="/WEB-INF/include.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
 <html>
 <head>
+
+<link href="<c:url value="/resources/css/graphs.css" />"
+	rel="stylesheet">
 <link href="<c:url value="/resources/css/tweets.css" />"
 	rel="stylesheet">
-<link href="<c:url value="/resources/css/jquery.qtip.css" />"
+<link href="<c:url value="/resources/css/styles.css" />"
 	rel="stylesheet">
+<link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/imagesloaded.pkg.min.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/jquery.qtip.js" />"></script>
+<!-- jQuery -->
+<script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 
-<script type="text/javascript">
-	function getWikiBox(title) {
-		var text = "hey";
-		text = getWiki(title);
-		//while (!text) {}
+<!-- maps -->
+<script
+	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 
-		return text;
-	};
+<!-- graphs -->
+<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
+<script
+	src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 
-	function getIntro(data) {
-		var t;
-		for (text in data.parse.text) {
 
-			var text = data.parse.text[text].split("<p>");
-			var pText = "";
-			for (p in text) {
-				//Remove html comment
-				text[p] = text[p].split("<!--");
-				if (text[p].length > 1) {
-					text[p][0] = text[p][0].split(/\r\n|\r|\n/);
-					text[p][0] = text[p][0][0];
-					text[p][0] += "</p> ";
-				}
-				text[p] = text[p][0];
-				//Construct a string from paragraphs
-				if (text[p].indexOf("</p>") == text[p].length - 5) {
-					var htmlStrip = text[p].replace(/<(?:.|\n)*?>/gm, '') //Remove HTML
-					var splitNewline = htmlStrip.split(/\r\n|\r|\n/); //Split on newlines
-					for (newline in splitNewline) {
-						if (splitNewline[newline].substring(0, 11) != "Cite error:") {
-							pText += splitNewline[newline];
-							pText += "\n";
-						}
-					}
-				}
-			}
-			pText = pText.substring(0, pText.length - 2); //Remove extra newline
-			pText = pText.replace(/\[\d+\]/g, ""); //Remove reference tags (e.x. [1], [4], etc)
-			t = pText;
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-		}
-		return t;
-	};
+<!-- bootstrap -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-	function getWiki(title) {
-		//Get Leading paragraphs (section 0)
-		var t = "";
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		$.getJSON(
-				"http://en.wikipedia.org/w/api.php?action=parse&page=" + title
-						+ "&prop=text&section=0&format=json&callback=?",
-				function(data) {
-					console.log("Success for " + title);
-				}).done(function(data, callback) {
-			console.log("done");
-			t = getIntro(data);
-			console.log("returned" + t);
-		}).fail(function() {
-			console.log("fail");
-			t = "No additional information was found for " + title;
-		}).always(function() {
-			console.log("always");
-			return t;
-		});
-	};
+<title>Search Results Page</title>
 
-	//x = getWiki("Glasgow");
-	//console.log(x);
-	//y = getImages("Glasgow");
-	//console.log(y);
-</script>
-
-<script type="text/javascript">
-	//Create the tooltips only when document ready
-	$(document)
-			.ready(
-					function() {
-
-						$('.NETooltip').each(function() {
-							console.log($(this).text());
-							console.debug($(this));
-							$(this).qtip({
-								content : {
-									text : $(this).context.innerText
-								}
-							})
-						});
-
-						$('.UserIDTooltip').each(function() {
-							console.log($(this).text());
-							console.debug($(this));
-							$(this).qtip({
-								content : {
-									text : $(this).context.innerText
-								}
-							})
-						});
-
-						$('.URLTooltip').each(function() {
-							console.log($(this).text());
-							console.debug($(this));
-							$(this).qtip({
-								content : {
-									text : $(this).context.innerText
-								}
-							})
-						});
-
-						$('.HashtagTooltip').each(function() {
-							console.log($(this).text());
-							console.debug($(this));
-							$(this).qtip({
-								content : {
-									text : $(this).context.innerText
-								}
-							})
-						});
-
-						// Grab all elements with the class "hasTooltip"
-						$('.xTooltip')
-								.each(
-										function() { // Notice the .each() loop, discussed below
-											$(this)
-													.qtip(
-															{
-																content : {
-																	text : $(
-																			this)
-																			.next(
-																					'div')
-																// Use the "div" element next to this for the content
-																},
-																style : {
-																	width : 250,
-																	classes : 'qtip-blue qtip-shadow qtip-rounded',
-																	tip : {
-																		corner : true,
-																	}
-																}
-
-															});
-										});
-
-						$('.NETest').each(function() {
-							text = getWikiBox($(this).attr("title"));
-							console.log("For each: " + $(this).attr("title"));
-							console.log(text);
-							$(this).html("blah" + "\n" + text);
-						});
-
-						$('.URLTooltip')
-								.each(
-										function() {
-											title = $(this).attr("title");
-											$(this)
-													.html(
-															title
-																	+ " is an URL. Click on it to open it")
-										});
-
-						$('.HashtagTooltip')
-								.each(
-										function() {
-											title = $(this).attr("title");
-											$(this)
-													.html(
-															title
-																	+ " is a hashtag. Click on it to search for this hashtag in Twitter");
-
-										});
-
-						$('.UserIDTooltip')
-								.each(
-										function() {
-											title = $(this).attr("title");
-											$(this)
-													.html(
-															title
-																	+ " is a mentioned user on Twitter. Click to see the profile");
-										});
-
-						$('.LocationTooltip')
-								.each(
-										function() {
-											title = $(this).attr("title");
-											$(this)
-													.html(
-															title
-																	+ " is a location. Click to search for this place in Google Maps");
-
-										});
-					});
-	$('.PersonTooltip')
-	.each(
-			function() {
-				title = $(this).attr("title");
-				$(this)
-						.html(
-								title
-										+ " is a Person. Click to search for this place in Wikipedia");
-
-			});
-	
-	$('.OrganizationTooltip')
-	.each(
-			function() {
-				title = $(this).attr("title");
-				$(this)
-						.html(
-								title
-										+ " is an Organization. Click to search for this place in Wikipedia");
-
-			});
-</script>
 </head>
+
 <body>
 
+	<!--------------------------- BAR ------------------------------------>
+	<header>
+		<div id='logo'>
+			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
+				style="width: 30%;">
+			<img src="/TeamBravo/resources/img/Terrier.png"
+				style="width: 30%;">
+		</div>
+		<div id='cssmenu'>
+			<ul id='naviMenu'>
+				<li class='active'><a href='http://localhost:8080/TeamBravo/main/home'>
+								<span>BACK TO MAIN PAGE</span></a></li>
+			</ul>
+		</div>
+	</header>
+	<!-- -------------------------------------------------------------- -->
 
-	<h1>Tweets Wall</h1>
+	<!-- MAIN OUTLOOK TABLE  -->
 
-	<button type="button" onClick="window.location.reload();">Reload</button>
-
-	<ul>
-		<!-- Loop over the tweets  -->
-
-		<c:forEach var="tweet" items="${tweets}">
-
-			<li class="tweet"><img
-				src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
-				class="avatar" /> <!-- Loop over the elements of the tweet --> <c:if
-					test="${tweet.containsKey('user')}">
-					<p class="Username">${tweet.user.screen_name}</p>
-				</c:if> <c:if test="${tweet.containsKey('created_at')}">
-					<b>${fn:substringBefore(tweet.created_at,'+')}</b>
-				</c:if> <c:if test="${tweet.containsKey('text')}">
-					<p>${tweet.text}</p>
-				</c:if> <c:forEach var="NE" items="${tweet.Person}">
-					<p>
-						<img src=<c:url value="resources/img/user91.png"/>
-							class="icon_img" />
-					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
-
-					<div class="PersonTooltip" title=${NE}
-						style="visibility: hidden; display: none;"> <!-- This class should hide the element, change it if needed -->
-					    						
-							</div>
-					<br />
-
-				</c:forEach> <c:forEach var="NE" items="${tweet.Location}">
-
-					<img src=<c:url value="resources/img/world90.png"/>
-						class="icon_img" />
-					<div class="xTooltip" title=${NE}>
-						<a href="https://www.google.co.uk/maps/search/${NE}">${NE}</a>
-					</div>
-					<div class="LocationTooltip" title=${NE} style="visibility: hidden; display: none;"></div>
-					<br />
-
-				</c:forEach> <c:forEach var="NE" items="${tweet.Organization}">
-					<p>
-						<img src=<c:url value="resources/img/factory6.png"/>
-							class="icon_img" />
-					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
-
-					<div class="OrganizationTooltip" title=${NE}
-						style="visibility: hidden; display: none;"></div>
-					<br />
-
-				</c:forEach> <c:forEach var="NE" items="${tweet.UserID}">
-
-					<img src=<c:url value="resources/img/at2.png"/> class="icon_img" />
-					<div class="xTooltip" title=${NE}>
-						<a href="http://twitter.com/${NE}">${NE}</a>
-					</div>
-					<div class="UserIDTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
-					<br />
-
-				</c:forEach> <c:forEach var="NE" items="${tweet.URL}">
-					<img src=<c:url value="resources/img/external1.png"/>
-						class="icon_img" />
-					<div class="xTooltip" title=${NE}>
-						<a href="${NE}">${NE}</a>
-					</div>
-					<div class="URLTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
-					<br />
-
-				</c:forEach> <c:forEach var="NE" items="${tweet.Hashtag}">
-
-					<img src=<c:url value="resources/img/internet60.png"/>
-						class="icon_img" />
-					<div class="xTooltip" title="${NE}">
-						<a href="https://twitter.com/hashtag/${fn:replace(NE,'#', '')}">
-							${NE} </a>
-					</div>
-					<div class="HashtagTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
-					<br />
-
-				</c:forEach></li>
-		</c:forEach>
-	</ul>
+	<div class="container-fluid">
+		Search returned ${numberOfTweets} tweets for keywords "${query}".
+		<div id="row0" class="row"></div>
+		
 	</div>
+
+	<!-- -------------------------------------------- -->
+
 </body>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		console.log("ready!");
+
+		getTemplate();
+
+		function getTemplate() {
+			if (tile_template == null) {
+				$.ajax({
+					url : '/TeamBravo/main/tile_template',
+					success : function(data) {
+						tile_template = data;
+						initPage();
+					}
+				});
+			} else {
+				initPage();
+			}
+		}
+
+		function initPage() {
+			addTile("0");
+			addTile("1");
+			addTile("2");
+			addTile("3");
+		}
+	});
+
+	var tile_template = null;
+	var row_index = 0;
+	var current_num_of_tiles = 0;
+
+	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
+		console.log("submit");
+		e.preventDefault(); //prevent form from submitting
+		var data = $("#add_more_form").serializeArray();
+		console.log(data[0].value);
+		var toAdd = data[0].value;
+		//debugger;
+		if (tile_template == null) {
+			$.ajax({
+				url : '/TeamBravo/main/tile_template',
+				success : function(data) {
+					tile_template = data;
+					addTile(toAdd);
+				}
+			});
+		} else {
+			addTile(toAdd);
+		}
+	});
+
+	function addTile(toAdd) {
+		if (toAdd != null && tile_template != null) {
+			//debugger;
+
+			console.log("addTile:" + toAdd);
+			console.log("curr:" + current_num_of_tiles);
+			var next = $('#next');
+			var c = current_num_of_tiles;
+			//var row = next.closest('.row');
+			console.log("row_index: " + row_index);
+			var row = $('#row' + row_index);
+			var children = row.children();
+			if (children.length >= 2) {
+				row_index += 1;
+				row.after('<div id="row'+row_index+'" class="row"></div>');
+				row = $('#row' + row_index);
+			}
+			row.append(tile_template);
+
+			fixTemplate(c);
+			var tile_title = $('#tile_title' + c);
+			//debugger;
+			switch (toAdd) {
+			case "0":// add map
+				tile_title.text("Locations of Tweets with Keyword '${query}'");
+				getMaps('tile_content' + c, c);
+				break;
+			case "1":// add graphs
+				tile_title.text("Graphs for Tweets with Keyword '${query}'");
+				getGraphs("tile_content" + c, c);
+				break;
+			case "2":// add tweetwall
+				tile_title.text("Tweet Wall for Tweets with Keyword '${query}'");
+				getTweetwall("tile_content" + c, c);
+				break;
+			case "3":
+				tile_title.text("General Statistics for Tweets with Keyword '$query'");
+				getStastics("tile_content" + c, c);
+				break;
+			}
+			current_num_of_tiles += 1;
+		} else {
+			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
+					+ tile_template);
+		}
+	}
+	
+	function getStastics(container_id, index){
+		var img = document.createElement("img");
+		img.src = 
+			"https://dl-web.dropbox.com/get/fake_stat.png?_subject_uid=96006775&w=AABe7KABsfKQUdwmrjymXE96pxDcgIk9wbw1K_XCdMG69A";
+		
+		img.style.height = '600px';
+	    img.style.width = '610px';
+		
+		var src = document.getElementById("tile3");
+		src.appendChild(img);	
+	}
+	
+	function getGraphs(container_id, index){
+		var img = document.createElement("img");
+		img.src = 
+			"https://dl-web.dropbox.com/get/anychart1.jpg?_subject_uid=96006775&w=AABmUPooiXMworxwJmxaNjbhhCFAaQemNGnt7dlG9jClzQ";
+		
+		var src = document.getElementById("tile1");
+		src.appendChild(img);
+	}
+
+	function getMaps(container_id, index) {
+		var img = document.createElement("img");
+		img.src = 
+			"https://dl-web.dropbox.com/get/fake_map.png?_subject_uid=96006775&w=AADfkGiai_-39KpvfdLdpfjNETeeyFtMG06rCWThgEeLoQ";
+		
+		img.style.height = '450px';
+	    img.style.width = '610px';
+		
+		var src = document.getElementById("tile0");
+		src.appendChild(img);
+	}
+		
+	function getTweetwall(container_id, index) {
+		var img = document.createElement("img");
+		img.src = 
+			"https://dl-web.dropbox.com/get/fake_tweetwall.png?_subject_uid=96006775&w=AAApjl53-8X1SK9x-1kDdBDe_VRil3oMN56aCsnbUUyUvQ";
+		
+		img.style.height = '450px';
+	    img.style.width = '610px';
+		
+		var src = document.getElementById("tile2");
+		src.appendChild(img);
+		
+	}
+
+	function fixTemplate(c) {
+		console.log("fixTemplate " + c);
+		$('#template_column_id').attr('id', 'tile' + c);
+		$('#template_title').attr('id', 'tile_title' + c);
+		$('#template_submit_button').attr('id', c);
+		$('#template_settings_div').attr('id', 'settings' + c);
+		$('#template_content').attr('id', 'tile_content' + c);
+	}
+
+</script>
 </html>

@@ -102,7 +102,7 @@ public class SearchDAOImpl {
 		this.alreadyRunQuery = true;
 	}
 
-	public Set<String> getTweetsForQuery(String query) {
+	public ArrayList<HashMap<String,Object>> getTweetsForQuery(String query) {
 
 		String mode = "normal";
 		
