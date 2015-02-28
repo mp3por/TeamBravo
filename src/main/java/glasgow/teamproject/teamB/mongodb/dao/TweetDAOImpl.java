@@ -125,16 +125,18 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	
 	@Override
 	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
-
+		System.out.println("Number of tweets to show: " + count);
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
-		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1));
-		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again. 
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
+		System.out.println(dbCursor.curr());
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
 		// parsing gets complicated!
 		while(dbCursor.hasNext() && i<count){
-			BasicDBObject currentObj = (BasicDBObject) dbCursor.next();
+			System.out.println(dbCursor.curr());
+			BasicDBObject currentObj = (BasicDBObject) dbCursor.curr();
 			HashMap<String, Object> tweet = parseDBObject(currentObj);
 			tweets.add(tweet);
 			i++;

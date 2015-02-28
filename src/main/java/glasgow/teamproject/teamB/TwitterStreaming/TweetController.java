@@ -56,7 +56,8 @@ public class TweetController implements SearchResultsInterface {
 	 * */
 	private ArrayList<HashMap<String,Object>> getTweets() throws UnknownHostException {
 				
-		ArrayList<HashMap<String,Object>> t = tweetSaver.getLastTweets(TWEETS_TO_RECEIVE, "tweets");		
+		ArrayList<HashMap<String,Object>> t = tweetSaver.getLastTweets(TWEETS_TO_RECEIVE, "tweets");
+		System.out.println(t.size());
 		return t;
 	
 	}
