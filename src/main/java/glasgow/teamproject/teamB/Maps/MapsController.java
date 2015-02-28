@@ -123,6 +123,14 @@ public class MapsController {
 		tweetSaver.getTweetsForMaps(collection);
 		return mv;
 	}
+	
+	@RequestMapping("/maps/getSettings")
+	@ResponseBody
+	public ModelAndView getSettings(){
+		ModelAndView mv = new ModelAndView("settings-maps");
+		
+		return mv;
+	}
 
 	@RequestMapping("/ajaxAll")
 	public ModelAndView ajaxMaps() {
@@ -206,6 +214,7 @@ public class MapsController {
 
 		return coordinates;
 	}
+	
 
 	@RequestMapping("/test3")
 	@ResponseBody

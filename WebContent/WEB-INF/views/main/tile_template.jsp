@@ -7,7 +7,7 @@
 			<div class="col-md-12">
 				<div class="above_box text-center" id="template_title">TITLE</div>
 				<div>
-					<button id="template_submit_button" type="button" class="btn btn-sm" settings_button_id="temlate" onClick="settingsButtonClick(this)">Settings!</button>
+					<button id="template_submit_button" type="button" class="btn btn-sm" settings_button_id="temlate" opened="0" onClick="settingsButtonClick(this)">Settings!</button>
 				</div>
 			</div>
 		</div>

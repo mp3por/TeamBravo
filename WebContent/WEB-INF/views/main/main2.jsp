@@ -2,12 +2,9 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/graphs.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
@@ -15,28 +12,23 @@
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 
 <!-- maps -->
-<script
-	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
 <!-- graphs -->
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script
-	src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 
 
 <!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- bootstrap -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,15 +41,22 @@
 	<!--------------------------- BAR ------------------------------------>
 	<header>
 		<div id='logo'>
-			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
-				style="width: 30%;">
+			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png" style="width: 30%;">
 		</div>
 		<div id='cssmenu'>
 			<ul id='naviMenu'>
-				<li class='active'><a href='#'><span>Home</span></a></li>
-				<li><a href='#'><span>Tweets</span></a></li>
-				<li><a href='#'><span>Map</span></a></li>
-				<li class='last'><a href='#'><span>Graphs</span></a></li>
+				<li class='active'>
+					<a href='#'><span>Home</span></a>
+				</li>
+				<li>
+					<a href='#'><span>Tweets</span></a>
+				</li>
+				<li>
+					<a href='#'><span>Map</span></a>
+				</li>
+				<li class='last'>
+					<a href='#'><span>Graphs</span></a>
+				</li>
 			</ul>
 			<div id="search"></div>
 		</div>
@@ -80,18 +79,14 @@
 
 						<!-- Multiple Radios (inline) -->
 						<div class="form-group">
-							<label class="col-md-4 control-label" for="radios">Choose
-								Tile Type</label>
+							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
 							<div class="col-md-8">
 
 								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-									</label> 
-								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-									</label>
-								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-									</label>
-								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
-									</label>
+								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+								</label>
 							</div>
 						</div>
 
@@ -100,8 +95,7 @@
 						<div class="form-group">
 							<label class="col-md-4 control-label" for="addMoreSubmit"></label>
 							<div class="col-md-4">
-								<button id="addMoreSubmit" name="addMoreSubmit" type="submit"
-									class="btn btn-primary">Add</button>
+								<button id="addMoreSubmit" name="addMoreSubmit" type="submit" class="btn btn-primary">Add</button>
 							</div>
 						</div>
 
@@ -168,10 +162,18 @@
 			addTile(toAdd);
 		}
 	});
-	
+
 	function settingsButtonClick(clicked) {
+		//debugger;
 		var settings = $('#settings' + clicked.id);
-		settings.show();
+		var p = $(clicked).attr("opened");
+		if (p == '0') {
+			settings.show();
+			$(clicked).attr("opened","1");
+		}else{
+			settings.hide();
+			$(clicked).attr("opened","0");
+		}
 	}
 
 	function addTile(toAdd) {
@@ -210,7 +212,7 @@
 				break;
 			case "3":
 				tile_title.text("Stats");
-				getStastics("tile_content" + c,c);
+				getStastics("tile_content" + c, c);
 				break;
 			}
 			current_num_of_tiles += 1;
@@ -219,18 +221,18 @@
 					+ tile_template);
 		}
 	}
-	
-	function getStastics(container_id, index){
+
+	function getStastics(container_id, index) {
 		$.ajax({
 			url : '/TeamBravo/counter/test',
 			success : function(data) {
-				initStatistics(data,index);
+				initStatistics(data, index);
 			}
 		});
 	}
-	
-	function initStatistics(data,index){
-		$('#tile_content'+index).html(data);
+
+	function initStatistics(data, index) {
+		$('#tile_content' + index).html(data);
 	}
 
 	function getMaps(container_id, index) {
@@ -241,13 +243,26 @@
 				var longitudes = data['longitudes'];
 				var latitudes = data['latitudes'];
 				var tweets = data.text;
+				var settings = data.settings;
 				var needed = data.needed;
 				initMaps(container_id, longitudes, latitudes, tweets, needed,
 						index);
 			}
 		});
+		$.ajax({
+			url : '/TeamBravo/maps/maps/getSettings',
+			success : function(data) {
+				//console.log(data);
+				$('#settings' + index).html(data);
+				$('#settings_template_form')
+						.attr('id', 'settings_form' + index);
+				$('#settings_button_template').attr('id',
+						'settings_button' + index);
+				$('#settings_button' + index).attr('tile', index);
+			}
+		});
 	}
-	
+
 	function initMaps(container_id, longitudes, latitudes, tweets, needed,
 			index) {
 		//debugger;
@@ -260,13 +275,13 @@
 		google.maps.event.addDomListener(window, 'load', initialize('map'
 				+ index, longitudes, latitudes, tweets, index));
 	}
-	
+
 	function initWall(container_id, data, index) {
 		//debugger;
-		$('#tile_content'+index).append(data);
+		$('#tile_content' + index).append(data);
 		console.log("init wall");
 		//console.log(tweets);
-		
+
 		/*
 		console.log("container_id: " + container_id);
 		console.log("index: " + index);
@@ -275,9 +290,9 @@
 		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
 		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
 		
-		*/
+		 */
 	}
-	
+
 	function getTweetwall(container_id, index) {
 		console.log("Getting tweetwall: " + container_id);
 		$.ajax({
