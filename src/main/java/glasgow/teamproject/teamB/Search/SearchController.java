@@ -47,9 +47,9 @@ public class SearchController {
 //	@Autowired
 //	private GraphsController graphs;
 	
-	@Autowired
-	private CounterController counter;
-	
+//	@Autowired
+//	private CounterController counter;
+//	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();

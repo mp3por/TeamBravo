@@ -211,7 +211,7 @@ public class MapsController {
 	@ResponseBody
 	public Map<String, ArrayList<String>> test3() {
 
-		List<String> tweetsForMaps = tweetSaver.getTweetsForMaps(ProjectProperties.TWEET_COLLECTION);
+		List<String> tweetsForMaps = tweetSaver.getTweetsForMapsWithLimit(ProjectProperties.TWEET_COLLECTION, 20);
 		Map<String, ArrayList<String>> data = null;
 		HashSet<String> tweetsSet = new HashSet<String>(tweetsForMaps);
 		data = getData(tweetsSet);

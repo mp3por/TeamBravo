@@ -88,6 +88,22 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return results;
 	}
 	
+	public List<String> getTweetsForMapsWithLimit(String collectionName, int numberOfTweetsWanted) {
+		//TODO:get only last 1000 tweets
+		
+		DBCollection collection = mongoOps.getCollection(collectionName);
+		DBObject q = QueryBuilder.start().put("coordinates").notEquals(null).get();
+		DBCursor c = collection.find(q).sort(new BasicDBObject("timestamp_ms", -1)).limit(numberOfTweetsWanted);
+		c.next(); // first object is null
+		List<String> results = new ArrayList<String>();
+		
+		while(c.hasNext()){
+			results.add(c.next().toString());
+		}
+		
+		return results;
+	}
+	
 	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
 	private double[] getCoordinate(DBObject tweet){	
 		

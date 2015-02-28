@@ -33,6 +33,7 @@ public interface TweetDAO {
 	public ArrayList<HashMap<String, Object>> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
+	public List<String> getTweetsForMapsWithLimit(String collectionName, int numberOfTweetsWanted); 
 	
 	
 	// For Terrier
