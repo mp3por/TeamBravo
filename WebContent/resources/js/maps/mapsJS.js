@@ -76,7 +76,7 @@ var lat = "55.873714";
 var myCenter = new google.maps.LatLng(lat, long1);
 
 function refreshMap(longitudes, latitudes, tweets, index, map) {
-	debugger;
+	// debugger;
 	var o = longitudes;
 	var q = latitudes;
 	var b = tweets;
@@ -98,31 +98,34 @@ function refreshMap(longitudes, latitudes, tweets, index, map) {
 			position : latLng,
 			draggable : true,
 			icon : markerImage,
-			map : map,
-			title : "1"
+			map : map
 		});
-
-		var infowindow = new google.maps.InfoWindow({
-			content : "test",
-			maxWidth : 250
-		});
-		google.maps.event.addListener(marker, 'click', function() {
-			debugger;
-			console.log(marker);
-		});
-//		infoWindows[info_window_index++] = infowindow;
 		markers[marker_index++] = marker;
 	}
-	debugger;
+	//debugger;
 	var end_index = marker_index;
 	console.log(marker_index);
 	console.log(end_index - start_index);
 	var curr_markers = [];
 	while(start_index<end_index){
-		curr_markers.push(markers[start_index]);
+		var marker = markers[start_index];
+		var infowindow = new google.maps.InfoWindow({
+			content : "test",
+			maxWidth : 250,
+		});
+		google.maps.event.addListener(marker, 'click', function(e) {
+			debugger;
+			var t = e;
+			var m = marker;
+			console.log(e);
+			console.log(marker);
+			console.log(marker.title);
+			infowindow.open(map,this);
+		});
+		curr_markers.push(marker);
 		start_index++;
 	}
-	debugger;
+	//debugger;
 
 	var markerClusterer = new MarkerClusterer(map, curr_markers, {
 		maxZoom : null,
