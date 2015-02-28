@@ -1,6 +1,5 @@
 package glasgow.teamproject.teamB.TwitterStreaming;
 
-import glasgow.teamproject.teamB.Main.SearchResultsInterface;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.net.UnknownHostException;
@@ -18,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class TweetController implements SearchResultsInterface {
+public class TweetController {
 	
 	@Autowired
 	private TweetDAO tweetSaver;
@@ -71,13 +70,5 @@ public class TweetController implements SearchResultsInterface {
 		mv.addObject("tweets",tweets);
 		//mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
 		return mv;
-	}
-	
-
-	@Override
-	public String getResultsForSetOfTweets(Set<String> tweetsSet) {
-		// TODO Auto-generated method stub
-		String r = allTweetsTest2(tweetsSet).toString();
-		return r;
 	}
 }

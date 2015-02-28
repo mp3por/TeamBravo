@@ -361,7 +361,6 @@
 		$.ajax({
 			url : '/TeamBravo/maps/test3',
 			success : function(data) {
-				debugger;
 				var longitudes = data['longitudes'];
 				var latitudes = data['latitudes'];
 				var tweets = data.text;

@@ -1,20 +1,15 @@
 package glasgow.teamproject.teamB.Maps;
 
-import glasgow.teamproject.teamB.Main.SearchResultsInterface;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
-import glasgow.teamproject.teamB.Util.StreamReaderService;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Random;
 import java.util.Set;
-
-import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MapsController implements SearchResultsInterface {
+public class MapsController {
 
 	@Autowired
 	private TweetDAO tweetSaver;
@@ -216,12 +211,20 @@ public class MapsController implements SearchResultsInterface {
 	@ResponseBody
 	public Map<String, ArrayList<String>> test3() {
 
+		List<String> tweetsForMaps = tweetSaver.getTweetsForMaps(ProjectProperties.TWEET_COLLECTION);
+		Map<String, ArrayList<String>> data = null;
+		HashSet<String> tweetsSet = new HashSet<String>(tweetsForMaps);
+		data = getData(tweetsSet);
+		return data;
+	}
+	
+	private Map<String,ArrayList<String>> getData(Set<String> tweetsForMaps){
 		ArrayList<String> tweet_text = new ArrayList<>();
 		ArrayList<String> latitudes = new ArrayList<>();
 		ArrayList<String> longitudes = new ArrayList<>();
 		Map<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
 
-		List<String> tweetsForMaps = tweetSaver.getTweetsForMaps(ProjectProperties.TWEET_COLLECTION);
+		
 		for (String tweet : tweetsForMaps) {
 			JSONObject js = new JSONObject(tweet);
 			String a = (String) js.get("text");
@@ -239,14 +242,7 @@ public class MapsController implements SearchResultsInterface {
 		data.put("longitudes", longitudes);
 		data.put("latitudes", latitudes);
 		data.put("text", tweet_text);
-
 		return data;
-	}
-
-	@Override
-	public String getResultsForSetOfTweets(Set<String> tweetsSet) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	//	@Override
