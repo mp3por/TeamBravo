@@ -169,11 +169,19 @@
 		var p = $(clicked).attr("opened");
 		if (p == '0') {
 			settings.show();
-			$(clicked).attr("opened","1");
-		}else{
+			$(clicked).attr("opened", "1");
+		} else {
 			settings.hide();
-			$(clicked).attr("opened","0");
+			$(clicked).attr("opened", "0");
 		}
+	}
+
+	function setButtonClick(button) {
+		debugger;
+		var index = $(button).attr('tile');
+		var form = $('#settings_form' + index);
+		var form_values = form.serializeArray();
+		console.log(form_values);
 	}
 
 	function addTile(toAdd) {
@@ -243,10 +251,18 @@
 				var longitudes = data['longitudes'];
 				var latitudes = data['latitudes'];
 				var tweets = data.text;
-				var settings = data.settings;
 				var needed = data.needed;
-				initMaps(container_id, longitudes, latitudes, tweets, needed,
-						index);
+				var users = data.user;
+				var time = data.time;
+
+				var tweets_info = {
+					"users" : users,
+					"time" : time,
+					"tweets" : tweets,
+					"longitudes" : longitudes,
+					"latitudes" : latitudes
+				}
+				initMaps(container_id, index, needed, tweets_info);
 			}
 		});
 		$.ajax({
@@ -254,17 +270,38 @@
 			success : function(data) {
 				//console.log(data);
 				$('#settings' + index).html(data);
+				$('#settings_template_form').attr('tile', index);
 				$('#settings_template_form')
 						.attr('id', 'settings_form' + index);
 				$('#settings_button_template').attr('id',
 						'settings_button' + index);
 				$('#settings_button' + index).attr('tile', index);
+				$('#settings_form' + index).submit(function(e) {
+					e.preventDefault();
+					var index = $(this).attr('tile');
+					var data = $(this).serializeArray();
+					$('#tooltip_time' + index).hide();
+					$('#tooltip_text' + index).hide();
+					$('#tooltip_user' + index).hide();
+
+					for (var i = 0; i < data.length; i++) {
+						var p = data[i]["value"];
+						if (p == "text") {
+							$('#tooltip_text' + index).show();
+						} else if (p == "user"){
+							$('#tooltip_user'+index).show();
+						} else if (p == "time"){
+							$('#tooltip_time'+index).show();
+						}
+					}
+
+					//$('#settings_button'+index).click();
+				});
 			}
 		});
 	}
 
-	function initMaps(container_id, longitudes, latitudes, tweets, needed,
-			index) {
+	function initMaps(container_id, index, needed, tweets_info) {
 		//debugger;
 		console.log("init maps");
 		$('#' + container_id).append(needed);
@@ -273,7 +310,7 @@
 		$('#added_map_div').attr('id', 'map' + index);
 
 		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ index, longitudes, latitudes, tweets, index));
+				+ index, index, tweets_info));
 	}
 
 	function initWall(container_id, data, index) {

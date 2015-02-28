@@ -75,27 +75,35 @@ var long1 = "-4.287393";
 var lat = "55.873714";
 var myCenter = new google.maps.LatLng(lat, long1);
 
-function refreshMap(longitudes, latitudes, tweets, index, map) {
+function refreshMap(tweets_info, index, map) {
 	// debugger;
+	var longitudes = tweets_info["longitudes"];
+	var latitudes = tweets_info["latitudes"];
+	var tweets = tweets_info["tweets"];
+	var users = tweets_info["users"];
+	var time = tweets_info["time"];
 
 	// var map = maps[index];
 	var marketClusterer = markerClusterers[index];
 	if (typeof markerClusterer != 'undefined') {
 		markerClusterer.clearMarkers();
 	}
-
+	
+//	var tooltip_template = "<div><label>Time:</label>1</div><div><label>user:</label>2</div><div><label>text:</label>3</div>"
+	var tooltip_template;
 	var markerImage = new google.maps.MarkerImage(imageUrl,
 			new google.maps.Size(24, 32));
 	var curr_markers = [];
 
 	for (var i = 0; i < latitudes.length; i++) {
 		var latLng = new google.maps.LatLng(latitudes[i], longitudes[i])
+		tooltip_template = "<div id='tooltip_time"+index+"'><label>Time:</label>"+time[i]+"</div><div id='tooltip_user"+index+"'><label>user:</label>"+users[i]+"</div><div id='tooltip_text"+index+"'><label>text:</label>"+tweets[i]+"</div>"
 		var marker = new google.maps.Marker({
 			position : latLng,
 			draggable : false,
 			icon : markerImage,
 			map : map,
-			tweet : tweets[i]
+			tweet : tooltip_template
 		});
 		
 		google.maps.event.addListener(marker, 'click', function(e) {
@@ -116,7 +124,7 @@ function refreshMap(longitudes, latitudes, tweets, index, map) {
 	// console.log(markerClusterers);
 }
 
-function initialize(mapElementId, longitudes, latitudes, tweets, index) {
+function initialize(mapElementId, index, tweets_info) {
 
 	var map = new google.maps.Map(document.getElementById(mapElementId), {
 		zoom : 11,
@@ -124,7 +132,7 @@ function initialize(mapElementId, longitudes, latitudes, tweets, index) {
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	});
 	maps[index] = map;
-	refreshMap(longitudes, latitudes, tweets, index, map);
+	refreshMap(tweets_info, index, map);
 }
 
 function clearClusters(e) {

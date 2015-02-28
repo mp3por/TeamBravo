@@ -123,12 +123,12 @@ public class MapsController {
 		tweetSaver.getTweetsForMaps(collection);
 		return mv;
 	}
-	
+
 	@RequestMapping("/maps/getSettings")
 	@ResponseBody
-	public ModelAndView getSettings(){
+	public ModelAndView getSettings() {
 		ModelAndView mv = new ModelAndView("settings-maps");
-		
+
 		return mv;
 	}
 
@@ -214,7 +214,6 @@ public class MapsController {
 
 		return coordinates;
 	}
-	
 
 	@RequestMapping("/test3")
 	@ResponseBody
@@ -226,22 +225,35 @@ public class MapsController {
 		data = getData(tweetsSet);
 		return data;
 	}
-	
-	private Map<String,ArrayList<String>> getData(Set<String> tweetsForMaps){
+
+	private Map<String, ArrayList<String>> getData(Set<String> tweetsForMaps) {
 		ArrayList<String> tweet_text = new ArrayList<>();
 		ArrayList<String> latitudes = new ArrayList<>();
 		ArrayList<String> longitudes = new ArrayList<>();
+		ArrayList<String> tweet_time = new ArrayList<>();
+		ArrayList<String> tweet_user = new ArrayList<>();
 		Map<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
 
-		
+		String a = null;
+		String time = null;
+		JSONObject b = null;
+		JSONArray c = null;
+
+		String user = null;
+
 		for (String tweet : tweetsForMaps) {
 			JSONObject js = new JSONObject(tweet);
-			String a = (String) js.get("text");
-			JSONObject b = (JSONObject) js.get("coordinates");
-			JSONArray c = (JSONArray) b.get("coordinates");
+			a = (String) js.get("text");
+			time = js.getString("created_at");
+			b = (JSONObject) js.get("coordinates");
+			c = (JSONArray) b.get("coordinates");
+			b = js.getJSONObject("user");
+			user = b.getString("name");
 			tweet_text.add(a);
 			longitudes.add(Double.toString(c.getDouble(0)));
 			latitudes.add(Double.toString(c.getDouble(1)));
+			tweet_time.add(time);
+			tweet_user.add(user);
 		}
 
 		String needed = "<div id='added_map_container' class='map-container'><div id='added_map_div' class='map'></div></div>";
@@ -251,6 +263,9 @@ public class MapsController {
 		data.put("longitudes", longitudes);
 		data.put("latitudes", latitudes);
 		data.put("text", tweet_text);
+		data.put("time", tweet_time);
+		data.put("user", tweet_user);
+
 		return data;
 	}
 
