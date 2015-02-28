@@ -88,6 +88,40 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return results;
 	}
 	
+	@Override
+	public List<String> getTweetsForMapsWithLimit(String collectionName, int numberOfTweetsWanted) {
+		//TODO:get only last 1000 tweets
+		
+		DBCollection collection = mongoOps.getCollection(collectionName);
+		DBObject q = QueryBuilder.start().put("coordinates").notEquals(null).get();
+		DBCursor c = collection.find(q).sort(new BasicDBObject("timestamp_ms", -1)).limit(numberOfTweetsWanted);
+		List<String> results = getResults(c);
+		return results;
+	}
+	
+	private List<String> getResults(DBCursor c){
+		c.next(); // first object is null
+		List<String> results = new ArrayList<String>();
+		
+		while(c.hasNext()){
+			results.add(c.next().toString());
+		}
+		return results;
+	}
+	
+	public List<String> getTweetsForMapsWithLimitAndDates(Date stDate, Date endDate, String collectionName, int max){
+		DBCollection collection = mongoOps.getCollection(collectionName);
+		
+		DBObject query = QueryBuilder.start().put("timestamp_ms")
+				.greaterThanEquals(Long.toString(stDate.getTime()))
+				.lessThanEquals(Long.toString(endDate.getTime())).get();
+		
+		DBCursor c = collection.find(query).sort(new BasicDBObject("timestamp_ms", -1)).limit(max);
+		List<String> results = getResults(c);
+		return results;
+		
+	}
+	
 	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
 	private double[] getCoordinate(DBObject tweet){	
 		
