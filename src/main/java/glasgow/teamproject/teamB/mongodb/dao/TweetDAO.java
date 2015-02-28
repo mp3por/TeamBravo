@@ -16,6 +16,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.json.JSONObject;
+
 
 public interface TweetDAO {
 	/**

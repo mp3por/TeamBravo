@@ -359,8 +359,9 @@
 	function getMaps(container_id, index) {
 		console.log("getting maps: " + container_id);
 		$.ajax({
-			url : '/TeamBravo/maps/test2',
+			url : '/TeamBravo/maps/test3',
 			success : function(data) {
+				debugger;
 				var longitudes = data['longitudes'];
 				var latitudes = data['latitudes'];
 				var tweets = data.text;
