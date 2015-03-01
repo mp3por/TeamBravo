@@ -207,14 +207,19 @@
 								Tile Type</label>
 							<div class="col-md-8">
 
-								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-									</label> 
-								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-									</label>
-								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-									</label>
-								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
-									</label>
+								<label class="radio" for="radios-0"> <input type="radio"
+									name="type" id="radios-0" value="0" checked="checked">
+									Maps
+								</label> <label class="radio" for="radios-1"> <input
+									type="radio" name="type" id="radios-1" value="1">
+									Graphs
+								</label> <label class="radio" for="radios-2"> <input
+									type="radio" name="type" id="radios-2" value="2"> Tweet
+									Wall
+								</label> <label class="radio" for="radios-3"> <input
+									type="radio" name="type" id="radios-3" value="3">
+									Stastistics
+								</label>
 							</div>
 						</div>
 
@@ -291,7 +296,7 @@
 			addTile(toAdd);
 		}
 	});
-	
+
 	function settingsButtonClick(clicked) {
 		var settings = $('#settings' + clicked.id);
 		settings.show();
@@ -333,7 +338,7 @@
 				break;
 			case "3":
 				tile_title.text("Stats");
-				getStastics("tile_content" + c,c);
+				getStastics("tile_content" + c, c);
 				break;
 			}
 			current_num_of_tiles += 1;
@@ -343,18 +348,51 @@
 		}
 	}
 	
-	function getStastics(container_id, index){
+	function reloadStats(param) {
+		
+		var index = param.data.param1
+		$(this).addClass('active').siblings().removeClass('active');
+		var time = $(this).text();
+		var linkStr;
+		if( time == 'past day') linkStr = 'pastDay';
+		else if ( time == 'past month') linkStr = 'pastMonth';
+		else if ( time == 'past week') linkStr = 'pastWeek';
+		else linkStr = 'allTime';
+			
 		$.ajax({
-			url : '/TeamBravo/counter/test',
+			url : '/TeamBravo/counter/getStats/' + time,
 			success : function(data) {
-				initStatistics(data,index);
+				$('#tile_content' + index).html(data);
+				$('#added_stat_container').attr('id', 'stat_container' + index);
+				}
+		});
+	}
+
+	function getStastics(container_id, index) {
+		$.ajax({
+			url : '/TeamBravo/counter/stats/getSettings',
+			success : function(data) {
+				$('#settings' + index).html(data);
+				$('#stat_time_setting').attr('id', 'stat_time_setting' + index);
+				$('#stat_time_setting_label').attr('for', 'stat_time_setting' + index);
+				$('#stat_time_setting' + index + ' button').click( {param1: index}, reloadStats );
+			}
+		});
+		$.ajax({
+			url : '/TeamBravo/counter/getStats/allTime',
+			success : function(data) {
+				$('#tile_content' + index).html(data);
+				$('#added_stat_container').attr('id', 'stat_container' + index);
+				//initStatistics(data, index);
 			}
 		});
 	}
-	
-	function initStatistics(data,index){
-		$('#tile_content'+index).html(data);
-	}
+
+// 	function initStatistics(data, index) {
+// 		$('#tile_content' + index).html(data);
+// 		$('#added_stat_container').attr('id', 'stat_container' + index);
+// 		$('#settings' + index).html
+// 	}
 
 	function getMaps(container_id, index) {
 		console.log("getting maps: " + container_id);
@@ -370,7 +408,7 @@
 			}
 		});
 	}
-	
+
 	function initMaps(container_id, longitudes, latitudes, tweets, needed,
 			index) {
 		//debugger;
@@ -383,13 +421,13 @@
 		google.maps.event.addDomListener(window, 'load', initialize('map'
 				+ index, longitudes, latitudes, tweets, index));
 	}
-	
+
 	function initWall(container_id, data, index) {
 		//debugger;
-		$('#tile_content'+index).append(data);
+		$('#tile_content' + index).append(data);
 		console.log("init wall");
 		//console.log(tweets);
-		
+
 		/*
 		console.log("container_id: " + container_id);
 		console.log("index: " + index);
@@ -398,9 +436,9 @@
 		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
 		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
 		
-		*/
+		 */
 	}
-	
+
 	function getTweetwall(container_id, index) {
 		console.log("Getting tweetwall: " + container_id);
 		$.ajax({

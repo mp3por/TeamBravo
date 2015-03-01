@@ -45,16 +45,12 @@
 
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-6">
-					<img src=<c:url value="resources/img/user91.png"/>
-						class="user_icon" />
 					<h5>
 						<small>MOST ACTIVE USER</small><br> ${most_active_user}
 					</h5>
 				</div>
 
 				<div class="col-md-6 col-sm-6 col-xs-6">
-					<img src=<c:url value="resources/img/user91.png"/>
-						class="user_icon" />
 					<h5>
 						<small>MOST MENTIONED USER</small><br> ${most_mentioned_user}
 					</h5>
@@ -95,7 +91,7 @@
 
 			<div class="row">
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					<img src=<c:url value="resources/img/smiling36.png"/>
+					<img src=<c:url value="resources/img/retweet_icon.png"/>
 						class="stat_icon" />
 					<h5 class="mini">
 						<small>MOST RETWEETED TWEET</small>
@@ -111,7 +107,7 @@
 
 			<div class="row">
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					<img src=<c:url value="resources/img/smiling36.png"/>
+					<img src=<c:url value="resources/img/fav_icon.png"/>
 						class="stat_icon" />
 					<h5 class="mini">
 						<small>MOST FAVOURITED TWEET</small>
