@@ -16,6 +16,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.json.JSONObject;
+
 
 public interface TweetDAO {
 	/**
@@ -31,6 +33,7 @@ public interface TweetDAO {
 	public ArrayList<HashMap<String, Object>> getLastTweets(int count, String collectionName);
 	
 	public List<String> getTweetsForMaps(String collectionName);
+	public List<String> getTweetsForMapsWithLimit(String collectionName, int numberOfTweetsWanted); 
 	
 	
 	// For Terrier
@@ -54,6 +57,9 @@ public interface TweetDAO {
 	// For Counting
 	public void dailyMapReduce(Date date);
 	public void mergingMapReduce(TimePeriod timePeriod);
+
+	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
+			String dateFrom, String dateTo, String collectionName);
 
 	
 

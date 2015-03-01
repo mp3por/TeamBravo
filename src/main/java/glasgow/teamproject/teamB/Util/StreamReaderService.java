@@ -72,6 +72,7 @@ public class StreamReaderService extends Observable {
 			@Override
 			public void onMessage(String rawString) {
 				System.out.println("twitterStreamer: " + rawString);
+				if (rawString.isEmpty()) return;
 				serv.setChanged();
 				serv.notifyObservers(rawString);
 			}

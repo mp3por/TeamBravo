@@ -18,9 +18,11 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
@@ -79,8 +81,45 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	@Override
 	public List<String> getTweetsForMaps(String collectionName) {
-		List<String> results = mongoOps.find(new Query(), String.class, collectionName);
+		//TODO:get only last 1000 tweets
+		Query q = new Query();
+		q.addCriteria(Criteria.where("coordinates").ne(null));
+		List<String> results = mongoOps.find(q, String.class, collectionName);
 		return results;
+	}
+	
+	@Override
+	public List<String> getTweetsForMapsWithLimit(String collectionName, int numberOfTweetsWanted) {
+		//TODO:get only last 1000 tweets
+		
+		DBCollection collection = mongoOps.getCollection(collectionName);
+		DBObject q = QueryBuilder.start().put("coordinates").notEquals(null).get();
+		DBCursor c = collection.find(q).sort(new BasicDBObject("timestamp_ms", -1)).limit(numberOfTweetsWanted);
+		List<String> results = getResults(c);
+		return results;
+	}
+	
+	private List<String> getResults(DBCursor c){
+		c.next(); // first object is null
+		List<String> results = new ArrayList<String>();
+		
+		while(c.hasNext()){
+			results.add(c.next().toString());
+		}
+		return results;
+	}
+	
+	public List<String> getTweetsForMapsWithLimitAndDates(Date stDate, Date endDate, String collectionName, int max){
+		DBCollection collection = mongoOps.getCollection(collectionName);
+		
+		DBObject query = QueryBuilder.start().put("timestamp_ms")
+				.greaterThanEquals(Long.toString(stDate.getTime()))
+				.lessThanEquals(Long.toString(endDate.getTime())).get();
+		
+		DBCursor c = collection.find(query).sort(new BasicDBObject("timestamp_ms", -1)).limit(max);
+		List<String> results = getResults(c);
+		return results;
+		
 	}
 	
 	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
@@ -122,25 +161,43 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return result.isUpdateOfExisting();
 	}
 
-	
-	@Override
-	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
-
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-
-		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1));
-		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again. 
+	private ArrayList<HashMap<String, Object>> traverseTheQuery (DBCursor dbCursor, int count) {
+		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
+		System.out.println("DBCursor length:" + dbCursor);
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
 		int i = 0;
 		// parsing gets complicated!
-		while(dbCursor.hasNext() && i<count){
-			BasicDBObject currentObj = (BasicDBObject) dbCursor.next();
+		while(dbCursor.hasNext() && i<=count){
+			BasicDBObject currentObj = (BasicDBObject) dbCursor.curr();
 			HashMap<String, Object> tweet = parseDBObject(currentObj);
 			tweets.add(tweet);
 			i++;
 			dbCursor.next();
 		}
 		return tweets;
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
+			String dateFrom, String dateTo, String collectionName) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+
+		//DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
+	    BasicDBObject getQuery = new BasicDBObject();
+	    getQuery.put("created_at", new BasicDBObject("$gt", dateFrom).append("$lt", dateTo));
+	    DBCursor dbCursor = dbCollection.find(getQuery).limit(count+1);
+
+		
+		return traverseTheQuery(dbCursor, count);
+	}
+	
+	@Override
+	public ArrayList<HashMap<String,Object>> getLastTweets(int count, String collectionName) {
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+
+		DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count+1);
+		
+		return traverseTheQuery(dbCursor, count);
 	}
 
 	private HashMap<String, Object> parseDBObject(BasicDBObject currentObj) {
@@ -640,6 +697,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		return null;
 	}
+
+	
 
 	
 }

@@ -1,22 +1,3 @@
-$(function() {
-	
-	//initialiseData calls daily mapReduce() method
-	initialiseData("WEEK");
-	initialiseData("MONTH");
-	
-	function initialiseData(timeScale) {
-		graphInit(timeScale);
-	};
-	
-	function graphInit(timeScale) {
-		$.ajax({
-			url : '/TeamBravo/graphs/graphInit/' + timeScale,
-			async : false, //Quick fix, remove later
-			success : function(data) {
-			}
-		});
-	}
-});
 
 //INITIALISE GLOBAL DATA FOR GRAPHS --------------------------------------------------------------------------->>
 var dataForDimpleWeek;
@@ -141,6 +122,7 @@ function drawBarChart(tileNo, timeScale){
 	
 	initDimple(timeScale);
 	//Set data source week or month
+	debugger;
 	var src;
 	if(timeScale == "WEEK"){
 		src = dataForDimpleWeek;

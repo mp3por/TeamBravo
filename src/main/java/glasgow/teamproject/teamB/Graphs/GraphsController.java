@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,22 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class GraphsController {
 	
+	@Autowired
 	private TweetDAO c;
-	
-	@RequestMapping("/graphInit/{timeScale}")
-	@ResponseBody
-	public void graphInit(@PathVariable("timeScale") String timeScale){
-		c = new TweetDAOImpl();
-		/*c.dailyMapReduce(new Date());
-		if(timeScale.equals("WEEK")){
-			c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
-		}else if(timeScale.equals("MONTH")){
-			c.mergingMapReduce(Counter.TimePeriod.PASTMONTH);
-		}else{
-			System.err.print("Error: " + timeScale + " Not a valid time period.");
-		}*/ //This only needs to be called daily or when the twitter stream is running
-	}
-
 	
 	//RETURN LISTS FOR GRAPH DATA------------------------------------------------------------------------------------>>
 	
@@ -142,6 +129,7 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
+		
 
 		List<HashMap<String,String>> tweets = new ArrayList<>();
 		List<EntityCountPair> topics = null;
@@ -177,6 +165,9 @@ public class GraphsController {
 		}else if(timePeriod.equals("MONTH")){
 			
 			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 10);
+			System.out.println("Getting Dimple Week Data//////////////////////////////////////////////");
+			System.out.println("Topics: " + topics);
+			
 			noOfDays = 30;
 			
 			//Get top three values and clean up strings, removing []
