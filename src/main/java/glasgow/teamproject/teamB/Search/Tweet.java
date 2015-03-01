@@ -1,18 +1,17 @@
-package glasgow.teamproject.teamB.mongodb.dao;
+package glasgow.teamproject.teamB.Search;
 
 import java.util.Comparator;
-
-import com.mongodb.BasicDBObject;
+import java.util.Map;
 
 public class Tweet implements Comparable<Tweet>{
 	
-	private BasicDBObject tweet;
+	private Map<String, Object> tweet;
 	
-	protected Tweet (BasicDBObject tweet){
+	public Tweet (Map<String, Object> tweet){
 		this.tweet = tweet;
 	}
 	
-	protected BasicDBObject getTweet(){
+	public Map<String, Object> getTweet(){
 		return this.tweet;
 	}
 
@@ -30,6 +29,17 @@ public class Tweet implements Comparable<Tweet>{
 			int retweet_count2 = Integer.parseInt(tweet2.getTweet().get("retweet_count").toString());
 			
 			return retweet_count2 - retweet_count1;
+		}
+	};
+	
+	public static Comparator<Tweet> PostedTimeComparator = new Comparator<Tweet>(){
+			
+			public int compare(Tweet tweet1, Tweet tweet2){
+			
+			int posted_time1 = Integer.parseInt(tweet1.getTweet().get("timestamp").toString());
+			int posted_time2 = Integer.parseInt(tweet2.getTweet().get("timestamp").toString());
+			
+			return posted_time2 - posted_time1;
 		}
 	};
 

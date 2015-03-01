@@ -40,7 +40,6 @@ colour5.opacity = 1;
 
 //Initialisation methods -------------------------------------------------------------------------------------->>
 function initDimple(timeScale){
-	
 	if(timeScale == "WEEK"){
 		//Only init data if it hasn't already been set
 		if(dataForDimpleWeek == null){

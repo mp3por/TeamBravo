@@ -1,9 +1,9 @@
 package glasgow.teamproject.teamB.Graphs;
 
-
-import glasgow.teamproject.teamB.Counter.Counter;
-import glasgow.teamproject.teamB.Counter.Counter.DateCountPair;
-import glasgow.teamproject.teamB.Counter.Counter.EntityCountPair;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,12 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class GraphsController {
 	
-	private Counter c;
+	private TweetDAO c;
 	
 	@RequestMapping("/graphInit/{timeScale}")
 	@ResponseBody
 	public void graphInit(@PathVariable("timeScale") String timeScale){
-		c = new Counter();
+		c = new TweetDAOImpl();
 		/*c.dailyMapReduce(new Date());
 		if(timeScale.equals("WEEK")){
 			c.mergingMapReduce(Counter.TimePeriod.PASTWEEK);
@@ -47,9 +47,9 @@ public class GraphsController {
 		List<EntityCountPair> topics = new ArrayList<EntityCountPair>();
 		
 		if(timePeriod.equals("WEEK")){
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 14);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 14);
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 14);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 14);
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
 		}
@@ -80,7 +80,8 @@ public class GraphsController {
 		String topic5Clean = "";
 		
 		if(timePeriod.equals("WEEK")){
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 10);
+			System.out.println("GETTING TOPICS" + topics);
 			//Get top three values and clean up strings, removing []
 			String topic1 = topics.get(0).getID().replace("[", "");
 			topic1Clean = topic1.replace("]", "");
@@ -94,7 +95,7 @@ public class GraphsController {
 			topic5Clean = topic5.replace("]", "");
 			
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 11);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 11);
 			//Get top three values and clean up strings, removing []
 			String topic1 = topics.get(1).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
 			topic1Clean = topic1.replace("]", "");
@@ -158,7 +159,7 @@ public class GraphsController {
 		//Get top 3 topics for the past time period
 		if(timePeriod.equals("WEEK")){
 			
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTWEEK, 10);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 10);
 			noOfDays = 7;
 			
 			//Get top three values and clean up strings, removing []
@@ -175,7 +176,7 @@ public class GraphsController {
 			
 		}else if(timePeriod.equals("MONTH")){
 			
-			topics = c.getTopEntities(Counter.Field.ALL, Counter.TimePeriod.PASTMONTH, 10);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 10);
 			noOfDays = 30;
 			
 			//Get top three values and clean up strings, removing []

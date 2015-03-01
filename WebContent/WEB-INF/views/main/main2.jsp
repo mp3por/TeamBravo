@@ -2,9 +2,12 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/graphs.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />"
+	rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
@@ -12,23 +15,26 @@
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 
 <!-- maps -->
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script
+	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
 <!-- graphs -->
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
-<script src="<c:url value="/resources/js/timeButtons.js" />"></script>
+<script src="<c:url value="/resources/js/settingsButtons.js" />"></script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -108,7 +114,7 @@
 	var lat = "55.873714";
 	var myCenter = new google.maps.LatLng(lat, long1);
 
-	function refreshMap(longitudes, latitudes, tweets,index) {
+	function refreshMap(longitudes, latitudes, tweets, index) {
 		//debugger;
 		var marketClusterer = markerClusterers[index];
 		if (typeof markerClusterer != 'undefined') {
@@ -137,19 +143,19 @@
 			styles : styles[null]
 		});
 		//console.log(marketClusterer);
-		markerClusterers[index]=marketClusterer;
+		markerClusterers[index] = marketClusterer;
 		//console.log(markerClusterers);
 	}
 
-	function initialize(mapElementId, longitudes, latitudes, tweets,index) {
-		
+	function initialize(mapElementId, longitudes, latitudes, tweets, index) {
+
 		var map = new google.maps.Map(document.getElementById(mapElementId), {
 			zoom : 11,
 			center : myCenter,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		});
 		maps[index] = map;
-		refreshMap(longitudes, latitudes,tweets,index);
+		refreshMap(longitudes, latitudes, tweets, index);
 	}
 
 	function clearClusters(e) {
@@ -158,27 +164,21 @@
 		markerClusterer.clearMarkers();
 	}
 </script>
+
 </head>
 <body>
 	<!--------------------------- BAR ------------------------------------>
 	<header>
 		<div id='logo'>
-			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png" style="width: 30%;">
+			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
+				style="width: 30%;">
 		</div>
 		<div id='cssmenu'> 
 			<ul id='naviMenu'>
-				<li class='active'>
-					<a href='#'><span>Home</span></a>
-				</li>
-				<li>
-					<a href='#'><span>Tweets</span></a>
-				</li>
-				<li>
-					<a href='#'><span>Map</span></a>
-				</li>
-				<li class='last'>
-					<a href='#'><span>Graphs</span></a>
-				</li>
+				<li class='active'><a href='#'><span>Home</span></a></li>
+				<li><a href='#'><span>Tweets</span></a></li>
+				<li><a href='#'><span>Map</span></a></li>
+				<li class='last'><a href='#'><span>Graphs</span></a></li>
 			</ul>
 			<div id="search"></div>
 		</div>
@@ -205,11 +205,18 @@
 
 						<!-- Multiple Radios (inline) -->
 						<div class="form-group">
-							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
+							<label class="col-md-4 control-label" for="radios">Choose
+								Tile Type</label>
 							<div class="col-md-8">
+
 								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-								</label>
+									</label> 
+								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+									</label>
+								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+									</label>
+								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+									</label>
 							</div>
 						</div>
 
@@ -218,7 +225,8 @@
 						<div class="form-group">
 							<label class="col-md-4 control-label" for="addMoreSubmit"></label>
 							<div class="col-md-4">
-								<button id="addMoreSubmit" name="addMoreSubmit" type="submit" class="btn btn-primary">Add</button>
+								<button id="addMoreSubmit" name="addMoreSubmit" type="submit"
+									class="btn btn-primary">Add</button>
 							</div>
 						</div>
 
@@ -256,7 +264,8 @@
 		function initPage() {
 			addTile("0");
 			addTile("1");
-			//addTile("0");
+			addTile("2");
+			getSearchBox();
 		}
 	});
 
@@ -287,7 +296,7 @@
 	function addTile(toAdd) {
 		if (toAdd != null && tile_template != null) {
 			//debugger;
-			
+
 			console.log("addTile:" + toAdd);
 			console.log("curr:" + current_num_of_tiles);
 			var next = $('#next');
@@ -315,12 +324,33 @@
 				tile_title.text("Graphs");
 				showBarChart(c);
 				break;
+			case "2":// add tweetwall
+				tile_title.text("Tweet Wall");
+				getTweetwall("tile_content" + c, c);
+				break;
+			case "3":
+				tile_title.text("Stats");
+				getStastics("tile_content" + c,c);
+				break;
 			}
 			current_num_of_tiles += 1;
 		} else {
 			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 					+ tile_template);
 		}
+	}
+	
+	function getStastics(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/counter/test',
+			success : function(data) {
+				initStatistics(data,index);
+			}
+		});
+	}
+	
+	function initStatistics(data,index){
+		$('#tile_content'+index).html(data);
 	}
 
 	function getMaps(container_id, index) {
@@ -337,7 +367,7 @@
 			}
 		});
 	}
-
+	
 	function initMaps(container_id, longitudes, latitudes, tweets, needed,
 			index) {
 		//debugger;
@@ -348,7 +378,41 @@
 		$('#added_map_div').attr('id', 'map' + index);
 
 		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ index, longitudes, latitudes, tweets,index));
+				+ index, longitudes, latitudes, tweets, index));
+	}
+	
+	function initWall(container_id, data, index) {
+		//debugger;
+		$('#tile_content'+index).append(data);
+		console.log("init wall");
+		//console.log(tweets);
+		
+		/*
+		console.log("container_id: " + container_id);
+		console.log("index: " + index);
+		
+		$('#' + container_id).append(needed);
+		$('#added_tweetwall_container').attr('id', 'tweetwall_container' + index);
+		$('#added_tweetwall_div').attr('id', 'tweetwall' + index);
+		
+		*/
+	}
+	
+	function getTweetwall(container_id, index) {
+		console.log("Getting tweetwall: " + container_id);
+		$.ajax({
+			url : '/TeamBravo/tweets/test',
+			success : function(data) {
+				//debugger;
+				//console.log("consoler:");
+				//console.log(data);
+				//var tweets = null;
+				//var needed = null;
+				//console.log (data);
+				console.log("Success for tweetwall");
+				initWall(container_id, data, index);
+			}
+		});
 	}
 
 	function fixTemplate(c) {
@@ -378,7 +442,7 @@
 
 	function getSearchBox() {
 		$.ajax({
-			url : '/TeamBravo/main/searchBox',
+			url : '/TeamBravo/search/searchBox',
 			success : function(data) {
 				$("#search").html(data);
 			}

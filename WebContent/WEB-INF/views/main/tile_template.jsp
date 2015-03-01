@@ -12,6 +12,7 @@
 			</div>
 		</div>
 		<div id="template_settings_div" class="settings" >
+			
 			<form id='settingsForm'>
 				<select id='settingsFormComponent'>
 					<option  value='MAP'>Map</option>
@@ -28,6 +29,7 @@
 				
 				<button id='settingsFormButton' data-tileno='tileNo' type='button' onClick='settingsFormButtonClick(this)'>Show</button>
 			</form>
+			
 		</div>
 		<div id="template_content">
 		</div>

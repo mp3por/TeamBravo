@@ -16,7 +16,7 @@ import com.mongodb.MongoClient;
 public class UpdateTest {
 
 	public static final String DB_NAME = "tweetsTest";
-	public static final String TWEETS_COLLECTION = "tweetsfrommainclass";
+	public static final String TWEETS_COLLECTION = "tweets";
 	public static final String MONGO_HOST = "localhost";
 	public static final int MONGO_PORT = 27017;
 

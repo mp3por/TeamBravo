@@ -1,11 +1,18 @@
 package glasgow.teamproject.teamB.Maps;
 
+import glasgow.teamproject.teamB.Main.SearchResultsInterface;
+import glasgow.teamproject.teamB.Util.StreamReaderService;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +23,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class MapsController {
+public class MapsController implements SearchResultsInterface {
 	
 	@Autowired
 	private TweetDAO tweetSaver;
+	
+//	@Autowired
+//	private StreamReaderService serv;
+//	
+//	
+//	@PostConstruct
+//	public void testing(){
+//		System.out.println("OMGOMGOMGOMG");
+//		serv.addObserver(this);
+//		System.out.println("OMGOMGOMGOMG: " + serv.countObservers());
+//	}
 	
 	/**
 	 * just a simple googleMaps controller method that sets the display to Glasgow
@@ -186,4 +204,16 @@ public class MapsController {
 		
 		return coordinates;
 	}
+
+	@Override
+	public String getResultsForSetOfTweets(Set<String> tweetsSet) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public void update(Observable o, Object arg) {
+//		// TODO Auto-generated method stub
+//		System.out.println("maps: " + arg);
+//	}
 }

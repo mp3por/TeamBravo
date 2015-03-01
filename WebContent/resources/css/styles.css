@@ -277,6 +277,11 @@ h:FIRST-CHILD {
 	font-family: "Exo 2";
 }
 
+
+#searchbutton {
+	color: black;
+}
+
 /*------------------Clearfix---------*/
 .cf:before, .cf:after {
 	content: "";

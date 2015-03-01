@@ -207,28 +207,28 @@
 																	+ " is a location. Click to search for this place in Google Maps");
 
 										});
+						$('.PersonTooltip')
+								.each(
+										function() {
+											title = $(this).attr("title");
+											$(this)
+													.html(
+															title
+																	+ " is a Person. Click to search for this place in Wikipedia");
+
+										});
+
+						$('.OrganizationTooltip')
+								.each(
+										function() {
+											title = $(this).attr("title");
+											$(this)
+													.html(
+															title
+																	+ " is an Organization. Click to search for this place in Wikipedia");
+
+										});
 					});
-	$('.PersonTooltip')
-	.each(
-			function() {
-				title = $(this).attr("title");
-				$(this)
-						.html(
-								title
-										+ " is a Person. Click to search for this place in Wikipedia");
-
-			});
-	
-	$('.OrganizationTooltip')
-	.each(
-			function() {
-				title = $(this).attr("title");
-				$(this)
-						.html(
-								title
-										+ " is an Organization. Click to search for this place in Wikipedia");
-
-			});
 </script>
 </head>
 <body>
@@ -256,12 +256,16 @@
 					<p>
 						<img src=<c:url value="resources/img/user91.png"/>
 							class="icon_img" />
-					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
+					<div class="xTooltip">
+						<a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a>
+					</div>
 
-					<div class="PersonTooltip" title=${NE}
-						style="visibility: hidden; display: none;"> <!-- This class should hide the element, change it if needed -->
-					    						
-							</div>
+					<div class="PersonTooltip" title=${NE
+						}
+						style="visibility: hidden; display: none;">
+						<!-- This class should hide the element, change it if needed -->
+
+					</div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.Location}">
@@ -271,16 +275,21 @@
 					<div class="xTooltip" title=${NE}>
 						<a href="https://www.google.co.uk/maps/search/${NE}">${NE}</a>
 					</div>
-					<div class="LocationTooltip" title=${NE} style="visibility: hidden; display: none;"></div>
+					<div class="LocationTooltip" title=${NE
+						}
+						style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.Organization}">
 					<p>
 						<img src=<c:url value="resources/img/factory6.png"/>
 							class="icon_img" />
-					<div class="xTooltip"><a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a></div>
+					<div class="xTooltip">
+						<a href="http://en.wikipedia.org/w/index.php?search=${NE}">${NE}</a>
+					</div>
 
-					<div class="OrganizationTooltip" title=${NE}
+					<div class="OrganizationTooltip" title=${NE
+						}
 						style="visibility: hidden; display: none;"></div>
 					<br />
 
@@ -291,7 +300,8 @@
 						<a href="http://twitter.com/${NE}">${NE}</a>
 					</div>
 					<div class="UserIDTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
+						}
+						style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.URL}">
@@ -301,7 +311,8 @@
 						<a href="${NE}">${NE}</a>
 					</div>
 					<div class="URLTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
+						}
+						style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach> <c:forEach var="NE" items="${tweet.Hashtag}">
@@ -313,7 +324,8 @@
 							${NE} </a>
 					</div>
 					<div class="HashtagTooltip" title=${NE
-						} style="visibility: hidden; display: none;"></div>
+						}
+						style="visibility: hidden; display: none;"></div>
 					<br />
 
 				</c:forEach></li>

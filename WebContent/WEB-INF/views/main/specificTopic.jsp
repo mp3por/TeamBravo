@@ -106,7 +106,7 @@
 
 		function getSearchBox() {
 			$.ajax({
-				url : '/TeamBravo/main/searchBox',
+				url : '/TeamBravo/search/searchBox',
 				success : function(data) {
 					$("#search").html(data);
 				}

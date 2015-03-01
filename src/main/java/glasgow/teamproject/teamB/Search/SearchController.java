@@ -1,10 +1,16 @@
 package glasgow.teamproject.teamB.Search;
 
+//import glasgow.teamproject.teamB.Graphs.GraphsController;
+//import glasgow.teamproject.teamB.Maps.MapsController;
+import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
+//import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-//@RequestMapping("/search")
 public class SearchController {
 	
 	@Autowired
@@ -21,12 +26,9 @@ public class SearchController {
 	
 	@Autowired
 	private TweetsIndexer indexer;
-		
-	@RequestMapping("/terrier")
-	public ModelAndView Search(){
-		ModelAndView modelandview = new ModelAndView("Terrier");	
-		return modelandview;
-	}
+	
+	@Autowired
+	private SearchDAOImpl dao;
 	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
@@ -38,28 +40,28 @@ public class SearchController {
 	}
 	
 	@RequestMapping("/terrier/{query}")
-	public ModelAndView Search(@PathVariable("query") String query){
+	public ModelAndView search(@PathVariable("query") String query){		
 		
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getResultList(retriver.getResultSet().getDocids()));
+		dao.runQuery("normal", query);
 		
+//    	Set<String> resultSet = dao.getTweetsForQuery(query);
+    	// TODO : vili find a way to do this AspectOriented
+    	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
+    	// String resultTweetWall = tweetWall.getResultsForSetOfTweets(tweetsSet);
+    	// String resultGraphs = graphs.getResultsForSetOfTweets(tweetSet);
+    	
+//    	System.err.println(dao.getResultsList().get(2).toString());
+    	
+//    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+    	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
+//		modelandview.addObject("tweets", tweets);
+//		
+//		modelandview.addObject("count", tweets.size());
+		modelandview.addObject("numberOfTweets", dao.getResultsList().size());
+		modelandview.addObject("query", query);		
 		return modelandview;
 	}
 	
-	@RequestMapping("/terrier/{query}/rank")
-	public ModelAndView RankedSearch(@PathVariable("query") String query){
-		
-		TweetsRetriver retriver = new TweetsRetriver(this.indexer.getIndex(), query);
-		retriver.runQuery();
-		List<HashMap<String,Object>> tweets = tweetSaver.getTerrierResults(tweetSaver.getRankedResultList(retriver.getResultSet().getDocids()));
-		
-		ModelAndView modelandview = new ModelAndView("TerrierResult");
-		modelandview.addObject("tweets", tweets);
-		modelandview.addObject("count", tweets.size());
-		return modelandview;
-	}
+	
 }
