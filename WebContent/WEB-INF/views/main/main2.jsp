@@ -40,6 +40,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
+  <script type="text/javascript"
+	src="<c:url value="/resources/js/moment.js" />"></script>
+
+ <script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
+
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -211,11 +220,24 @@
 				});
 	}
 
-	//      function initStatistics(data, index) {
-	//              $('#tile_content' + index).html(data);
-	//              $('#added_stat_container').attr('id', 'stat_container' + index);
-	//              $('#settings' + index).html
-	//      }
+	function fixDatePickers (index) {
+        $(function () {
+            $('#datetimepicker_from_'+index).datetimepicker({
+            	sideBySide: true,
+            	format: 'ddd MMM DD HH:mm:ss YYYY'
+            });
+            $('#datetimepicker_to_'+index).datetimepicker({
+            	sideBySide: true,
+            	format: 'ddd MMM DD HH:mm:ss YYYY'
+            });
+            $("#datetimepicker_from_"+index).on("dp.change",function (e) {
+                $('#datetimepicker_to_'+index).data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker_to_"+index).on("dp.change",function (e) {
+                $('#datetimepicker_from_'+index).data("DateTimePicker").maxDate(e.date);
+            });
+        });
+	}
 
 	function graphInit() {
 		$.ajax({
@@ -271,5 +293,7 @@
 			}
 		});
 	}
+	
+	
 </script>
 </html>

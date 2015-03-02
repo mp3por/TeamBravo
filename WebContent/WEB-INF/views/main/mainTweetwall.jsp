@@ -6,8 +6,14 @@ function submitTweetwallSettings (deb) {
 		var index = parts[parts.length-1];
 		
 		var count = document.getElementById('tweetwallTweetNumber_'+index).value;
+		var dateFrom = $('#datetimepicker_from_'+index).data('date');
+		console.log(dateFrom);
+		var dateTo = $('#datetimepicker_to_'+index).data('date');
+		console.log(dateTo);
+		if (!dateFrom) dateFrom = 0;
+		if (!dateTo) dateTo = 0;
 		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/'+count+'/0/0',
+			url : '/TeamBravo/tweets/tweetWall/'+count+'/'+dateFrom+'/'+dateTo,
 			success : function(data) {
 				initWall("tile_content"+index, data, index);
 			}
@@ -37,6 +43,13 @@ function submitTweetwallSettings (deb) {
 
 			$(this).css('width', size+50*inc+"px");
 		});
+	}
+	
+	function makeTweetLarger(index, inc) {
+		var s = index.getAttribute("id");
+		var parts = s.split("_");
+		var i = parts[parts.length-1];
+		
 	}
 	
 	function initWall(container_id, data, index) {
@@ -70,14 +83,16 @@ function submitTweetwallSettings (deb) {
 					//submitTweetwallSettings should not be used in your component
 					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
 					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'+
-					'<br/><br/>'+
 					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make User ID smaller</button>'+
 					'<button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User ID larger</button>'+
-					'<br/><br />'+
 					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index "><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make User Avatar smaller</button>'+
-					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User Avatar larger</button>'
-								
+					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User Avatar larger</button>'+
+					'<button type="button" onclick="makeTweetLarger(this, -1);" index="added_smaller_tweet" id="added_smaller_tweet" class="btn btn-default added_smaller_tweet"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make Tweet smaller</button>'+
+					'<button type="button"  onclick="makeTweetLarger(this, 1);" index="added_smaller_tweet" id="added_smaller_tweet" class="btn btn-default added_smaller_tweet"><span class="glyphicon glyphicon-plus"  aria-hidden="true"></span> Make Tweet larger</button>'								
 		);
+	       
+	           
+	       
 				
 		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
 		
@@ -130,14 +145,18 @@ function submitTweetwallSettings (deb) {
 		$("#added_datetimepicker_from").attr("id", "datetimepicker_from_"+index);
 		$("#added_datetimepicker_to").attr("id", "datetimepicker_to_"+index);
 		
+     	fixDatePickers(index);
+        
+
+		
 		console.log("init wall");
 		
 
 	}
-	//initial tweetWall with latest tweets and 25 tweets in the wall
+	//initial tweetWall with latest tweets and 10 tweets in the wall
 	function getTweetwall(container_id, index) {
 		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/2/0/0',
+			url : '/TeamBravo/tweets/tweetWall/10/0/0',
 			success : function(data) {
 				console.log("index: " + index);
 				console.log("cont_id: " + container_id);
