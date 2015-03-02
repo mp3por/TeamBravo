@@ -108,12 +108,12 @@ public class SearchDAOImpl {
 	}
 	
 	public void rankedByRetweeted(){
-		System.err.println("Sorting by retweeted times");
+//		System.err.println("Sorting by retweeted times");
 		Collections.sort(this.resultsList, Tweet.RetweetCountComparator);
 	}
 	
 	public void rankedByPostedTime(){
-		System.err.println("Sorting by posted time");
+//		System.err.println("Sorting by posted time");
 		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
 	}
 

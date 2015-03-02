@@ -53,7 +53,7 @@
 					<a href='#'><span>Results Page</span></a>
 				</li>
 				<li><a href='http://localhost:8080/TeamBravo/main/home'>
-								<span>BACK TO MAIN PAGE</span></a></li>
+								<span>Back to main page</span></a></li>
 				
 			</ul>
 			<div id="search"></div>

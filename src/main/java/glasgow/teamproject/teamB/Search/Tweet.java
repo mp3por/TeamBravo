@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-public class Tweet implements Comparable<Tweet> {
+public class Tweet{
 	
 	private String tweet;
 	private Map<String, Object> tweetMap;
@@ -28,14 +28,19 @@ public class Tweet implements Comparable<Tweet> {
 		return this.tweet;
 	}
 
-	@Override
-	public int compareTo(Tweet o) {
-		return Integer.parseInt(o.getTweetMap().get("retweet_count").toString()) 
-				- Integer.parseInt(this.tweetMap.get("retweet_count").toString()); 
-	}
+//	@Override
+//	public int compareTo(Tweet o) {
+//		JSONObject js1 = new JSONObject(this.getTweet());
+//		JSONObject js2 = new JSONObject(o.getTweet());
+//		
+//		int posted_time1 = Integer.parseInt(js1.get("timestamp_ms").toString());
+//		int posted_time2 = Integer.parseInt(js2.get("timestamp_ms").toString());
+//		
+//		return posted_time2 - posted_time1;
+//	}
 	
 	public static Comparator<Tweet> RetweetCountComparator = new Comparator<Tweet>(){
-		
+		@Override
 		public int compare(Tweet tweet1, Tweet tweet2){
 			
 			JSONObject js1 = new JSONObject(tweet1.getTweet());
@@ -49,16 +54,16 @@ public class Tweet implements Comparable<Tweet> {
 	};
 	
 	public static Comparator<Tweet> PostedTimeComparator = new Comparator<Tweet>(){
-			
+			@Override
 			public int compare(Tweet tweet1, Tweet tweet2){
 				
 			JSONObject js1 = new JSONObject(tweet1.getTweet());
 			JSONObject js2 = new JSONObject(tweet2.getTweet());
 			
-			int posted_time1 = Integer.parseInt(js1.get("timestamp_ms").toString());
-			int posted_time2 = Integer.parseInt(js2.get("timestamp_ms").toString());
+			long posted_time1 = Long.parseLong(js1.get("timestamp_ms").toString());
+			long posted_time2 = Long.parseLong(js2.get("timestamp_ms").toString());
 			
-			return posted_time2 - posted_time1;
+			return (int) (posted_time2 - posted_time1);
 		}
 	};
 
