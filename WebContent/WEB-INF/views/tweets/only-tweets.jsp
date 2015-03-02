@@ -3,17 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<link href="<c:url value="/resources/css/jquery.qtip.css" />"
-	rel="stylesheet">
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/imagesloaded.pkg.min.js" />"></script>
-
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
+  <script type="text/javascript"
+	src="<c:url value="/resources/js/moment.js" />"></script>
 
- 
+ <script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
 
 <script type="text/javascript">
 
@@ -23,7 +19,7 @@
 			.ready(
 					function() {
 						
-						$('.tweetText')
+						$('.addedTweetText')
 								.each(
 										function() {
 
@@ -82,31 +78,39 @@
 														text = text
 																.replace(
 																		toReplace,
-																		"<a href='"+tooltipLinks[i]+toReplace+"' data-toggle='tooltip' title='"+
-							toReplace+tooltipTexts[i]+"'>"
+																		"<a href='"+tooltipLinks[i]+toReplace+"' class='URLTooltip' title='"
+																				+toReplace+tooltipTexts[i]+"'>"
 																				+ "<span class='"+tooltipImgs[i]+"'></span>"
 																				+ toReplace
 																				+ "</a>");
-														//toReplace+tooltipTexts[i]+"'><img src=<c:url value='"+tooltipImgs[i]+"'/> class='icon_img' />"+toReplace+"</a>");
 													}
 												}
 											}
 											$(this).html("<br/>"+"<p class='tweetText' id='tweetText'>"+text+"</p>");
 										});
-						$("body").tooltip({
-							selector : '[data-toggle=tooltip]'
-						});
+								$(".URLTooltip").each(function (){$(this).tooltip();});
 					});
 </script>
 
 <br/>
 
-
+       
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker6').datetimepicker();
+        $('#datetimepicker7').datetimepicker();
+        $("#datetimepicker6").on("dp.change",function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change",function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>
 
 <div id="" style="overflow-y: scroll; height:400px;">
 <ul>
 	<!-- Loop over the tweets  -->
-
 	<c:forEach var="tweet" items="${tweets}">
 		<div class="tweet" class="added_tweetwall_li"><img
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
@@ -115,7 +119,7 @@
 			
 				<h4 class="added_tweetwall_h4"><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
 			
-				<div class="tweetText" text="${tweet.text}"
+				<div class="addedTweetText" text="${tweet.text}"
 					person="${tweet.Person}" location="${tweet.Location}"
 					organization="${tweet.Organization}" userID="${tweet.UserID}"
 					hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>

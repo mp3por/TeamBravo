@@ -8,6 +8,8 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +46,7 @@ public class SearchDAOImpl {
 	@Autowired
 	SearchMemoryIndex index;
 
-	private ArrayList<Tweet> resultsList;
+	private List<Tweet> resultsList;
 	private boolean alreadyRunQuery = false;
 	private Manager queryManager;
 	private String query;
@@ -59,7 +61,7 @@ public class SearchDAOImpl {
 		queryManager = new Manager(index);
 	}
 
-	public ArrayList<Tweet> getResultsList() {
+	public List<Tweet> getResultsList() {
 
 		if (this.alreadyRunQuery == false) {
 			System.out.println("You have not run any query");
@@ -81,7 +83,7 @@ public class SearchDAOImpl {
 	// this.resultsList.sort(cmp);
 	// }
 
-	public void runQuery(String mode, String query) {
+	public void runQuery(String query) {
 
 		System.err.println("Running search for " + query);
 		StringBuffer sb = new StringBuffer();
@@ -102,20 +104,17 @@ public class SearchDAOImpl {
 		this.resultsList = this.tweetSaver.getResultsList(
 				ProjectProperties.TWEET_COLLECTION, resultsDocids);
 
-		switch (mode) {
-		case "retweeted":
-			this.resultsList.sort(Tweet.RetweetCountComparator);
-			break;
-
-		case "recent":
-			this.resultsList.sort(Tweet.PostedTimeComparator);
-			break;
-
-		case "normal":
-			break;
-		}
-
 		this.alreadyRunQuery = true;
+	}
+	
+	public void rankedByRetweeted(){
+		System.err.println("Sorting by retweeted times");
+		Collections.sort(this.resultsList, Tweet.RetweetCountComparator);
+	}
+	
+	public void rankedByPostedTime(){
+		System.err.println("Sorting by posted time");
+		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
 	}
 
 	/*
