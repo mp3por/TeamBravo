@@ -4,7 +4,7 @@ import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
+//import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +53,11 @@ public class SearchController {
 		return mv;
 	}
 	
+	@RequestMapping("/tile_template_search")
+	public String getTeplate(){
+		return "tile_template_search";
+	}
+	
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView searchPage(@PathVariable("query") String query){		
 		
@@ -89,24 +94,32 @@ public class SearchController {
 	@RequestMapping("/terrier/tweetwall/{mode}/{query}")
 	public ModelAndView tweetWallRanked(@PathVariable Map<String, String> pathVar) {
 //		System.err.println("Ranking by " + pathVar.get("mode"));
+		String mode = pathVar.get("mode");
 		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
+		System.err.println("mode is: " + mode);
+//		dao.rankedByPostedTime(); 
 		
-		dao.rankedByRetweeted();
-//		if (pathVar.get("mode") == "retweeted"){
-//			System.err.println("Ranking by retweeted.");
-//			dao.rankedByRetweeted();
-//		}
-//		else if (pathVar.get("mode") == "recent"){
-//			System.err.println("Ranking by posted time.");
-//			dao.rankedByPostedTime();
-//		}
-		
-		List<Tweet> list = dao.getResultsList();
-		JSONObject js;
-		for (Tweet t: list){
-			js = new JSONObject(t.getTweet());
-			System.out.println(js);
+		if (mode.equals("retweeted")){
+			System.err.println("Ranking by retweeted times.");
+			dao.rankedByRetweeted();
 		}
+		
+		if(mode.equals("recent")){
+			System.err.println("Ranking by posted time.");
+			dao.rankedByPostedTime();
+		}
+		
+		if(mode.equals("favourite")){
+			System.err.println("Ranking by favourited times.");
+			dao.rankByFavourited();
+		}
+		
+//		List<Tweet> list = dao.getResultsList();
+//		JSONObject js;
+//		for (Tweet t: list){
+//			js = new JSONObject(t.getTweet());
+//			System.out.println(js.get("retweet_count"));
+//		}
 		
 		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
 		modelandview.addObject("tweets", tweets);

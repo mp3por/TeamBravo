@@ -6,16 +6,16 @@ import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
+//import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+//import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -108,13 +108,17 @@ public class SearchDAOImpl {
 	}
 	
 	public void rankedByRetweeted(){
-		System.err.println("Sorting by retweeted times");
+//		System.err.println("Sorting by retweeted times");
 		Collections.sort(this.resultsList, Tweet.RetweetCountComparator);
 	}
 	
 	public void rankedByPostedTime(){
-		System.err.println("Sorting by posted time");
+//		System.err.println("Sorting by posted time");
 		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
+	}
+	
+	public void rankByFavourited(){
+		Collections.sort(this.resultsList, Tweet.MostFavouritedComparator);
 	}
 
 	/*
@@ -174,6 +178,8 @@ public class SearchDAOImpl {
 		JSONArray c = null;
 
 		String user = null;
+		
+		int non_geotagged_count = 0;
 
 		for (String tweet : tweetsForMaps) {
 			JSONObject js = new JSONObject(tweet);
@@ -191,10 +197,14 @@ public class SearchDAOImpl {
 				tweet_user.add(user);
 			}
 			catch(ClassCastException e){
-				System.err.println("Tweet not geotagged, couldn't pin on map.");
+//				System.err.println("Tweet not geotagged, couldn't pin on map.");
+				non_geotagged_count++;
 			}
 		}
-
+		
+		System.err.println(non_geotagged_count + " out of " + 
+							this.resultsList.size() + " tweets are not geotagged and couldn't be pinned on the map");
+		
 		String needed = "<div id='added_map_container' class='map-container'><div id='added_map_div' class='map'></div></div>";
 		ArrayList<String> need = new ArrayList<String>();
 		need.add(needed);
