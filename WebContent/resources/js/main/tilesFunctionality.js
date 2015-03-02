@@ -1,30 +1,29 @@
 $(document).ready(function() {
 	console.log("ready!");
-
 	getTemplate();
-
-	function getTemplate() {
-		if (tile_template == null) {
-			$.ajax({
-				url : '/TeamBravo/main/tile_template',
-				success : function(data) {
-					tile_template = data;
-					initPage();
-				}
-			});
-		} else {
-			initPage();
-		}
-	}
-
-	function initPage() {
-		addTile("0");
-		addTile("1");
-		addTile("0");
-		addTile("2");
-		getSearchBox();
-	}
 });
+
+function getTemplate() {
+	if (tile_template == null) {
+		$.ajax({
+			url : '/TeamBravo/main/tile_template',
+			success : function(data) {
+				tile_template = data;
+				initPage();
+			}
+		});
+	} else {
+		initPage();
+	}
+}
+
+function initPage() {
+	addTile("0");
+	addTile("1");
+	addTile("0");
+	addTile("2");
+	getSearchBox();
+}
 
 var tile_template = null;
 var row_index = 0;
