@@ -77,9 +77,8 @@ function addTile(toAdd) {
 
 		console.log("addTile:" + toAdd);
 		console.log("curr:" + current_num_of_tiles);
-		var next = $('#next');
+		
 		var c = current_num_of_tiles;
-		// var row = next.closest('.row');
 		console.log("row_index: " + row_index);
 		var row = $('#row' + row_index);
 		var children = row.children();
