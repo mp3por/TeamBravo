@@ -90,7 +90,7 @@ function addTile(toAdd) {
 			break;
 		case "3":
 			tile_title.text("Stats");
-			getStastics("tile_content" + c, c);
+			getStatistics("tile_content" + c, c);
 			break;
 		}
 		num_of_tiles_added += 1;

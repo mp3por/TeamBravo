@@ -1,15 +1,17 @@
 <%@ include file="/WEB-INF/include.jsp"%>
 <%@ include file="/WEB-INF/views/main/mainTweetwall.jsp"%>
+<%@ include file="/WEB-INF/views/main/mainStats.jsp"%>
 
 <html>
 <head>
+<link href="<c:url value="/resources/css/graphs.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />"
+	rel="stylesheet">
 
-
-<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
-
-<link href="<c:url value="/resources/css/stat.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/stats.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/bootstrap-datetimepicker.css" />" rel="stylesheet">
@@ -149,76 +151,12 @@
 			addTile(toAdd);
 		}
 	});
-
-	function reloadStats(param) {
-
-		var index = param.data.param1
-		$(this).addClass('active').siblings().removeClass('active');
-		var time = $(this).text();
-		var linkStr;
-		if (time == 'past day')
-			linkStr = 'pastDay';
-		else if (time == 'past month')
-			linkStr = 'pastMonth';
-		else if (time == 'past week')
-			linkStr = 'pastWeek';
-		else
-			linkStr = 'allTime';
-
-		$
-				.ajax({
-					url : '/TeamBravo/counter/getStats/' + linkStr,
-					success : function(data) {
-						$('#tile_content' + index).html(data);
-						$('#added_stat_container').attr('id',
-								'stat_container' + index);
-					}
-				});
-	}
+	
 	function settingsButtonClick(clicked) {
 		var settings = $('#settings' + clicked.id);
 		settings.show();
 	}
 
-	function getStastics(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/counter/test',
-			success : function(data) {
-				initStatistics(data, index);
-			}
-		});
-	}
-
-	function initStatistics(data, index) {
-		$('#tile_content' + index).html(data);
-	}
-
-	function getStastics(container_id, index) {
-		$
-				.ajax({
-					url : '/TeamBravo/counter/stats/getSettings',
-					success : function(data) {
-						$('#settings' + index).html(data);
-						$('#stat_time_setting').attr('id',
-								'stat_time_setting' + index);
-						$('#stat_time_setting_label').attr('for',
-								'stat_time_setting' + index);
-						$('#stat_time_setting' + index + ' button').click({
-							param1 : index
-						}, reloadStats);
-					}
-				});
-		$
-				.ajax({
-					url : '/TeamBravo/counter/getStats/allTime',
-					success : function(data) {
-						$('#tile_content' + index).html(data);
-						$('#added_stat_container').attr('id',
-								'stat_container' + index);
-						//initStatistics(data, index);
-					}
-				});
-	}
 
 	function fixDatePickers (index) {
         $(function () {
@@ -238,7 +176,6 @@
             });
         });
 	}
-
 	function graphInit() {
 		$.ajax({
 			url : '/TeamBravo/graphs/graphInit',
