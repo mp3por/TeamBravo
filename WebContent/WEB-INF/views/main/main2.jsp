@@ -2,9 +2,12 @@
 <html>
 <head>
 
+
 <link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+
+<link href="<c:url value="/resources/css/stat.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
@@ -85,10 +88,15 @@
 							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
 							<div class="col-md-8">
 
-								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
+								<<<<<<< HEAD <label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
 								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
 								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics ======= <label class="radio" for="radios-0"> <input
+											type="radio" name="type" id="radios-0" value="0" checked="checked"
+										> Maps
+								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics >>>>>>> counter_stat
 								</label>
 							</div>
 						</div>
@@ -114,16 +122,6 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
-	
-
-	function getStastics(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/counter/test',
-			success : function(data) {
-				initStatistics(data, index);
-			}
-		});
-	}
 
 	
 	function submitTweetwallSettings (deb) {
@@ -157,10 +155,52 @@
 		});
 	}
 
-	
-	function initStatistics(data,index){
-		$('#tile_content'+index).html(data);
+
+	function reloadStats(param) {
+		
+		var index = param.data.param1
+		$(this).addClass('active').siblings().removeClass('active');
+		var time = $(this).text();
+		var linkStr;
+		if( time == 'past day') linkStr = 'pastDay';
+		else if ( time == 'past month') linkStr = 'pastMonth';
+		else if ( time == 'past week') linkStr = 'pastWeek';
+		else linkStr = 'allTime';
+			
+		$.ajax({
+			url : '/TeamBravo/counter/getStats/' + linkStr,
+			success : function(data) {
+				$('#tile_content' + index).html(data);
+				$('#added_stat_container').attr('id', 'stat_container' + index);
+				}
+		});
 	}
+
+	function getStastics(container_id, index) {
+		$.ajax({
+			url : '/TeamBravo/counter/stats/getSettings',
+			success : function(data) {
+				$('#settings' + index).html(data);
+				$('#stat_time_setting').attr('id', 'stat_time_setting' + index);
+				$('#stat_time_setting_label').attr('for', 'stat_time_setting' + index);
+				$('#stat_time_setting' + index + ' button').click( {param1: index}, reloadStats );
+			}
+		});
+		$.ajax({
+			url : '/TeamBravo/counter/getStats/allTime',
+			success : function(data) {
+				$('#tile_content' + index).html(data);
+				$('#added_stat_container').attr('id', 'stat_container' + index);
+				//initStatistics(data, index);
+			}
+		});
+	}
+
+// 	function initStatistics(data, index) {
+// 		$('#tile_content' + index).html(data);
+// 		$('#added_stat_container').attr('id', 'stat_container' + index);
+// 		$('#settings' + index).html
+// 	}
 
 	function getMaps(container_id, index) {
 		console.log("getting maps: " + container_id);
@@ -221,6 +261,7 @@
 	}
 
 	function initMaps(container_id, index, needed, tweets_info) {
+
 		//debugger;
 		console.log("init maps");
 		$('#' + container_id).append(needed);
@@ -252,54 +293,12 @@
 				
 		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
 
-		
-		$('#added_submitTweetwallSettings').attr('index', index);
-		
-		$('.added_tweetwall_h3').each(function () {
-			console.log("I am here at h3");
-			$(this).attr('class', 'tweetwall_h3_'+index);
-		});
-		
-		$('.added_tweetwall_h4').each(function () {
-			$(this).attr('class', 'tweetwall_h4_'+index);
-		});
-		
-		$('.added_tweetwall_avatar').each(function () {
-			$(this).attr('class', 'avatar_'+index);
-		});
-
-		$('.added_tweetwall_tweet').each(function () {	
-			$(this).attr('class', 'tweetwall_tweet_'+index);
-		});
-		
-		$('#added_makeUserIDLarger').each( function () {
-			$(this).attr("index", index);
-		});
-		$('#added_makeUserIDSmaller').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_smaller_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-
-		$('#added_larger_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_Submit_index').each(function (){
-			$(this).attr('index', index);
-		});
-		
-		$('.added_tweetwall_li').each(function () {
-			$(this).attr('class', 'tweetwall_li_'+index);
-		});
+		//debugger;
+		$('#tile_content' + index).append(data);
 		console.log("init wall");
-		
-
+		//console.log(tweets);
 	}
-
-
+	
 	function getTweetwall(container_id, index) {
 		$.ajax({
 			url : '/TeamBravo/tweets/tweetWall/25/0/0',
