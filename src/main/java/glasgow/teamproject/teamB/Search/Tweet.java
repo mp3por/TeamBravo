@@ -66,5 +66,19 @@ public class Tweet{
 			return (int) (posted_time2 - posted_time1);
 		}
 	};
+	//favorite_count
+	public static Comparator<Tweet> MostFavouritedComparator = new Comparator<Tweet>(){
+			@Override
+			public int compare(Tweet tweet1, Tweet tweet2){
+			
+				JSONObject js1 = new JSONObject(tweet1.getTweet());
+				JSONObject js2 = new JSONObject(tweet2.getTweet());
+				
+				int favourite_count1 = Integer.parseInt(js1.get("favorite_count").toString());
+				int favourite_count2 = Integer.parseInt(js2.get("favorite_count").toString());
+				
+				return (favourite_count1 - favourite_count2);			
+			}
+	};
 
 }

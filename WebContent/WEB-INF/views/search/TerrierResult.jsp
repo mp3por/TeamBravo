@@ -83,7 +83,7 @@
 		function getTemplate() {
 			if (tile_template == null) {
 				$.ajax({
-					url : '/TeamBravo/main/tile_template',
+					url : '/TeamBravo/search/tile_template_search',
 					success : function(data) {
 						tile_template = data;
 						initPage();
@@ -116,7 +116,7 @@
 		//debugger;
 		if (tile_template == null) {
 			$.ajax({
-				url : '/TeamBravo/main/tile_template',
+				url : '/TeamBravo/search/tile_template_search',
 				success : function(data) {
 					tile_template = data;
 					addTile(toAdd);
@@ -298,16 +298,32 @@
 		});
 	}
 	
+	function rankedByFavourited(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/search/terrier/tweetwall/favourite/${query}',
+			success: function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content" + index, data, index);
+			}
+		});
+	}
+	
 	function initWall(container_id, data, index) {
 
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
 					'<button type="button" onclick="rankedByRetweeted(tile_content2, 2);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
-					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+
+					'<button type="button" onclick="rankedByFavourited(tile_content2, 2);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
 					'<br/><br />');
 		
 		$('#rank_by_retweeted').each( function () {
+			$(this).attr("index", index);
+		});
+		
+		$('#rank_by_favourited').each( function () {
 			$(this).attr("index", index);
 		});
 		

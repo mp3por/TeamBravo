@@ -4,7 +4,7 @@ import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
+//import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +51,11 @@ public class SearchController {
 		ModelAndView mv = new ModelAndView(viewName);
 		mv.addObject("serverTime", now);
 		return mv;
+	}
+	
+	@RequestMapping("/tile_template_search")
+	public String getTeplate(){
+		return "tile_template_search";
 	}
 	
 	@RequestMapping("/terrier/{query}")
@@ -104,11 +109,16 @@ public class SearchController {
 			dao.rankedByPostedTime();
 		}
 		
+		if(mode.equals("favourite")){
+			System.err.println("Ranking by favourited times.");
+			dao.rankByFavourited();
+		}
+		
 //		List<Tweet> list = dao.getResultsList();
 //		JSONObject js;
 //		for (Tweet t: list){
 //			js = new JSONObject(t.getTweet());
-//			System.out.println(js.get("timestamp_ms"));
+//			System.out.println(js.get("retweet_count"));
 //		}
 		
 		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
