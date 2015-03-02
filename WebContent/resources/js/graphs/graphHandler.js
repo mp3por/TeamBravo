@@ -131,7 +131,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 		url : '/TeamBravo/graphs/getSettings',
 		success : function(data) {
 			$('#settings' + tileNo).append(data);
-			debugger;
+			//debugger;
 			//Graph settings form
 			var c = tileNo;
 			$('#settingsForm').attr('id', 'settingsForm' + c);
@@ -147,6 +147,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 }
 
 function drawBarChart(tileNo, timeScale){
+	debugger;
 	
 	initDimple(timeScale);
 	//Set data source week or month

@@ -83,6 +83,7 @@ function addTile(toAdd) {
 			break;
 		case "1":// add graphs
 			tile_title.text("Graphs");
+			showBarChart(c);
 			break;
 		case "2":// add tweetwall
 			tile_title.text("Tweet Wall");
