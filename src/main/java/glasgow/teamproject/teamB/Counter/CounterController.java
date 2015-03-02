@@ -106,19 +106,20 @@ public class CounterController {
 	@ResponseBody
 	public ModelAndView getStats(@PathVariable("timePeriod") String timePeriod) {
 		ModelAndView model = new ModelAndView("only-stats");
+		
+		//DBHelper.dailyMapReduce(new Date());
 
 		TimePeriod p;
 		Date stTime = null, edTime = null;
-		// TODO
 		if (!timePeriod.equals("allTime")) {
 			Calendar stCal = Calendar.getInstance();
 			Calendar edCal = Calendar.getInstance();
 			if (timePeriod.equals("pastMonth")) {
 				p = TimePeriod.PASTMONTH;
-				edCal.add(Calendar.DATE, -30);
+				stCal.add(Calendar.DATE, -30);
 			} else if (timePeriod.equals("pastWeek")) {
 				p = TimePeriod.PASTWEEK;
-				edCal.add(Calendar.DATE, -7);
+				stCal.add(Calendar.DATE, -7);
 			} else {
 				p = TimePeriod.PASTDAY;
 			}
@@ -164,9 +165,13 @@ public class CounterController {
 		}
 
 		String most_active = DBHelper.getMostActiveUser(stTime, edTime);
-		String most_active_link = "<a href=\"https://twitter.com/"
-				+ most_active + "\">@" + most_active + "</a>";
-		model.addObject("most_active_user", most_active_link);
+		if (most_active != null) {
+			String most_active_link = "<a href=\"https://twitter.com/"
+					+ most_active + "\">@" + most_active + "</a>";
+			model.addObject("most_active_user", most_active_link);
+		} else {
+			model.addObject("most_active_user", "-");
+		}
 
 		List<EntityCountPair> most_pop_user = DBHelper.getTopEntities(
 				Field.USERID, p, 1);
@@ -181,9 +186,10 @@ public class CounterController {
 		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(
 				Field.HASHTAG, p, 1);
 		if (!most_pop_hashtag.isEmpty())
-			model.addObject("most_pop_hashtag", "<a href=\"/TeamBravo/search/terrier/"
-					+ most_pop_hashtag.get(0).getID() + "\">"
-					+ most_pop_hashtag.get(0).getID() + "</a>");
+			model.addObject("most_pop_hashtag",
+					"<a href=\"/TeamBravo/search/terrier/"
+							+ most_pop_hashtag.get(0).getID() + "\">"
+							+ most_pop_hashtag.get(0).getID() + "</a>");
 		else
 			model.addObject("most_pop_hashtag", "-");
 
@@ -202,9 +208,10 @@ public class CounterController {
 		List<EntityCountPair> most_pop_person = DBHelper.getTopEntities(
 				Field.PERSON, p, 1);
 		if (!most_pop_person.isEmpty())
-			model.addObject("most_pop_person", "<a href=\"/TeamBravo/search/terrier/"
-					+ most_pop_person.get(0).getID() + "\">"
-					+ most_pop_person.get(0).getID() + "</a>");
+			model.addObject("most_pop_person",
+					"<a href=\"/TeamBravo/search/terrier/"
+							+ most_pop_person.get(0).getID() + "\">"
+							+ most_pop_person.get(0).getID() + "</a>");
 		else
 			model.addObject("most_pop_person", "-");
 

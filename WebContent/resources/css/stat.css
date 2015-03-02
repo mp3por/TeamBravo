@@ -19,6 +19,16 @@
 	background: linear-gradient(#ffffff, #E8E8E8);
 }
 
+.stat-setting {
+	background-color: #656565;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+.stat-label {
+	color: white;
+}
+
 hr.horizontal-line {
 	background: #C9C9C9 no-repeat scroll center;
 	width: 98%;

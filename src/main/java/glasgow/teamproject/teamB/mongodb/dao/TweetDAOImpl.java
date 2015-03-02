@@ -628,17 +628,16 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 					.limit(1);
 		}
 
-		if (!cursor.hasNext())
-			return null;
-		DBObject obj = cursor.next();
 		HashMap<String, Object> tweet = new HashMap<>();
-		if ((int) obj.get(compareKey) != 0) {
-			tweet.put("text", obj.get("text"));
-			DBObject user = (DBObject) obj.get("user");
-			tweet.put("username", user.get("name"));
-			tweet.put("screen_name", user.get("screen_name"));
+		if (cursor.hasNext()) {
+			DBObject obj = cursor.next();
+			if ((int) obj.get(compareKey) != 0) {
+				tweet.put("text", obj.get("text"));
+				DBObject user = (DBObject) obj.get("user");
+				tweet.put("username", user.get("name"));
+				tweet.put("screen_name", user.get("screen_name"));
+			}
 		}
-
 		return tweet;
 	}
 
