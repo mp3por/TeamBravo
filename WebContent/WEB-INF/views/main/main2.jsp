@@ -88,16 +88,14 @@
 							<label class="col-md-4 control-label" for="radios">Choose Tile Type</label>
 							<div class="col-md-8">
 
-								<<<<<<< HEAD <label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics ======= <label class="radio" for="radios-0"> <input
-											type="radio" name="type" id="radios-0" value="0" checked="checked"
-										> Maps
-								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics >>>>>>> counter_stat
-								</label>
+								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
+								</label> 
+								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+								</label> 
+								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+								</label> 
+								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+								</label> 
 							</div>
 						</div>
 
@@ -122,85 +120,95 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
-
-	
-	function submitTweetwallSettings (deb) {
+	function submitTweetwallSettings(deb) {
 		console.log(deb);
 		var index = deb.getAttribute('index');
 		var count = document.getElementById('tweetwallTweetNumber').value;
 		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/'+count+'/0/0',
+			url : '/TeamBravo/tweets/tweetWall/' + count + '/0/0',
 			success : function(data) {
-				initWall("tile_content"+index, data, index);
+				initWall("tile_content" + index, data, index);
 			}
 		});
 	}
-	
+
 	function makeUserIDLarger(index, inc) {
 		var i = index.getAttribute('index');
-		$('.tweetwall_h3_'+i).each( function () {
-			 var size = parseFloat($(this).css("font-size"));
+		$('.tweetwall_h3_' + i).each(function() {
+			var size = parseFloat($(this).css("font-size"));
 
-			$(this).css('font-size', size+15*inc+"px");
+			$(this).css('font-size', size + 15 * inc + "px");
 		});
 	}
-	
+
 	function makeAvatarLarger(index, inc) {
 		var i = index.getAttribute('index');
 		console.log(index);
-		$('.avatar_'+i).each( function () {
-			 var size = parseFloat($(this).css("width"));
+		$('.avatar_' + i).each(function() {
+			var size = parseFloat($(this).css("width"));
 
-			$(this).css('width', size+50*inc+"px");
+			$(this).css('width', size + 50 * inc + "px");
 		});
 	}
 
-
 	function reloadStats(param) {
-		
+
 		var index = param.data.param1
 		$(this).addClass('active').siblings().removeClass('active');
 		var time = $(this).text();
 		var linkStr;
-		if( time == 'past day') linkStr = 'pastDay';
-		else if ( time == 'past month') linkStr = 'pastMonth';
-		else if ( time == 'past week') linkStr = 'pastWeek';
-		else linkStr = 'allTime';
-			
-		$.ajax({
-			url : '/TeamBravo/counter/getStats/' + linkStr,
-			success : function(data) {
-				$('#tile_content' + index).html(data);
-				$('#added_stat_container').attr('id', 'stat_container' + index);
-				}
-		});
+		if (time == 'past day')
+			linkStr = 'pastDay';
+		else if (time == 'past month')
+			linkStr = 'pastMonth';
+		else if (time == 'past week')
+			linkStr = 'pastWeek';
+		else
+			linkStr = 'allTime';
+
+		$
+				.ajax({
+					url : '/TeamBravo/counter/getStats/' + linkStr,
+					success : function(data) {
+						$('#tile_content' + index).html(data);
+						$('#added_stat_container').attr('id',
+								'stat_container' + index);
+					}
+				});
 	}
 
 	function getStastics(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/counter/stats/getSettings',
-			success : function(data) {
-				$('#settings' + index).html(data);
-				$('#stat_time_setting').attr('id', 'stat_time_setting' + index);
-				$('#stat_time_setting_label').attr('for', 'stat_time_setting' + index);
-				$('#stat_time_setting' + index + ' button').click( {param1: index}, reloadStats );
-			}
-		});
-		$.ajax({
-			url : '/TeamBravo/counter/getStats/allTime',
-			success : function(data) {
-				$('#tile_content' + index).html(data);
-				$('#added_stat_container').attr('id', 'stat_container' + index);
-				//initStatistics(data, index);
-			}
-		});
+		$
+				.ajax({
+					url : '/TeamBravo/counter/stats/getSettings',
+					success : function(data) {
+						$('#settings' + index).html(data);
+						$('#stat_time_setting').attr('id',
+								'stat_time_setting' + index);
+						$('#stat_time_setting_label').attr('for',
+								'stat_time_setting' + index);
+						$('#stat_time_setting' + index + ' button').click({
+							param1 : index
+						}, reloadStats);
+					}
+				});
+		$
+				.ajax({
+					url : '/TeamBravo/counter/getStats/allTime',
+					success : function(data) {
+						$('#tile_content' + index).html(data);
+						$('#added_stat_container').attr('id',
+								'stat_container' + index);
+						//initStatistics(data, index);
+					}
+				});
 	}
 
-// 	function initStatistics(data, index) {
-// 		$('#tile_content' + index).html(data);
-// 		$('#added_stat_container').attr('id', 'stat_container' + index);
-// 		$('#settings' + index).html
-// 	}
+	// 	function initStatistics(data, index) {
+	// 		$('#tile_content' + index).html(data);
+	// 		$('#added_stat_container').attr('id', 'stat_container' + index);
+	// 		$('#settings' + index).html
+	// 	}
 
 	function getMaps(container_id, index) {
 		console.log("getting maps: " + container_id);
@@ -247,10 +255,10 @@
 						var p = data[i]["value"];
 						if (p == "text") {
 							$('#tooltip_text' + index).show();
-						} else if (p == "user"){
-							$('#tooltip_user'+index).show();
-						} else if (p == "time"){
-							$('#tooltip_time'+index).show();
+						} else if (p == "user") {
+							$('#tooltip_user' + index).show();
+						} else if (p == "time") {
+							$('#tooltip_time' + index).show();
 						}
 					}
 
@@ -275,43 +283,46 @@
 
 	function initWall(container_id, data, index) {
 
-		$('#tile_content'+index).html(data);
-		
-		$('#settings'+index).html('<p>Number of tweets to show:</p>'+
-					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'+
-					'<script>$("input[name=demo3_22]").TouchSpin({'+
-						'initval:40,min:1,max:100}'+
-						')'+';'+' </sc'+'ript>'+
-						'<br/>'+
-					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
-					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'+
-					'<br/><br/><button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger">Make User ID larger</button>'+
-					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller">Make User ID smaller</button>'+
-					'<br/><br />'+
-					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index">Make User Avatar larger</button>'+
-					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index ">Make User Avatar smaller</button>)<br/><br/>');
-				
-		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
+		$('#tile_content' + index).html(data);
+
+		$('#settings' + index)
+				.html(
+						'<p>Number of tweets to show:</p>'
+								+ '<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'
+								+ '<script>$("input[name=demo3_22]").TouchSpin({'
+								+ 'initval:40,min:1,max:100}'
+								+ ')'
+								+ ';'
+								+ ' </sc'+'ript>'
+								+ '<br/>'
+								+ '<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '
+								+ 'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'
+								+ '<br/><br/><button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger">Make User ID larger</button>'
+								+ '<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller">Make User ID smaller</button>'
+								+ '<br/><br />'
+								+ '<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index">Make User Avatar larger</button>'
+								+ '<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index ">Make User Avatar smaller</button>)<br/><br/>');
+
+		$('#added_submitTweetwallSettings').attr('id',
+				'submitTweetwallSettings_' + index);
 
 		//debugger;
 		$('#tile_content' + index).append(data);
 		console.log("init wall");
 		//console.log(tweets);
 	}
-	
+
 	function getTweetwall(container_id, index) {
 		$.ajax({
 			url : '/TeamBravo/tweets/tweetWall/25/0/0',
 			success : function(data) {
 				console.log("index: " + index);
 				console.log("cont_id: " + container_id);
-				initWall("tile_content"+index, data, index);
+				initWall("tile_content" + index, data, index);
 			}
 		});
 	}
 
-	
-	
 	function graphInit() {
 		$.ajax({
 			url : '/TeamBravo/graphs/graphInit',
