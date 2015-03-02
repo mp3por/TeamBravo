@@ -311,14 +311,7 @@
 		});
 	}
 
-	function fixTemplate(c) {
-		console.log("fixTemplate " + c);
-		$('#template_column_id').attr('id', 'tile' + c);
-		$('#template_title').attr('id', 'tile_title' + c);
-		$('#template_submit_button').attr('id', c);
-		$('#template_settings_div').attr('id', 'settings' + c);
-		$('#template_content').attr('id', 'tile_content' + c);
-	}
+	
 	
 	function graphInit() {
 		$.ajax({

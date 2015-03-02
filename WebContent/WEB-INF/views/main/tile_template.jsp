@@ -9,6 +9,9 @@
 				<div>
 					<button id="template_submit_button" type="button" class="btn btn-sm" settings_button_id="temlate" opened="0" onClick="settingsButtonClick(this)">Settings!</button>
 				</div>
+				<div>
+					<button id="template_delete_button" type="button" class="btn btn-sm" tile="temlate_tile" onClick="deleteButtonClick(this)">Delete!</button>
+				</div>
 			</div>
 		</div>
 		<div id="template_settings_div" class="settings" >settings</div>
