@@ -95,11 +95,11 @@
 		}
 
 		function initPage() {
+			getSearchBox();
 			addTile("0");
 			addTile("1");
 			addTile("2");
 			addTile("3");
-			getSearchBox();
 		}
 	});
 
@@ -276,11 +276,46 @@
 		});		
 	}
 	
+	function rankedByRetweeted(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/search/terrier/tweetwall/retweeted/${query}',
+			success: function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content" + index, data, index);
+			}
+		});
+	}
+	
+	function rankedByPosted(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/search/terrier/tweetwall/recent/${query}',
+			success: function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content" + index, data, index);
+			}
+		});
+	}
+	
 	function initWall(container_id, data, index) {
 
-		$('#tile_content' + index).append(data);
+		$('#tile_content'+index).html(data);
+		
+		$('#settings'+index).html('<p>Rank the results</p>'+
+					'<button type="button" onclick="rankedByRetweeted(tile_content2, 2);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+
+					'<br/><br />');
+		
+		$('#rank_by_retweeted').each( function () {
+			$(this).attr("index", index);
+		});
+		
+		$('#rank_by_posted').each( function () {
+			$(this).attr("index", index);
+		});
+		
 		console.log("init wall");
-
 	}
 	
 	function getSearchBox() {
@@ -290,6 +325,19 @@
 				$("#search").html(data);
 			}
 		});
+	}
+	
+	function settingsButtonClick(clicked) {
+		//debugger;
+		var settings = $('#settings' + clicked.id);
+		var p = $(clicked).attr("opened");
+		if (p == '0') {
+			settings.show();
+			$(clicked).attr("opened", "1");
+		} else {
+			settings.hide();
+			$(clicked).attr("opened", "0");
+		}
 	}
 
 	function fixTemplate(c) {
