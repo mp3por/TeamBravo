@@ -96,9 +96,9 @@
 
 		function initPage() {
 			getSearchBox();
+			addTile("2");
 			addTile("0");
 			addTile("1");
-			addTile("2");
 			addTile("3");
 		}
 	});
@@ -191,7 +191,7 @@
 		img.src = 
 			"https://dl-web.dropbox.com/get/anychart1.jpg?_subject_uid=96006775&w=AABmUPooiXMworxwJmxaNjbhhCFAaQemNGnt7dlG9jClzQ";
 		
-		var src = document.getElementById("tile1");
+		var src = document.getElementById("tile2");
 		src.appendChild(img);
 	}
 
