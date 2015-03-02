@@ -5,14 +5,22 @@ import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
+import java.io.FileNotFoundException;
+//import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+//import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+//import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
@@ -38,9 +46,10 @@ public class SearchDAOImpl {
 	@Autowired
 	SearchMemoryIndex index;
 
-	private ArrayList<Tweet> resultsList;
+	private List<Tweet> resultsList;
 	private boolean alreadyRunQuery = false;
 	private Manager queryManager;
+	private String query;
 
 	// public SearchDAO(TweetDAO tweetSaver){
 	// this.tweetSaver = tweetSaver;
@@ -52,20 +61,29 @@ public class SearchDAOImpl {
 		queryManager = new Manager(index);
 	}
 
-	public ArrayList<Tweet> getResultsList() {
+	public List<Tweet> getResultsList() {
 
 		if (this.alreadyRunQuery == false) {
 			System.out.println("You have not run any query");
 			return null;
 		} else
-			return this.resultsList;
+		return this.resultsList;
+	}
+	
+	private List<String> getResultsListString() throws FileNotFoundException, UnsupportedEncodingException{
+		
+		List<String> results = new ArrayList<String>();
+		for (Tweet tweet: this.resultsList){
+			results.add(tweet.toString());
+		}
+		return results;
 	}
 
 	// public void sortResults(Comparator<Tweet> cmp) {
 	// this.resultsList.sort(cmp);
 	// }
 
-	public void runQuery(String mode, String query) {
+	public void runQuery(String query) {
 
 		System.err.println("Running search for " + query);
 		StringBuffer sb = new StringBuffer();
@@ -86,45 +104,21 @@ public class SearchDAOImpl {
 		this.resultsList = this.tweetSaver.getResultsList(
 				ProjectProperties.TWEET_COLLECTION, resultsDocids);
 
-		switch (mode) {
-		case "retweeted":
-			this.resultsList.sort(Tweet.RetweetCountComparator);
-			break;
-
-		case "recent":
-			this.resultsList.sort(Tweet.PostedTimeComparator);
-			break;
-
-		case "normal":
-			break;
-		}
-
 		this.alreadyRunQuery = true;
 	}
-
-	public ArrayList<HashMap<String,Object>> getTweetsForQuery(String query) {
-
-		String mode = "normal";
-		
-		
-		System.err.println("Running search for " + query);
-		StringBuffer sb = new StringBuffer();
-		sb.append(CollectionEnrichment.normaliseString(query));
-		SearchRequest srq = queryManager.newSearchRequest("query",
-				sb.toString());
-		/* What matching model should I set? */
-		/* Study searchRequest class and matching model. */
-		srq.addMatchingModel("Matching", "DirichletLM");
-		srq.setOriginalQuery(sb.toString());
-		srq.setControl("decorate", "on");
-		queryManager.runPreProcessing(srq);
-		queryManager.runMatching(srq);
-		queryManager.runPostProcessing(srq);
-		queryManager.runPostFilters(srq);
-
-		int[] resultsDocids = srq.getResultSet().getDocids();
-		this.alreadyRunQuery = true;
-		return tweetSaver.getTweetsForId(resultsDocids);
+	
+	public void rankedByRetweeted(){
+//		System.err.println("Sorting by retweeted times");
+		Collections.sort(this.resultsList, Tweet.RetweetCountComparator);
+	}
+	
+	public void rankedByPostedTime(){
+//		System.err.println("Sorting by posted time");
+		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
+	}
+	
+	public void rankByFavourited(){
+		Collections.sort(this.resultsList, Tweet.MostFavouritedComparator);
 	}
 
 	/*
@@ -135,7 +129,7 @@ public class SearchDAOImpl {
 		ArrayList<HashMap<String, Object>> results = new ArrayList<>();
 		Map<String, Object> currentTweet;
 		for (int i = 0; i < this.resultsList.size(); i++) {
-			currentTweet = this.resultsList.get(i).getTweet();
+			currentTweet = this.resultsList.get(i).getTweetMap();
 			HashMap<String, Object> tweet = new HashMap<>();
 			for (String key : currentTweet.keySet()) {
 				if (ProjectProperties.defaultNE.contains(key)) {
@@ -167,58 +161,118 @@ public class SearchDAOImpl {
 	 * The following three functions retrieve coordinates of geo tagged results
 	 * for mapping
 	 */
+	
+	public Map<String, ArrayList<String>> getDataForMaps() throws FileNotFoundException, UnsupportedEncodingException {
+		
+		HashSet<String> tweetsForMaps = new HashSet<String>(this.getResultsListString());
+		ArrayList<String> tweet_text = new ArrayList<>();
+		ArrayList<String> latitudes = new ArrayList<>();
+		ArrayList<String> longitudes = new ArrayList<>();
+		ArrayList<String> tweet_time = new ArrayList<>();
+		ArrayList<String> tweet_user = new ArrayList<>();
+		Map<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
+
+		String a = null;
+		String time = null;
+		JSONObject b = null;
+		JSONArray c = null;
+
+		String user = null;
+		
+		int non_geotagged_count = 0;
+
+		for (String tweet : tweetsForMaps) {
+			JSONObject js = new JSONObject(tweet);
+			a = (String) js.get("text");
+			time = js.getString("created_at");
+			try{
+				b = (JSONObject) js.get("coordinates");
+				c = (JSONArray) b.get("coordinates");
+				b = js.getJSONObject("user");
+				user = b.getString("name");
+				tweet_text.add(a);
+				longitudes.add(Double.toString(c.getDouble(0)));
+				latitudes.add(Double.toString(c.getDouble(1)));
+				tweet_time.add(time);
+				tweet_user.add(user);
+			}
+			catch(ClassCastException e){
+//				System.err.println("Tweet not geotagged, couldn't pin on map.");
+				non_geotagged_count++;
+			}
+		}
+		
+		System.err.println(non_geotagged_count + " out of " + 
+							this.resultsList.size() + " tweets are not geotagged and couldn't be pinned on the map");
+		
+		String needed = "<div id='added_map_container' class='map-container'><div id='added_map_div' class='map'></div></div>";
+		ArrayList<String> need = new ArrayList<String>();
+		need.add(needed);
+		data.put("needed", need);
+		data.put("longitudes", longitudes);
+		data.put("latitudes", latitudes);
+		data.put("text", tweet_text);
+		data.put("time", tweet_time);
+		data.put("user", tweet_user);
+
+		return data;
+	}
 
 	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
-	private double[] getCoordinate(Tweet tweet) {
-
-		double[] coordinate = new double[2];
-		// Map<String, Object> map = tweet.getTweet();
-		// System.err.println(map);
-		if (tweet.getTweet().get("coordinates") != null) {
-			String pairString = tweet.getTweet().get("coordinates").toString();
-			// System.err.println(pairString);
-
-			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
-			int comma = pairString.lastIndexOf(',');
-			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
-
-			String latitude = pairString
-					.substring(startOfCoordinate, comma - 1);
-			String longtitude = pairString.substring(comma + 2,
-					endOfCoordinate + 1);
-
-			coordinate[0] = Double.parseDouble(latitude);
-			coordinate[1] = Double.parseDouble(longtitude);
-
-			return coordinate;
-		} else
-			return null;
-	}
-
-	public ArrayList<String> latitudesForMaps() {
-
-		ArrayList<String> latitudes = new ArrayList<>();
-		double[] coordinate;
-		for (int i = 0; i < this.resultsList.size(); i++) {
-			coordinate = this.getCoordinate(this.resultsList.get(i));
-			if (coordinate != null)
-				latitudes.add(Double.toString(coordinate[0]));
-		}
-		// System.err.println("latitudes list created");
-		return latitudes;
-	}
-
-	public ArrayList<String> longtitudesForMaps() {
-
-		ArrayList<String> longtitudes = new ArrayList<>();
-		double[] coordinate;
-		for (int i = 0; i < this.resultsList.size(); i++) {
-			coordinate = this.getCoordinate(this.resultsList.get(i));
-			if (coordinate != null)
-				longtitudes.add(Double.toString(coordinate[1]));
-		}
-		// System.err.println(longtitudes);
-		return longtitudes;
+//	private double[] getCoordinate(Tweet tweet) {
+//
+//		double[] coordinate = new double[2];
+//		// Map<String, Object> map = tweet.getTweet();
+//		// System.err.println(map);
+//		if (tweet.getTweet().get("coordinates") != null) {
+//			String pairString = tweet.getTweet().get("coordinates").toString();
+//			// System.err.println(pairString);
+//
+//			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
+//			int comma = pairString.lastIndexOf(',');
+//			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
+//
+//			String latitude = pairString
+//					.substring(startOfCoordinate, comma - 1);
+//			String longtitude = pairString.substring(comma + 2,
+//					endOfCoordinate + 1);
+//
+//			coordinate[0] = Double.parseDouble(latitude);
+//			coordinate[1] = Double.parseDouble(longtitude);
+//
+//			return coordinate;
+//		} else
+//			return null;
+//	}
+//
+//	public ArrayList<Double> latitudesForMaps() {
+//
+//		ArrayList<Double> latitudes = new ArrayList<>();
+//		double[] coordinate;
+//		for (int i = 0; i < this.resultsList.size(); i++) {
+//			coordinate = this.getCoordinate(this.resultsList.get(i));
+//			if (coordinate != null)
+//				latitudes.add(coordinate[0]);
+//		}
+//		// System.err.println("latitudes list created");
+//		return latitudes;
+//	}
+//
+//	public ArrayList<Double> longtitudesForMaps() {
+//
+//		ArrayList<Double> longtitudes = new ArrayList<>();
+//		double[] coordinate;
+//		for (int i = 0; i < this.resultsList.size(); i++) {
+//			coordinate = this.getCoordinate(this.resultsList.get(i));
+//			if (coordinate != null)
+//				longtitudes.add(coordinate[1]);
+//		}
+//		// System.err.println(longtitudes);
+//		return longtitudes;
+//	}
+	
+	public String getQuery(){
+		return this.query;
 	}
 
 	/* To be added for graphs */

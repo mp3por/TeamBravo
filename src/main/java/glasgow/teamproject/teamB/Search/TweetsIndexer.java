@@ -1,6 +1,10 @@
 package glasgow.teamproject.teamB.Search;
 
+import glasgow.teamproject.teamB.Util.StreamReaderService;
+
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 
@@ -19,10 +23,8 @@ import org.terrier.indexing.TwitterJSONDocument;
  */
 
 @Component
-public class TweetsIndexer {
-	/* Shall be changed to TwitterMongoDBCollection shortly */
-	//	private TwitterJSONCollection tweets;
-
+public class TweetsIndexer implements Observer {
+	
 	@Autowired
 	private TwitterMongoDAOCollection tweets;
 
@@ -31,6 +33,9 @@ public class TweetsIndexer {
 	
 	@Autowired
 	private SearchMemoryIndex index;
+	
+	@Autowired
+	private StreamReaderService serv;
 
 	public TwitterMongoDAOCollection getTweets() {
 		return this.tweets;
@@ -55,6 +60,7 @@ public class TweetsIndexer {
 	@PostConstruct
 	private void init() {
 //		this.index = terrier.getMemoryIndex();
+		serv.addObserver(this);
 		indexTweets();
 	}
 
@@ -73,6 +79,13 @@ public class TweetsIndexer {
 		} catch (IOException e) {
 			System.err.println("Failed to close collection");
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		String tweet = (String) arg;
+		System.out.println("Index tweet: " +  tweet);
+		indexTweet(tweet);
 	}
 
 }

@@ -43,5 +43,7 @@
 	<context:component-scan base-package="glasgow.teamproject.teamB.TwitIE" />
 	<!-- <bean id="twitie" class="glasgow.teamproject.teamB.TwitIE.TwitIE">
 	</bean> -->
+	
+	<!-- Controllers -->
 
 </beans>

@@ -16,29 +16,99 @@ import glasgow.teamproject.teamB.Util.ProjectProperties;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.annotation.PostConstruct;
+
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TwitIE implements NamedEntityExtractor {
-	private static HashSet<String> interestedNE = new HashSet<String>(); 
+public class TwitIE {
+	private static HashSet<String> interestedNE = new HashSet<String>();
 	public final HashSet<String> defaultNE = ProjectProperties.defaultNE;
+	private boolean accept = false;
 
 	private static Corpus corpus;
 	private static CorpusController pipeline;
 
-	public void addNE (String s) {
+	public void addNE(String s) {
 		interestedNE.add(s);
 	}
 
-	public synchronized HashMap<String, ArrayList<String>> processString (String s) throws InterruptedException {
-		
+//	public TwitIE() {
+//		// TODO Auto-generated constructor stub
+//		init();
+//	}
+
+	@PostConstruct
+	public void init() {
+		System.out.println("twitie init");
+		try {
+			if (interestedNE.isEmpty()) {
+				interestedNE.addAll(defaultNE);
+			}
+			System.out.println("added NE");
+
+			// Only god knows how it works
+			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+
+			//String currentDir = "/Users/velin/Documents/Workspaces/3_Year/TP3/";
+			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
+			System.out.println(currentDir);
+
+			File f = new File(currentDir);
+			Gate.setGateHome(f);
+			System.out.println("before gate.init");
+			Gate.init();
+			System.out.println("after gate.init");
+			String pathToApplication = currentDir + "/" + "applicationState.xgapp";
+			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File(pathToApplication));
+			corpus = Factory.newCorpus("Tweet corpus");
+			accept = true;
+		} catch (GateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		//System.out.println("twirie init END");
+	}
+
+	public HashMap<String, ArrayList<String>> getNamedEntites(String tweet) {
+		accept = false;
+		//System.out.println("getNamedEntities: " + tweet);
+		JSONObject ob = null;
+		HashMap<String, ArrayList<String>> NEs = null;
+		try {
+			//System.out.println("before JSON");
+			ob = new JSONObject(tweet);
+			//System.out.println("after JSON");
+			//System.out.println("JSON: " + ob);
+
+			//System.out.println("trying");
+			NEs = this.processString((String) ob.getString("text"));
+			//System.out.println("tried");
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("Something wrong processing the string");
+		}
+
+		//System.out.println("END getNamedEntitties");
+		accept = true;
+		return NEs;
+	}
+
+	public synchronized HashMap<String, ArrayList<String>> processString(String s) throws InterruptedException {
+		//System.out.println("process String");
+
 		HashMap<String, ArrayList<String>> NEs = new HashMap<String, ArrayList<String>>();
-		if (s.isEmpty()) return null;
+		if (s.isEmpty())
+			return null;
 		Document doc = null;
 		try {
 			doc = Factory.newDocument(s);
@@ -46,6 +116,25 @@ public class TwitIE implements NamedEntityExtractor {
 
 			pipeline.setCorpus(corpus);
 			pipeline.execute();
+			
+			if (doc != null) {
+
+				AnnotationSet annotations = doc.getAnnotations();
+				for (String namedEntity : interestedNE) {
+					NEs.put(namedEntity, new ArrayList<String>());
+				}
+				Iterator<Annotation> itr = annotations.iterator();
+				while (itr.hasNext()) {
+					Annotation a = itr.next();
+					if (!interestedNE.contains(a.getType())) {
+						continue;
+					}
+					ArrayList<String> NEsArray = NEs.get(a.getType());
+					NEsArray.add(s.substring(a.getStartNode().getOffset().intValue(), a.getEndNode().getOffset().intValue()));
+					NEs.put(a.getType(), NEsArray);
+				}
+			}
+			
 		} catch (ResourceInstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,59 +144,16 @@ public class TwitIE implements NamedEntityExtractor {
 			System.out.println(s);
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-		}
-		finally {
-			corpus.remove(doc);
+		} finally {
 			corpus.clear();
-			corpus.cleanup();
-		}
-
-		if (doc != null) {
-
-			AnnotationSet annotations = doc.getAnnotations();
-			for (String namedEntity: interestedNE) {
-				NEs.put(namedEntity, new ArrayList<String>());
-			}
-			Iterator<Annotation> itr = annotations.iterator();
-			while (itr.hasNext()) {
-				Annotation a = itr.next();
-				if (!interestedNE.contains(a.getType())) {
-					continue;
-				}
-				ArrayList<String> NEsArray = NEs.get(a.getType());
-				NEsArray.add(s.substring(a.getStartNode().getOffset().intValue(), a.getEndNode().getOffset().intValue()));
-				NEs.put(a.getType(), NEsArray);
-			}
+			Factory.deleteResource(doc);
 		}
 		return NEs;
 	}
 
-
-	public void init() {
-		try {
-			if (interestedNE.isEmpty()) {
-				interestedNE.addAll(defaultNE);
-			}
-
-			// Only god knows how it works
-			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
-			System.out.println(currentDir);
-
-			File f = new File(currentDir);
-			Gate.setGateHome(f);
-
-			Gate.init();
-			String pathToApplication =currentDir+"/"+"applicationState.xgapp";
-			pipeline = (CorpusController) PersistenceManager.loadObjectFromFile(new File(pathToApplication));
-			corpus = Factory.newCorpus("Tweet corpus");
-		} catch (GateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}		
+	public boolean accept() {
+		// TODO Auto-generated method stub
+		return accept;
 	}
 
 }

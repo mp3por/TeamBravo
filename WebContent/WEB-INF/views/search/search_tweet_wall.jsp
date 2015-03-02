@@ -3,6 +3,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
+<link href="<c:url value="/resources/css/jquery.qtip.css" />"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/imagesloaded.pkg.min.js" />"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
+
+ 
 
 <script type="text/javascript">
 
@@ -12,7 +23,7 @@
 			.ready(
 					function() {
 						
-						$('.addedTweetText')
+						$('.tweetText')
 								.each(
 										function() {
 
@@ -71,34 +82,31 @@
 														text = text
 																.replace(
 																		toReplace,
-																		"<a href='"+tooltipLinks[i]+toReplace+"' class='URLTooltip' title='"
-																				+toReplace+tooltipTexts[i]+"'>"
+																		"<a href='"+tooltipLinks[i]+toReplace+"' data-toggle='tooltip' title='"+
+							toReplace+tooltipTexts[i]+"'>"
 																				+ "<span class='"+tooltipImgs[i]+"'></span>"
 																				+ toReplace
 																				+ "</a>");
+														//toReplace+tooltipTexts[i]+"'><img src=<c:url value='"+tooltipImgs[i]+"'/> class='icon_img' />"+toReplace+"</a>");
 													}
 												}
 											}
 											$(this).html("<br/>"+"<p class='tweetText' id='tweetText'>"+text+"</p>");
 										});
-								$(".URLTooltip").each(function (){$(this).tooltip();});
+						$("body").tooltip({
+							selector : '[data-toggle=tooltip]'
+						});
 					});
 </script>
 
 <br/>
 
-       
 
 
 <div id="" style="overflow-y: scroll; height:400px;">
 <ul>
-	<p>
-	Query: get ${amount} ${query}.  
-	</p>
 	<!-- Loop over the tweets  -->
-	<c:if test="${empty tweets}">
-		<h3>No tweets found for this query.</h3>
-	</c:if>
+
 	<c:forEach var="tweet" items="${tweets}">
 		<div class="tweet" class="added_tweetwall_li"><img
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
@@ -107,7 +115,7 @@
 			
 				<h4 class="added_tweetwall_h4"><b>${fn:substringBefore(tweet.created_at,'+')}</b></h4>
 			
-				<div class="addedTweetText" text="${tweet.text}"
+				<div class="tweetText" text="${tweet.text}"
 					person="${tweet.Person}" location="${tweet.Location}"
 					organization="${tweet.Organization}" userID="${tweet.UserID}"
 					hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>

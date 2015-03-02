@@ -9,56 +9,46 @@
 
 	<display-name>Spring MVC Application</display-name>
 
-<!-- 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list> -->
+	<!-- <welcome-file-list> <welcome-file>index.jsp</welcome-file> </welcome-file-list> -->
 
 	<error-page>
 		<error-code>404</error-code>
 		<location>/error.jsp</location>
 	</error-page>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
-	</context-param>
+
 
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
 
 	<!-- Servlets -->
 
 	<servlet>
-		<servlet-name>example</servlet-name>
+		<servlet-name>main</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/example-context.xml</param-value>
+			<param-value>/WEB-INF/spring/main-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>example</servlet-name>
-		<url-pattern>/example/*</url-pattern>
+		<servlet-name>main</servlet-name>
+		<url-pattern>/main/*</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>Graphs</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/graphs-context.xml</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>Graphs</servlet-name>
-		<url-pattern>/graphs/*</url-pattern>
-	</servlet-mapping>
+	<!-- <servlet> <servlet-name>Graphs</servlet-name> <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> 
+		<init-param> <param-name>contextConfigLocation</param-name> <param-value>/WEB-INF/spring/graphs-context.xml</param-value> 
+		</init-param> <load-on-startup>2</load-on-startup> </servlet> <servlet-mapping> 
+		<servlet-name>Graphs</servlet-name> <url-pattern>/graphs/*</url-pattern> 
+		</servlet-mapping> -->
 
 	<servlet>
 		<servlet-name>Maps</servlet-name>
@@ -89,22 +79,7 @@
 		<servlet-name>NE</servlet-name>
 		<url-pattern>/named_entities/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>Tweets</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/tweets-context.xml</param-value>
-		</init-param>
-		<load-on-startup>5</load-on-startup>
-	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>Tweets</servlet-name>
-		<url-pattern>/tweets/*</url-pattern>
-	</servlet-mapping>
-	
 	<servlet>
 		<servlet-name>Search</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -112,29 +87,16 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/search-context.xml</param-value>
 		</init-param>
-		<load-on-startup>6</load-on-startup>
+		<load-on-startup>5</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Search</servlet-name>
 		<url-pattern>/search/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>main</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/main-context.xml</param-value>
-		</init-param>
-		<load-on-startup>7</load-on-startup>
-	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>main</servlet-name>
-		<url-pattern>/main/*</url-pattern>
-	</servlet-mapping>
-	
+
+
 	<servlet>
 		<servlet-name>Counter</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -142,12 +104,27 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/counter-context.xml</param-value>
 		</init-param>
-		<load-on-startup>8</load-on-startup>
+		<load-on-startup>6</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Counter</servlet-name>
 		<url-pattern>/counter/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>Tweets</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/tweets-context.xml</param-value>
+		</init-param>
+		<load-on-startup>7</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Tweets</servlet-name>
+		<url-pattern>/tweets/*</url-pattern>
+	</servlet-mapping>
+
 </web-app>
