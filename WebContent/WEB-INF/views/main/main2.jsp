@@ -2,6 +2,8 @@
 <html>
 <head>
 
+<link href="<c:url value="/resources/css/stat.css" />"
+	rel="stylesheet">
 <link href="<c:url value="/resources/css/graphs.css" />"
 	rel="stylesheet">
 <link href="<c:url value="/resources/css/tweets.css" />"
@@ -360,7 +362,7 @@
 		else linkStr = 'allTime';
 			
 		$.ajax({
-			url : '/TeamBravo/counter/getStats/' + time,
+			url : '/TeamBravo/counter/getStats/' + linkStr,
 			success : function(data) {
 				$('#tile_content' + index).html(data);
 				$('#added_stat_container').attr('id', 'stat_container' + index);

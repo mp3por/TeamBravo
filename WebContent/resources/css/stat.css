@@ -1,8 +1,13 @@
-#stat-container {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+.stat-container {
+	padding-top: 6px;
+	padding-right: 6px;
+	padding-bottom: 6px;
+	padding-left: 6px;
+	
+	border-style: solid;
+    border-width: 5px;
+	border-color: #656565;
+	
 	/* gradient from top to bottom */
 	/* For Safari 5.1 to 6.0 */
 	background: -webkit-linear-gradient(#ffffff, #E8E8E8);
@@ -16,31 +21,31 @@
 
 hr.horizontal-line {
 	background: #C9C9C9 no-repeat scroll center;
-	width: 95%;
+	width: 98%;
 	height: 1px;
-	margin-top: 2px;
+	margin-top: 10px;
 	margin-bottom: 2px;
 }
 
-p.mini {
+p.stat {
 	margin-bottom: 0px;
 }
 
-h5.mini {
+h5.stat {
 	margin-top: 10px;
 	margin-bottom: 0px;
 }
 
-h5.subtopic {
+h5.stat-subtopic {
 	margin-top: 0px;
 	margin-bottom: 10px;
 }
 
-footer.mini {
+footer.stat {
 	font-size: 75%;
 }
 
-blockquote.mini {
+blockquote.stat {
 	font-size: 14px;
 	margin: 0px;
 	padding: 0px;
@@ -55,7 +60,7 @@ blockquote.mini {
 	float: left;
 }
 
-.user_icon {
+/*.stat .user_icon {
 	border-style: solid;
 	border-width: 1px;
 	border-color: ##C9C9C9;
@@ -65,4 +70,4 @@ blockquote.mini {
 	margin-right: 10px;
 	margin-bottom: 5px;
 	float: left;
-}
+}*/

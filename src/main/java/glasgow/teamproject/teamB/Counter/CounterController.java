@@ -110,14 +110,13 @@ public class CounterController {
 		TimePeriod p;
 		Date stTime = null, edTime = null;
 		// TODO
-		if( !timePeriod.equals("allTime") ) {
+		if (!timePeriod.equals("allTime")) {
 			Calendar stCal = Calendar.getInstance();
 			Calendar edCal = Calendar.getInstance();
-			if( timePeriod.equals("pastMonth") ) {
+			if (timePeriod.equals("pastMonth")) {
 				p = TimePeriod.PASTMONTH;
 				edCal.add(Calendar.DATE, -30);
-			}
-			else if ( timePeriod.equals("pastWeek") ) {
+			} else if (timePeriod.equals("pastWeek")) {
 				p = TimePeriod.PASTWEEK;
 				edCal.add(Calendar.DATE, -7);
 			} else {
@@ -153,8 +152,8 @@ public class CounterController {
 			model.addObject("most_retweeted_tweet_user", most_retweeted_link);
 		}
 
-		HashMap<String, Object> most_fav = DBHelper.getMostPopularTweet(
-				stTime, edTime, "favorite_count");
+		HashMap<String, Object> most_fav = DBHelper.getMostPopularTweet(stTime,
+				edTime, "favorite_count");
 		if (!most_fav.isEmpty()) {
 			model.addObject("most_fav_tweet", most_fav.get("text"));
 			String most_fav_link = most_fav.get("screen_name")
@@ -164,8 +163,7 @@ public class CounterController {
 			model.addObject("most_fav_tweet_user", most_fav_link);
 		}
 
-		String most_active = DBHelper.getMostActiveUser(stTime,
-				edTime);
+		String most_active = DBHelper.getMostActiveUser(stTime, edTime);
 		String most_active_link = "<a href=\"https://twitter.com/"
 				+ most_active + "\">@" + most_active + "</a>";
 		model.addObject("most_active_user", most_active_link);
@@ -177,23 +175,38 @@ public class CounterController {
 			String link = "<a href=\"https://twitter.com/" + username + "\">@"
 					+ username + "</a>";
 			model.addObject("most_mentioned_user", link);
+		} else {
+			model.addObject("most_pop_user", "-");
 		}
-
 		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(
 				Field.HASHTAG, p, 1);
 		if (!most_pop_hashtag.isEmpty())
-			model.addObject("most_pop_hashtag", most_pop_hashtag.get(0).getID());
+			model.addObject("most_pop_hashtag", "<a href=\"/TeamBravo/search/terrier/"
+					+ most_pop_hashtag.get(0).getID() + "\">"
+					+ most_pop_hashtag.get(0).getID() + "</a>");
+		else
+			model.addObject("most_pop_hashtag", "-");
+
+		// /TeamBravo/
 
 		List<EntityCountPair> most_pop_location = DBHelper.getTopEntities(
 				Field.LOCATION, p, 1);
 		if (!most_pop_location.isEmpty())
-			model.addObject("most_pop_location", most_pop_location.get(0)
-					.getID());
+			model.addObject("most_pop_location",
+					"<a href=\"/TeamBravo/search/terrier/"
+							+ most_pop_location.get(0).getID() + "\">"
+							+ most_pop_location.get(0).getID() + "</a>");
+		else
+			model.addObject("most_pop_location", "-");
 
 		List<EntityCountPair> most_pop_person = DBHelper.getTopEntities(
 				Field.PERSON, p, 1);
 		if (!most_pop_person.isEmpty())
-			model.addObject("most_pop_person", most_pop_person.get(0).getID());
+			model.addObject("most_pop_person", "<a href=\"/TeamBravo/search/terrier/"
+					+ most_pop_person.get(0).getID() + "\">"
+					+ most_pop_person.get(0).getID() + "</a>");
+		else
+			model.addObject("most_pop_person", "-");
 
 		return model;
 	}
