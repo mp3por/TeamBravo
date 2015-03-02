@@ -4,6 +4,7 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,8 +129,10 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
-		
-
+		/*c.dailyMapReduce(new Date());
+		c.mergingMapReduce(TimePeriod.PASTWEEK);
+		c.mergingMapReduce(TimePeriod.PASTMONTH);
+		*/
 		List<HashMap<String,String>> tweets = new ArrayList<>();
 		List<EntityCountPair> topics = null;
 		List<DateCountPair> topic1Dates = null;
