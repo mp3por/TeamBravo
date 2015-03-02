@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/include.jsp"%>
+<%@ include file="/WEB-INF/views/main/mainTweetwall.jsp"%>
+
 <html>
 <head>
 
@@ -10,6 +12,8 @@
 	rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/bootstrap-datetimepicker.css" />" rel="stylesheet">
+
 
 <!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
@@ -36,6 +40,10 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	
+	
+
+ 
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -353,37 +361,7 @@
 	}
 	
 	
-	function submitTweetwallSettings (deb) {
-		console.log(deb);
-		var index = deb.getAttribute('index');
-		var count = document.getElementById('tweetwallTweetNumber').value;
-		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/'+count+'/0/0',
-			success : function(data) {
-				initWall("tile_content"+index, data, index);
-			}
-		});
-	}
 	
-	function makeUserIDLarger(index, inc) {
-		var i = index.getAttribute('index');
-		$('.tweetwall_h3_'+i).each( function () {
-			 var size = parseFloat($(this).css("font-size"));
-
-			$(this).css('font-size', size+15*inc+"px");
-		});
-	}
-	
-	function makeAvatarLarger(index, inc) {
-		var i = index.getAttribute('index');
-		console.log(index);
-		$('.avatar_'+i).each( function () {
-			 var size = parseFloat($(this).css("width"));
-
-			$(this).css('width', size+50*inc+"px");
-		});
-	}
-
 	
 	function initStatistics(data,index){
 		$('#tile_content'+index).html(data);
@@ -417,84 +395,7 @@
 				+ index, longitudes, latitudes, tweets, index));
 	}
 	
-	function initWall(container_id, data, index) {
-		$('#tile_content'+index).html(data);
-		
-		$('#settings'+index).html('<p>Number of tweets to show:</p>'+
-					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'+
-					'<script>$("input[name=demo3_22]").TouchSpin({'+
-						'initval:40,min:1,max:100}'+
-						')'+';'+' </sc'+'ript>'+
-						'<br/>'+
-					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
-					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'+
-					'<br/><br/><button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger">Make User ID larger</button>'+
-					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller">Make User ID smaller</button>'+
-					'<br/><br />'+
-					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index">Make User Avatar larger</button>'+
-					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index ">Make User Avatar smaller</button>)<br/><br/>');
-				
-		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
-		
-		$('#added_submitTweetwallSettings').attr('index', index);
-		
-		$('.added_tweetwall_h3').each(function () {
-			console.log("I am here at h3");
-			$(this).attr('class', 'tweetwall_h3_'+index);
-		});
-		
-		$('.added_tweetwall_h4').each(function () {
-			$(this).attr('class', 'tweetwall_h4_'+index);
-		});
-		
-		$('.added_tweetwall_avatar').each(function () {
-			$(this).attr('class', 'avatar_'+index);
-		});
-
-		$('.added_tweetwall_tweet').each(function () {	
-			$(this).attr('class', 'tweetwall_tweet_'+index);
-		});
-		
-		$('#added_makeUserIDLarger').each( function () {
-			$(this).attr("index", index);
-		});
-		$('#added_makeUserIDSmaller').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_smaller_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-
-		$('#added_larger_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_Submit_index').each(function (){
-			$(this).attr('index', index);
-		});
-		
-		$('.added_tweetwall_li').each(function () {
-			$(this).attr('class', 'tweetwall_li_'+index);
-		});
-		
 	
-		
-		console.log("init wall");
-		
-
-	}
-	//initial tweetWall with latest tweets and 25 tweets in the wall
-	function getTweetwall(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/25/0/0',
-			success : function(data) {
-				console.log("index: " + index);
-				console.log("cont_id: " + container_id);
-				initWall("tile_content"+index, data, index);
-			}
-		});
-	}
 
 	function fixTemplate(c) {
 		console.log("fixTemplate " + c);
