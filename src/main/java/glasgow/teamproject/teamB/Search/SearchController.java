@@ -4,6 +4,7 @@ import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,9 +54,9 @@ public class SearchController {
 	}
 	
 	@RequestMapping("/terrier/{query}")
-	public ModelAndView search(@PathVariable("query") String query){		
+	public ModelAndView searchPage(@PathVariable("query") String query){		
 		
-		dao.runQuery("normal", query);
+		dao.runQuery(query);
 		
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);
     	// TODO : vili find a way to do this AspectOriented
@@ -80,7 +82,33 @@ public class SearchController {
 //		dao.runQuery("normal", query);
 		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
 		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
-		modelandview.addObject("query", query);
+		modelandview.addObject("tweets", tweets);
+		return modelandview;
+	}
+	
+	@RequestMapping("/terrier/tweetwall/{mode}/{query}")
+	public ModelAndView tweetWallRanked(@PathVariable Map<String, String> pathVar) {
+//		System.err.println("Ranking by " + pathVar.get("mode"));
+		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
+		
+		dao.rankedByRetweeted();
+//		if (pathVar.get("mode") == "retweeted"){
+//			System.err.println("Ranking by retweeted.");
+//			dao.rankedByRetweeted();
+//		}
+//		else if (pathVar.get("mode") == "recent"){
+//			System.err.println("Ranking by posted time.");
+//			dao.rankedByPostedTime();
+//		}
+		
+		List<Tweet> list = dao.getResultsList();
+		JSONObject js;
+		for (Tweet t: list){
+			js = new JSONObject(t.getTweet());
+			System.out.println(js);
+		}
+		
+		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
 		modelandview.addObject("tweets", tweets);
 		return modelandview;
 	}
