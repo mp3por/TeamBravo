@@ -96,9 +96,9 @@
 
 		function initPage() {
 			getSearchBox();
+			addTile("2");
 			addTile("0");
 			addTile("1");
-			addTile("2");
 			addTile("3");
 		}
 	});
@@ -191,7 +191,7 @@
 		img.src = 
 			"https://dl-web.dropbox.com/get/anychart1.jpg?_subject_uid=96006775&w=AABmUPooiXMworxwJmxaNjbhhCFAaQemNGnt7dlG9jClzQ";
 		
-		var src = document.getElementById("tile1");
+		var src = document.getElementById("tile2");
 		src.appendChild(img);
 	}
 
@@ -314,9 +314,9 @@
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
-					'<button type="button" onclick="rankedByRetweeted(tile_content2, 2);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
-					'<button type="button" onclick="rankedByFavourited(tile_content2, 2);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
-					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
+					'<button type="button" onclick="rankedByRetweeted(tile_content0, 0);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
+					'<button type="button" onclick="rankedByFavourited(tile_content0, 0);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
 					'<br/><br />');
 		
 		$('#rank_by_retweeted').each( function () {
