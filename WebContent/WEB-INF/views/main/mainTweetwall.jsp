@@ -39,9 +39,11 @@ function submitTweetwallSettings (deb) {
 		console.log(index);
 		console.log(i);
 		$('.avatar_'+i).each( function () {
-			 var size = parseFloat($(this).css("width"));
-
+			var size = parseFloat($(this).css("width"));
+			var height = parseFloat($(this).css("height"));
 			$(this).css('width', size+size*0.25*inc+"px");
+			$(this).css('height', height+height*0.25*inc+"px");
+
 		});
 	}
 	
@@ -108,7 +110,7 @@ function submitTweetwallSettings (deb) {
 		$('#added_submitTweetwallSettings').attr('index', index);
 		
 		$('.added_tweetwall_h3').each(function () {
-			console.log("I am here at h3");
+			console.log("I am here at h4");
 			$(this).attr('class', 'tweetwall_h3_'+index);
 		});
 		

@@ -16,7 +16,7 @@
 
 	<!-- if you are using a MAP as a pathvariable -->
 	<mvc:annotation-driven/>
-
+	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<bean id="viewResolver"

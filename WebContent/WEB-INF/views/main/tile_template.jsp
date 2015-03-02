@@ -2,9 +2,10 @@
 
 
 <div class="col-md-6 HOLDER" id="template_column_id">
-	<div class="block">
+	<div id='block' class="block">
 		<div class="row">
 			<div class="col-md-12">
+
 				<div class="above_box text-center">
 					<div id="template_title">TITLE</div>
 					<div>
@@ -17,6 +18,7 @@
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</div>
+
 				</div>
 
 			</div>

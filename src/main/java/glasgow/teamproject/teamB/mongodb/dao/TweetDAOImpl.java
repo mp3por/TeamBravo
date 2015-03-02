@@ -42,6 +42,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	@Autowired
 	private MongoOperations mongoOps;
 
+
 	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
 	// public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
 	// super(s);
