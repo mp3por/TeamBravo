@@ -60,7 +60,6 @@ public class SearchController {
 	
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView searchPage(@PathVariable("query") String query){		
-		
 		dao.runQuery(query);
 		
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);

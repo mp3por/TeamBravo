@@ -2,26 +2,33 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/graphs.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />"
+	rel="stylesheet">
+
+<link href="<c:url value="/resources/css/stats.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
+
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/bootstrap-datetimepicker.css" />" rel="stylesheet">
+
+
 
 <!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
+
+
+<!-- tiles -->
+<script src="<c:url value="/resources/js/main/tilesFunctionality.js" />"></script>
+
 
 <!-- maps -->
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
 <script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
-
-<!-- graphs -->
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -29,6 +36,22 @@
 <!-- bootstrap -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+<!-- graphs -->
+<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
+<script src="<c:url value="/resources/js/settingsButtons.js" />"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
+  <script type="text/javascript"
+	src="<c:url value="/resources/js/moment.js" />"></script>
+
+ <script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
