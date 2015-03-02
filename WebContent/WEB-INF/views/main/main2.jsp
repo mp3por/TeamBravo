@@ -6,10 +6,10 @@
 <link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
 <!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
+
 
 <!-- maps -->
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
@@ -58,10 +58,6 @@
 				</li>
 			</ul>
 			<div id="search"></div>
-		</div>
-		<div id='timeButtons'>
-			<button id='timeButton1' type="button">Week</button> 
-			<button id='timeButton2' type="button">Month</button>
 		</div>
 	</header>
 	<!-- -------------------------------------------------------------- -->
@@ -116,7 +112,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		console.log("ready!");
-
 		getTemplate();
 
 		function getTemplate() {
@@ -438,14 +433,7 @@
 		$('#template_submit_button').attr('id', c);
 		$('#template_settings_div').attr('id', 'settings' + c);
 		$('#template_content').attr('id', 'tile_content' + c);
-
-		$('#settingsForm').attr('id', 'settingsForm' + c);
-		$('#settingsFormButton').attr('id', 'settingsFormButton' + c);
-		$('#settingsFormButton' + c).attr('data-tileno', c);
-		$('#settingsFormComponent').attr('id', 'settingsForm' + c + 'Component');
-		$('#settingsFormTimeScale').attr('id', 'settingsForm' + c + 'TimeScale');
 		
-
 	}
 
 	function getSearchBox() {

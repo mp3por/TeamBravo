@@ -2,8 +2,10 @@
 //INITIALISE GLOBAL DATA FOR GRAPHS --------------------------------------------------------------------------->>
 var dataForDimpleWeek;
 var dataForDimpleMonth;
+
 var dataForPieWeek;
 var dataForPieMonth;
+
 var dataForCloudWeek;
 var dataForCloudMonth;
 
@@ -21,8 +23,8 @@ colour5.opacity = 1;
 
 //Initialisation methods -------------------------------------------------------------------------------------->>
 function initDimple(timeScale){
-	if(timeScale == "WEEK"){
-		//Only init data if it hasn't already been set
+	switch(timeScale){
+	case "WEEK":
 		if(dataForDimpleWeek == null){
 			$.ajax({
 				async: false,
@@ -32,8 +34,8 @@ function initDimple(timeScale){
 				}
 			});
 		}
-	}else{
-		//Only init data if it hasn't already been set
+		break;
+	case "MONTH":
 		if(dataForDimpleMonth == null){
 			$.ajax({
 				async: false,
@@ -43,14 +45,15 @@ function initDimple(timeScale){
 				}
 			});
 		}
+		break;
+	default:
 	}
 }
 
 
 function initPie(timeScale){
-	
-	if(timeScale == "WEEK"){
-		//Only init data if it hasn't already been set
+	switch(timeScale){
+	case "WEEK":
 		if(dataForPieWeek == null){
 			$.ajax({
 				async: false,
@@ -60,8 +63,8 @@ function initPie(timeScale){
 				}
 			});
 		}
-	}else{
-		//Only init data if it hasn't already been set
+		break;
+	case "MONTH":
 		if(dataForPieMonth == null){
 			$.ajax({
 				async: false,
@@ -71,13 +74,14 @@ function initPie(timeScale){
 				}
 			});
 		}
+		break;
+	default:
 	}
 }
 
 function initCloud(timeScale){
-	
-	if(timeScale == "WEEK"){
-		//Only init data if it hasn't already been set
+	switch(timeScale){
+	case "WEEK":
 		if(dataForCloudWeek == null){
 			$.ajax({
 				async: false,
@@ -87,8 +91,8 @@ function initCloud(timeScale){
 				}
 			});
 		}
-	}else{
-		//Only init data if it hasn't already been set
+		break;
+	case "MONTH":
 		if(dataForCloudMonth == null){
 			$.ajax({
 				async: false,
@@ -98,6 +102,8 @@ function initCloud(timeScale){
 				}
 			});
 		}
+		break;
+	default:
 	}
 }
 
@@ -116,19 +122,38 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			drawBarChart(tileNo, "WEEK");
 		}
 	});
+	$.ajax({
+		aync : false,
+		url : '/TeamBravo/graphs/getSettings',
+		success : function(data) {
+			$('#settings' + tileNo).append(data);
+			debugger;
+			//Graph settings form
+			var c = tileNo;
+			$('#settingsForm').attr('id', 'settingsForm' + c);
+			$('#settingsForm' + c).attr('data-tileno', c);
+			$('#settingsFormComponent').attr('id', 'settingsForm' + c + 'Component');
+			$('#settingsFormComponent' + c).attr('data-tileno', c);
+			$('#graphSetBtnWeek').attr('id','graphSetBtnWeek' + c);
+			$('#graphSetBtnWeek' + c).attr('data-tileno', c);
+			$('#graphSetBtnMonth').attr('id','graphSetBtnMonth' + c);
+			$('#graphSetBtnMonth' + c).attr('data-tileno', c);
+		}
+	});
+	$
 }
 
 function drawBarChart(tileNo, timeScale){
 	
 	initDimple(timeScale);
 	//Set data source week or month
-	debugger;
 	var src;
 	if(timeScale == "WEEK"){
 		src = dataForDimpleWeek;
-	}else{
+	}else if(timeScale == "MONTH"){
 		src = dataForDimpleMonth;
 	}
+	
 	
 	//Get id and append SVG
 	var chartId = "#chart" + tileNo;
@@ -152,7 +177,7 @@ function drawBarChart(tileNo, timeScale){
 	];
 
 	barChart.draw();
-	myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
+	//myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
 }
 
 //LINEGRAPH------------------------------------------------------------------------------------------->>
@@ -176,10 +201,9 @@ function drawLineGraph(tileNo,timeScale){
 	var srcLine;
 	if(timeScale == "WEEK"){
 		srcLine = dataForDimpleWeek;
-	}else{
+	}else if(timeScale == "MONTH"){
 		srcLine = dataForDimpleMonth;
 	}
-	
 		
 	var LinechartId = "#chart" + tileNo;
 	var svg1 = dimple.newSvg(LinechartId, "100%", "57%");
@@ -229,7 +253,7 @@ function drawPieChart(tileNo,timeScale){
 	var srcPie;
 	if(timeScale == "WEEK"){
 		srcPie = dataForPieWeek;
-	}else{
+	}else if(timeScale == "MONTH"){
 		srcPie = dataForPieMonth;
 	}
 	
@@ -273,7 +297,7 @@ function drawWordCloud(tileNo,timeScale){
 	var srcCloud;
 	if(timeScale == "WEEK"){
 		srcCloud = dataForCloudWeek;
-	}else{
+	}else if(timeScale == "MONTH"){
 		srcCloud = dataForCloudMonth;
 	}
   	
@@ -316,25 +340,23 @@ function drawWordCloud(tileNo,timeScale){
 
 //RE-DRAW GRAPHS------------------------------------------------------------------------------------------->>
 function reDrawGraph(tileNo, graphType, timeScale){
+	//Remove old SVG
+	d3.select('#chart' + tileNo).select("svg").remove();
 	
+	//Draw graph
 	switch(graphType) {
     case "LINEGRAPH":
-    	d3.select('#chart' + tileNo).select("svg").remove();
     	drawLineGraph(tileNo, timeScale);
         break;
     case "BARCHART":
-    	d3.select('#chart'+ tileNo).select("svg").remove();
     	drawBarChart(tileNo, timeScale);
         break;
     case "PIECHART":
-    	d3.select('#chart' + tileNo).select("svg").remove();
     	drawPieChart(tileNo, timeScale);
         break;
     case "WORDCLOUD":
-    	d3.select('#chart' + tileNo).select("svg").remove();
     	drawWordCloud(tileNo, timeScale);
         break;
     default:
-        //Add other components
 	} 	
 }

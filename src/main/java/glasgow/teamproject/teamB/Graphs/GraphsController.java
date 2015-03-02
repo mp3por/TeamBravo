@@ -68,7 +68,6 @@ public class GraphsController {
 		
 		if(timePeriod.equals("WEEK")){
 			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 10);
-			System.out.println("GETTING TOPICS" + topics);
 			//Get top three values and clean up strings, removing []
 			String topic1 = topics.get(0).getID().replace("[", "");
 			topic1Clean = topic1.replace("]", "");
@@ -82,17 +81,17 @@ public class GraphsController {
 			topic5Clean = topic5.replace("]", "");
 			
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 11);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 10);
 			//Get top three values and clean up strings, removing []
-			String topic1 = topics.get(1).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
+			String topic1 = topics.get(0).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
 			topic1Clean = topic1.replace("]", "");
-			String topic2 = topics.get(2).getID().replace("[", "");
+			String topic2 = topics.get(1).getID().replace("[", "");
 			topic2Clean = topic2.replace("]", "");
-			String topic3 = topics.get(3).getID().replace("[", "");
+			String topic3 = topics.get(2).getID().replace("[", "");
 			topic3Clean = topic3.replace("]", "");
-			String topic4 = topics.get(4).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
+			String topic4 = topics.get(3).getID().replace("[", ""); //Starts with get(2) as get(1) is "[]" empty.
 			topic4Clean = topic4.replace("]", "");
-			String topic5 = topics.get(5).getID().replace("[", "");
+			String topic5 = topics.get(4).getID().replace("[", "");
 			topic5Clean = topic5.replace("]", "");
 
 		}else{
@@ -165,8 +164,6 @@ public class GraphsController {
 		}else if(timePeriod.equals("MONTH")){
 			
 			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 10);
-			System.out.println("Getting Dimple Week Data//////////////////////////////////////////////");
-			System.out.println("Topics: " + topics);
 			
 			noOfDays = 30;
 			
@@ -184,6 +181,7 @@ public class GraphsController {
 			
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
+
 		}
 		
 		//Add "topic" in each object and add to separate lists
@@ -279,15 +277,10 @@ public class GraphsController {
 		return view;
 	}
 	
-	@RequestMapping("/settings/{tileNo}")
-	@ResponseBody
-	public Map<String,String> getSettingsDivs(@PathVariable("tileNo") int tileNo){
-		Map<String,String> divs = new HashMap<String, String>();
-		String settingsForm = "<form id='settingsForm'><select id='component" + tileNo +"'><option value='map'>Map</option><option value='barChart'>Bar Chart</option><option value='lineGraph'>Line Graph</option><option value='pieChart'>Pie Chart</option><option value='wordCloud'>Word Cloud</option></select><select id='timeScale" + tileNo +"'><option value='WEEK'>Week</option><option value='MONTH'>Month</option></select> <button id='settingsFormButton' data-tileNo='" + tileNo +"' type='button'>Show</button><input id='hiddenTileNo'type='hidden' value='" + tileNo +"'></form>";
-		
-		
-		
-		divs.put("settingsDivs", settingsForm);
-		return divs;
+	//RETURN SETTINGS-------------------------------------------------------------------------------------------------->>
+	@RequestMapping("/getSettings")
+	public ModelAndView getGraphSettings(){
+		ModelAndView view = new ModelAndView("graphSettings");
+		return view;
 	}
 }
