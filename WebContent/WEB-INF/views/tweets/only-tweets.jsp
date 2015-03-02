@@ -3,13 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<script type="text/javascript"
-	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
-  <script type="text/javascript"
-	src="<c:url value="/resources/js/moment.js" />"></script>
-
- <script type="text/javascript"
-	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
 
 <script type="text/javascript">
 
@@ -95,22 +88,17 @@
 <br/>
 
        
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker6').datetimepicker();
-        $('#datetimepicker7').datetimepicker();
-        $("#datetimepicker6").on("dp.change",function (e) {
-            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-        });
-        $("#datetimepicker7").on("dp.change",function (e) {
-            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-        });
-    });
-</script>
+
 
 <div id="" style="overflow-y: scroll; height:400px;">
 <ul>
+	<p>
+	Query: get ${amount} ${query}.  
+	</p>
 	<!-- Loop over the tweets  -->
+	<c:if test="${empty tweets}">
+		<h3>No tweets found for this query.</h3>
+	</c:if>
 	<c:forEach var="tweet" items="${tweets}">
 		<div class="tweet" class="added_tweetwall_li"><img
 			src='${fn:replace(tweet.user.profile_image_url, "_normal", "")}'
