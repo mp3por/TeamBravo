@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
-import glasgow.teamproject.teamB.Util.StreamReaderService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,19 +41,20 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	@Autowired
 	private MongoOperations mongoOps;
-	
-	///Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
-	/*public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
-		super(s);
-		mongoOps = mongoOps2;
-	}*/
+
+
+	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
+	// public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
+	// super(s);
+	// mongoOps = mongoOps2;
+	// }
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TweetDAOImpl");
-		addTweet((String)arg, ProjectProperties.TWEET_COLLECTION);
+		addTweet((String) arg, ProjectProperties.TWEET_COLLECTION);
 	}
-	
+
 	@Override
 	public void addTweet(String tweet, String collectionName) {
 		tweet = tweet.replace("\"id\":", "\"tweet_id\":");
@@ -62,12 +62,14 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		// If we ever need to store it as JSON object
 		// Done in order to save the JSON object efficiently
 		DBObject ob = (DBObject) JSON.parse(tweet);
-		//System.out.println("OB:" + ob.toString());
-		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets collection
+		// System.out.println("OB:" + ob.toString());
+		DBCollection dbCollection = mongoOps.getCollection(collectionName); // gets
+																			// collection
 		dbCollection.insert(ob);// stores the JSON
 
 		// Simple store as String
-		// mongoOps.insert(tweet, collectionName + "STRING"); // stores the tweet as string
+		// mongoOps.insert(tweet, collectionName + "STRING"); // stores the
+		// tweet as string
 
 		System.out.println("SAVED in DB: " + tweet);
 	}
@@ -75,7 +77,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	@Override
 	public String readByTime(String time, String collectionName) {
 		Query query = new Query(Criteria.where("timestamp_ms").is(time));
-		String tweet = this.mongoOps.findOne(query, String.class, collectionName);
+		String tweet = this.mongoOps.findOne(query, String.class,
+				collectionName);
 		return tweet;
 	}
 
@@ -121,47 +124,51 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return results;
 		
 	}
-	
 	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
-	private double[] getCoordinate(DBObject tweet){	
-		
+	private double[] getCoordinate(DBObject tweet) {
+
 		double[] coordinate = new double[2];
-//		Map<String, Object> map = tweet.getTweet();
-//		System.err.println(map);
-		if (tweet.get("coordinates") != null){
+		// Map<String, Object> map = tweet.getTweet();
+		// System.err.println(map);
+		if (tweet.get("coordinates") != null) {
 			String pairString = tweet.get("coordinates").toString();
-//			System.err.println(pairString);
-		
+			// System.err.println(pairString);
+
 			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
 			int comma = pairString.lastIndexOf(',');
 			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
-		
-			String latitude = pairString.substring(startOfCoordinate, comma - 1);
-			String longtitude = pairString.substring(comma + 2, endOfCoordinate + 1);
-		
-		
+
+			String latitude = pairString
+					.substring(startOfCoordinate, comma - 1);
+			String longtitude = pairString.substring(comma + 2,
+					endOfCoordinate + 1);
+
 			coordinate[0] = Double.parseDouble(latitude);
 			coordinate[1] = Double.parseDouble(longtitude);
-		
-		
+
 			return coordinate;
-		}
-		else return null;
+		} else
+			return null;
 	}
 
 	@Override
-	public boolean addNamedEntitiesById(String id, String collectionName, HashMap<String, ArrayList<String>> NamedEntities) {
-		
+	public boolean addNamedEntitiesById(String id, String collectionName,
+			HashMap<String, ArrayList<String>> NamedEntities) {
+
 		Query query = new Query(Criteria.where("id_str").is(id));
 		Update update = new Update();
 		update.push("named_entities", NamedEntities);
 
-		WriteResult result = mongoOps.updateFirst(query, update, collectionName);
+		WriteResult result = mongoOps
+				.updateFirst(query, update, collectionName);
 
 		return result.isUpdateOfExisting();
 	}
 
+
 	private ArrayList<HashMap<String, Object>> traverseTheQuery (DBCursor dbCursor, int count) {
+		if (!dbCursor.hasNext()) 
+			return null;
 		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
 		System.out.println("DBCursor length:" + dbCursor);
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
@@ -202,10 +209,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	private HashMap<String, Object> parseDBObject(BasicDBObject currentObj) {
 		HashMap<String, Object> tweet = new HashMap<>();
-		for (String key: currentObj.keySet()) {
+		for (String key : currentObj.keySet()) {
 			if (ProjectProperties.defaultNE.contains(key)) {
 				String s = currentObj.getString(key);
-				// if s contains only "[]", return null - no need to parse an empty array
+				// if s contains only "[]", return null - no need to parse an
+				// empty array
 				if (s.length() == 2) {
 					tweet.put(key, null);
 					continue;
@@ -216,12 +224,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 				HashSet<String> NEs = new HashSet<String>();
 
-				for (String NE: s.split(",")) {
+				for (String NE : s.split(",")) {
 					NEs.add(NE.trim());
 				}
 				tweet.put(key, NEs);
-			}
-			else {
+			} else {
 				tweet.put(key, currentObj.get(key));
 			}
 		}
@@ -233,33 +240,37 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
-		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(foo.size());
+		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(
+				foo.size());
 		foo.next();
-		while(foo.hasNext()){
+		while (foo.hasNext()) {
 			tweets.add(foo.next().toString());
 		}
 		return tweets;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids) {
-		
+	public ArrayList<Tweet> getResultsList(String collectionName,
+			int[] resultsDocids) {
+
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
 		foo.next();
-		
+
 		ArrayList<Tweet> collectionList = new ArrayList<>();
-		while(foo.hasNext())
-			collectionList.add(new Tweet(foo.next().toMap()));			
+		while(foo.hasNext()){ 
+			collectionList.add(new Tweet(foo.next().toString(), foo.curr().toMap()));
+		}
 		
+
 		ArrayList<Tweet> resultsList = new ArrayList<>();
 		Tweet tweet;
-		for (int i = 0; i < resultsDocids.length; i++){
+		for (int i = 0; i < resultsDocids.length; i++) {
 			tweet = collectionList.get(resultsDocids[i]);
 			resultsList.add(tweet);
 		}
-		
+
 		return resultsList;
 	}
 
@@ -267,18 +278,18 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	public Queue<String> getCollection(String string) {
 		List<String> o = this.mongoOps.find(new Query(), String.class);
 		Queue<String> j = new PriorityQueue<String>();
-		for (String p : o){
+		for (String p : o) {
 			j.add(p);
 		}
 		return j;
 	}
 
 	@Override
-	public ArrayList<HashMap<String,Object>> getTweetsForId(int[] ids) {
+	public ArrayList<HashMap<String, Object>> getTweetsForId(int[] ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	// ------------------------------------------------------------------------
 	// Counting Section
 	/** collection names */
@@ -287,8 +298,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	String MONTHLY_COLLECT_NAME = ProjectProperties.MONTHLY_COLLECT_NAME;
 
 	String COUNTER_DATE_FORMAT = ProjectProperties.COUNTER_DATE_FORMAT;
-	private DateFormat counterDateFormat = new SimpleDateFormat(COUNTER_DATE_FORMAT);
-	
+	private DateFormat counterDateFormat = new SimpleDateFormat(
+			COUNTER_DATE_FORMAT);
+
 	public enum Field {
 		HASHTAG {
 			public String toString() {
@@ -342,10 +354,12 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 */
 	public void dailyMapReduce(Date date) {
 
-		DBCollection tweets = mongoOps.getCollection(ProjectProperties.TWEET_COLLECTION);
+		DBCollection tweets = mongoOps
+				.getCollection(ProjectProperties.TWEET_COLLECTION);
 
 		// convert date to twitter created_at format
-		String twitterFormatDateStr = new SimpleDateFormat("EEE MMM dd").format(date);
+		String twitterFormatDateStr = new SimpleDateFormat("EEE MMM dd")
+				.format(date);
 		// query tweets where created_at LIKE dateStr%
 		BasicDBObject query = new BasicDBObject();
 		query.put("created_at",
@@ -372,10 +386,18 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 				map += "entity" + i + "[i] = entity" + i + "[i]"
 						+ ".replace(/[^a-zA-Z]/g, ' ');";
 			} else if (field.toString() == Field.HASHTAG.toString()) {
-				map += "entity" + i + "[i] = entity" + i + "[i]"
+				map += "entity"
+						+ i
+						+ "[i] = entity"
+						+ i
+						+ "[i]"
 						+ ".replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
 			} else if (field.toString() != Field.URL.toString()) {
-				map += "entity" + i + "[i] = entity" + i + "[i]"
+				map += "entity"
+						+ i
+						+ "[i] = entity"
+						+ i
+						+ "[i]"
 						+ ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
 			}
 
@@ -403,7 +425,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		// delete the temporary collection
 		temp.drop();
 	}
-	
+
 	/**
 	 * This method is called once a day to calculate trends for the past
 	 * week/month outCollection is always the same, one for weekly collection,
@@ -417,7 +439,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 */
 	public void mergingMapReduce(TimePeriod timePeriod) {
 
-		DBCollection dailyCollection = mongoOps.getCollection(DAILY_COLLECT_NAME);
+		DBCollection dailyCollection = mongoOps
+				.getCollection(DAILY_COLLECT_NAME);
 
 		Calendar today = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
@@ -462,7 +485,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		// delete the temporary collection
 		temp.drop();
 	}
-	
+
 	/**
 	 * @param field
 	 *            : type of entity
@@ -550,7 +573,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		ArrayList<DateCountPair> l = new ArrayList<DateCountPair>(numDays);
 
 		Calendar today = Calendar.getInstance();
-		DBCollection dailyCollection = mongoOps.getCollection(DAILY_COLLECT_NAME);
+		DBCollection dailyCollection = mongoOps
+				.getCollection(DAILY_COLLECT_NAME);
 
 		// iterate retrieving number of tweets of each day
 		for (int i = 0; i < numDays; ++i, today.add(Calendar.DATE, -1)) {
@@ -575,7 +599,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 		return l;
 	}
-	
+
 	public class EntityCountPair {
 		private String id;
 		private Double count;
@@ -611,7 +635,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			return count;
 		}
 	}
-	
+
 	// ------------------------------------------------------------------------
 
 	// For statistics
@@ -630,51 +654,68 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 */
 	@Override
 	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted) {
-		// TODO remove magic string
-		DBCollection tweets = mongoOps.getCollection("tweets");
-
-		DBObject query = QueryBuilder.start().put("timestamp_ms")
-				.greaterThanEquals(Long.toString(stDate.getTime()))
-				.lessThanEquals(Long.toString(edDate.getTime()))
-				.put("retweeted").is(isRetweeted).get();
-
-		return tweets.find(query).count();
+		DBCollection tweets = mongoOps
+				.getCollection(ProjectProperties.TWEET_COLLECTION);
+		if (stDate != null && edDate != null) {
+			DBObject query = QueryBuilder.start().put("timestamp_ms")
+					.greaterThanEquals(Long.toString(stDate.getTime()))
+					.lessThanEquals(Long.toString(edDate.getTime()))
+					.put("retweeted").is(isRetweeted).get();
+			return tweets.find(query).count();
+		} else {
+			DBObject query = QueryBuilder.start().put("retweeted")
+					.is(isRetweeted).get();
+			return tweets.find(query).count();
+		}
 	}
 
 	@Override
 	public HashMap<String, Object> getMostPopularTweet(Date stDate,
 			Date edDate, String compareKey) {
-		// TODO remove magic string
-		DBCollection tweets = mongoOps.getCollection("tweets");
+		DBCollection tweets = mongoOps
+				.getCollection(ProjectProperties.TWEET_COLLECTION);
 
-		DBObject query = QueryBuilder.start().put("timestamp_ms")
-				.greaterThanEquals(Long.toString(stDate.getTime()))
-				.lessThanEquals(Long.toString(edDate.getTime())).get();
+		DBCursor cursor;
+		if (stDate != null && edDate != null) {
+			DBObject query = QueryBuilder.start().put("timestamp_ms")
+					.greaterThanEquals(Long.toString(stDate.getTime()))
+					.lessThanEquals(Long.toString(edDate.getTime())).get();
+			cursor = tweets.find(query).sort(new BasicDBObject(compareKey, -1))
+					.limit(1);
+		} else {
+			cursor = tweets.find().sort(new BasicDBObject(compareKey, -1))
+					.limit(1);
+		}
 
-		DBCursor cursor = tweets.find(query)
-				.sort(new BasicDBObject(compareKey, -1)).limit(1);
-		if (!cursor.hasNext())
-			return null;
-		DBObject obj = cursor.next();
 		HashMap<String, Object> tweet = new HashMap<>();
-		tweet.put("text", obj.get("text"));
-		DBObject user = (DBObject) obj.get("user");
-		tweet.put("username", user.get("name"));
-		tweet.put("screen_name", user.get("screen_name"));
-		
+		if (cursor.hasNext()) {
+			DBObject obj = cursor.next();
+			if ((int) obj.get(compareKey) != 0) {
+				tweet.put("text", obj.get("text"));
+				DBObject user = (DBObject) obj.get("user");
+				tweet.put("username", user.get("name"));
+				tweet.put("screen_name", user.get("screen_name"));
+			}
+		}
 		return tweet;
 	}
-	
+
 	public String getMostActiveUser(Date stDate, Date edDate) {
-		
+
 		DBCollection tweets = mongoOps.getCollection("tweets");
-		
-		DBObject query = QueryBuilder.start().put("timestamp_ms")
-				.greaterThanEquals(Long.toString(stDate.getTime()))
-				.lessThanEquals(Long.toString(edDate.getTime())).get();
-		
+
+		DBObject query = null;
+		if (stDate != null && edDate != null) {
+			query = QueryBuilder.start().put("timestamp_ms")
+					.greaterThanEquals(Long.toString(stDate.getTime()))
+					.lessThanEquals(Long.toString(edDate.getTime())).get();
+		}
+
 		// create pipeline operations, first with the $match
-		DBObject match = new BasicDBObject("$match", query);
+		DBObject match = null;
+		if (query != null) {
+			match = new BasicDBObject("$match", query);
+		}
 
 		// build the $projection operation
 		DBObject fields = new BasicDBObject("user.screen_name", 1);
@@ -686,19 +727,21 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		DBObject group = new BasicDBObject("$group", groupFields);
 
 		// Finally the $sort operation
-		DBObject sort = new BasicDBObject("$sort", new BasicDBObject("count", -1));
+		DBObject sort = new BasicDBObject("$sort", new BasicDBObject("count",
+				-1));
 
-		List<DBObject> pipeline = Arrays.asList(match, project, group, sort);
+		List<DBObject> pipeline;
+		if (match != null) {
+			pipeline = Arrays.asList(match, project, group, sort);
+		} else {
+			pipeline = Arrays.asList(project, group, sort);
+		}
 		AggregationOutput output = tweets.aggregate(pipeline);
-		
+
 		for (DBObject result : output.results()) {
 			return (String) result.get("_id");
 		}
-		
+
 		return null;
 	}
-
-	
-
-	
 }

@@ -1,14 +1,30 @@
 <%@ include file="/WEB-INF/include.jsp"%>
+<%@ include file="/WEB-INF/views/main/mainTweetwall.jsp"%>
+<%@ include file="/WEB-INF/views/main/mainStats.jsp"%>
+
 <html>
 <head>
+<link href="<c:url value="/resources/css/graphs.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />"
+	rel="stylesheet">
 
-<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/stats.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
+
+<link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/bootstrap-datetimepicker.css" />" rel="stylesheet">
+
+
 
 <!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
+
+
+<!-- tiles -->
+<script src="<c:url value="/resources/js/main/tilesFunctionality.js" />"></script>
 
 
 <!-- maps -->
@@ -23,12 +39,21 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
+
 <!-- graphs -->
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
 <script src="<c:url value="/resources/js/settingsButtons.js" />"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
+  <script type="text/javascript"
+	src="<c:url value="/resources/js/moment.js" />"></script>
+
+ <script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -66,7 +91,7 @@
 
 	<div class="container-fluid">
 
-		<div id="row0" class="row"></div>
+		<div id="row0" class="row BIG_ROW" row="0"></div>
 
 		<div class="row" id="last_row">
 			<div class="col-md-12">
@@ -110,43 +135,14 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		console.log("ready!");
-		getTemplate();
 
-		function getTemplate() {
-			if (tile_template == null) {
-				$.ajax({
-					url : '/TeamBravo/main/tile_template',
-					success : function(data) {
-						tile_template = data;
-						initPage();
-					}
-				});
-			} else {
-				initPage();
-			}
-		}
-
-		function initPage() {
-			addTile("0");
-			addTile("1");
-			addTile("2");
-			getSearchBox();
-		}
-	});
-
-	var tile_template = null;
-	var row_index = 0;
-	var current_num_of_tiles = 0;
-
-	$('#add_more_form').on('submit', function(e) { //use on if jQuery 1.7+
+	$('#add_more_form').on('submit', function(e) { // use on if jQuery 1.7+
 		console.log("submit");
-		e.preventDefault(); //prevent form from submitting
+		e.preventDefault(); // prevent form from submitting
 		var data = $("#add_more_form").serializeArray();
 		console.log(data[0].value);
 		var toAdd = data[0].value;
-		//debugger;
+		// debugger;
 		if (tile_template == null) {
 			$.ajax({
 				url : '/TeamBravo/main/tile_template',
@@ -160,280 +156,29 @@
 		}
 	});
 
-	/*
 	function settingsButtonClick(clicked) {
-		//debugger;
 		var settings = $('#settings' + clicked.id);
-		var p = $(clicked).attr("opened");
-		if (p == '0') {
-			settings.show();
-			$(clicked).attr("opened", "1");
-		} else {
-			settings.hide();
-			$(clicked).attr("opened", "0");
-		}
-	}
-
-	function setButtonClick(button) {
-		debugger;
-		var index = $(button).attr('tile');
-		var form = $('#settings_form' + index);
-		var form_values = form.serializeArray();
-		console.log(form_values);
-	}*/
-
-
-	function addTile(toAdd) {
-		if (toAdd != null && tile_template != null) {
-			//debugger;
-
-			console.log("addTile:" + toAdd);
-			console.log("curr:" + current_num_of_tiles);
-			var next = $('#next');
-			var c = current_num_of_tiles;
-			//var row = next.closest('.row');
-			console.log("row_index: " + row_index);
-			var row = $('#row' + row_index);
-			var children = row.children();
-			if (children.length >= 2) {
-				row_index += 1;
-				row.after('<div id="row'+row_index+'" class="row"></div>');
-				row = $('#row' + row_index);
-			}
-			row.append(tile_template);
-
-			fixTemplate(c);
-			var tile_title = $('#tile_title' + c);
-			//debugger;
-			switch (toAdd) {
-			case "0":// add map
-				tile_title.text("Map");
-				getMaps('tile_content' + c, c);
-				break;
-			case "1":// add graphs
-				tile_title.text("Graphs");
-				showBarChart(c);
-				break;
-			case "2":// add tweetwall
-				tile_title.text("Tweet Wall");
-				getTweetwall("tile_content" + c, c);
-				break;
-			case "3":
-				tile_title.text("Stats");
-				getStastics("tile_content" + c, c);
-				break;
-			}
-			current_num_of_tiles += 1;
-		} else {
-			alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
-					+ tile_template);
-		}
-	}
-
-	function getStastics(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/counter/test',
-			success : function(data) {
-				initStatistics(data, index);
-			}
-		});
-	}
-
-	
-	function submitTweetwallSettings (deb) {
-		console.log(deb);
-		var index = deb.getAttribute('index');
-		var count = document.getElementById('tweetwallTweetNumber').value;
-		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/'+count+'/0/0',
-			success : function(data) {
-				initWall("tile_content"+index, data, index);
-			}
-		});
-	}
-	
-	function makeUserIDLarger(index, inc) {
-		var i = index.getAttribute('index');
-		$('.tweetwall_h3_'+i).each( function () {
-			 var size = parseFloat($(this).css("font-size"));
-
-			$(this).css('font-size', size+15*inc+"px");
-		});
-	}
-	
-	function makeAvatarLarger(index, inc) {
-		var i = index.getAttribute('index');
-		console.log(index);
-		$('.avatar_'+i).each( function () {
-			 var size = parseFloat($(this).css("width"));
-
-			$(this).css('width', size+50*inc+"px");
-		});
-	}
-
-	
-	function initStatistics(data,index){
-		$('#tile_content'+index).html(data);
-	}
-
-	function getMaps(container_id, index) {
-		console.log("getting maps: " + container_id);
-		$.ajax({
-			url : '/TeamBravo/maps/test3',
-			success : function(data) {
-				var longitudes = data['longitudes'];
-				var latitudes = data['latitudes'];
-				var tweets = data.text;
-				var needed = data.needed;
-				var users = data.user;
-				var time = data.time;
-
-				var tweets_info = {
-					"users" : users,
-					"time" : time,
-					"tweets" : tweets,
-					"longitudes" : longitudes,
-					"latitudes" : latitudes
-				}
-				initMaps(container_id, index, needed, tweets_info);
-			}
-		});
-		$.ajax({
-			url : '/TeamBravo/maps/maps/getSettings',
-			success : function(data) {
-				//console.log(data);
-				$('#settings' + index).html(data);
-				$('#settings_template_form').attr('tile', index);
-				$('#settings_template_form')
-						.attr('id', 'settings_form' + index);
-				$('#settings_button_template').attr('id',
-						'settings_button' + index);
-				$('#settings_button' + index).attr('tile', index);
-				$('#settings_form' + index).submit(function(e) {
-					e.preventDefault();
-					var index = $(this).attr('tile');
-					var data = $(this).serializeArray();
-					$('#tooltip_time' + index).hide();
-					$('#tooltip_text' + index).hide();
-					$('#tooltip_user' + index).hide();
-
-					for (var i = 0; i < data.length; i++) {
-						var p = data[i]["value"];
-						if (p == "text") {
-							$('#tooltip_text' + index).show();
-						} else if (p == "user"){
-							$('#tooltip_user'+index).show();
-						} else if (p == "time"){
-							$('#tooltip_time'+index).show();
-						}
-					}
-
-					//$('#settings_button'+index).click();
-				});
-			}
-		});
-	}
-
-	function initMaps(container_id, index, needed, tweets_info) {
-		//debugger;
-		console.log("init maps");
-		$('#' + container_id).append(needed);
-
-		$('#added_map_container').attr('id', 'map_container' + index);
-		$('#added_map_div').attr('id', 'map' + index);
-
-		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ index, index, tweets_info));
-	}
-
-	function initWall(container_id, data, index) {
-
-		$('#tile_content'+index).html(data);
-		
-		$('#settings'+index).html('<p>Number of tweets to show:</p>'+
-					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'+
-					'<script>$("input[name=demo3_22]").TouchSpin({'+
-						'initval:40,min:1,max:100}'+
-						')'+';'+' </sc'+'ript>'+
-						'<br/>'+
-					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
-					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button>'+
-					'<br/><br/><button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger">Make User ID larger</button>'+
-					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller">Make User ID smaller</button>'+
-					'<br/><br />'+
-					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index">Make User Avatar larger</button>'+
-					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index ">Make User Avatar smaller</button>)<br/><br/>');
-				
-		$('#added_submitTweetwallSettings').attr('id', 'submitTweetwallSettings_' + index);
-
-		
-		$('#added_submitTweetwallSettings').attr('index', index);
-		
-		$('.added_tweetwall_h3').each(function () {
-			console.log("I am here at h3");
-			$(this).attr('class', 'tweetwall_h3_'+index);
-		});
-		
-		$('.added_tweetwall_h4').each(function () {
-			$(this).attr('class', 'tweetwall_h4_'+index);
-		});
-		
-		$('.added_tweetwall_avatar').each(function () {
-			$(this).attr('class', 'avatar_'+index);
-		});
-
-		$('.added_tweetwall_tweet').each(function () {	
-			$(this).attr('class', 'tweetwall_tweet_'+index);
-		});
-		
-		$('#added_makeUserIDLarger').each( function () {
-			$(this).attr("index", index);
-		});
-		$('#added_makeUserIDSmaller').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_smaller_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-
-		$('#added_larger_avatar_index').each( function () {
-			$(this).attr("index", index);
-		});
-		
-		$('#added_Submit_index').each(function (){
-			$(this).attr('index', index);
-		});
-		
-		$('.added_tweetwall_li').each(function () {
-			$(this).attr('class', 'tweetwall_li_'+index);
-		});
-		console.log("init wall");
-		
-
+		settings.show();
 	}
 
 
-	function getTweetwall(container_id, index) {
-		$.ajax({
-			url : '/TeamBravo/tweets/tweetWall/25/0/0',
-			success : function(data) {
-				console.log("index: " + index);
-				console.log("cont_id: " + container_id);
-				initWall("tile_content"+index, data, index);
-			}
-		});
-	}
-
-	function fixTemplate(c) {
-		console.log("fixTemplate " + c);
-		$('#block').attr('id', 'block' + c);
-		$('#template_column_id').attr('id', 'tile' + c);
-		$('#template_title').attr('id', 'tile_title' + c);
-		$('#template_submit_button').attr('id', c);
-		$('#template_settings_div').attr('id', 'settings' + c);
-		$('#template_content').attr('id', 'tile_content' + c);
-		
+	function fixDatePickers (index) {
+        $(function () {
+            $('#datetimepicker_from_'+index).datetimepicker({
+            	sideBySide: true,
+            	format: 'ddd MMM DD HH:mm:ss YYYY'
+            });
+            $('#datetimepicker_to_'+index).datetimepicker({
+            	sideBySide: true,
+            	format: 'ddd MMM DD HH:mm:ss YYYY'
+            });
+            $("#datetimepicker_from_"+index).on("dp.change",function (e) {
+                $('#datetimepicker_to_'+index).data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker_to_"+index).on("dp.change",function (e) {
+                $('#datetimepicker_from_'+index).data("DateTimePicker").maxDate(e.date);
+            });
+        });
 	}
 
 	function getSearchBox() {
@@ -445,14 +190,6 @@
 		});
 	}
 	
-	/*function getDefaultGraph(container_id) {
-		$.ajax({
-			url : '/TeamBravo/graphs/bar/' + container_id + '/WEEK',
-			success : function(data) {
-				$("#tile_content" + container_id).html(data)
-			}
-		});
-	}*/
 	
 </script>
 </html>

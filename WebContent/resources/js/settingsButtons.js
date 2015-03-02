@@ -1,17 +1,4 @@
 
-function settingsButtonClick(clicked) {
-	
-	var settings = $('#settings' + clicked.id);
-	var p = $(clicked).attr("opened");
-	if (p == '0') {
-		settings.show();
-		$(clicked).attr("opened", "1");
-	} else {
-		settings.hide();
-		$(clicked).attr("opened", "0");
-	}
-}
-
 function settingsFormOptionSelect(dropDownList){
 	var tileNo = dropDownList.getAttribute('data-tileno');
 	var componentOption = $('#settingsForm' + tileNo + 'Component').val();

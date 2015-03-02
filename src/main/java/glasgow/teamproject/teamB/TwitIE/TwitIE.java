@@ -116,6 +116,25 @@ public class TwitIE {
 
 			pipeline.setCorpus(corpus);
 			pipeline.execute();
+			
+			if (doc != null) {
+
+				AnnotationSet annotations = doc.getAnnotations();
+				for (String namedEntity : interestedNE) {
+					NEs.put(namedEntity, new ArrayList<String>());
+				}
+				Iterator<Annotation> itr = annotations.iterator();
+				while (itr.hasNext()) {
+					Annotation a = itr.next();
+					if (!interestedNE.contains(a.getType())) {
+						continue;
+					}
+					ArrayList<String> NEsArray = NEs.get(a.getType());
+					NEsArray.add(s.substring(a.getStartNode().getOffset().intValue(), a.getEndNode().getOffset().intValue()));
+					NEs.put(a.getType(), NEsArray);
+				}
+			}
+			
 		} catch (ResourceInstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,29 +145,9 @@ public class TwitIE {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		} finally {
-			corpus.remove(doc);
 			corpus.clear();
-			corpus.cleanup();
+			Factory.deleteResource(doc);
 		}
-
-		if (doc != null) {
-
-			AnnotationSet annotations = doc.getAnnotations();
-			for (String namedEntity : interestedNE) {
-				NEs.put(namedEntity, new ArrayList<String>());
-			}
-			Iterator<Annotation> itr = annotations.iterator();
-			while (itr.hasNext()) {
-				Annotation a = itr.next();
-				if (!interestedNE.contains(a.getType())) {
-					continue;
-				}
-				ArrayList<String> NEsArray = NEs.get(a.getType());
-				NEsArray.add(s.substring(a.getStartNode().getOffset().intValue(), a.getEndNode().getOffset().intValue()));
-				NEs.put(a.getType(), NEsArray);
-			}
-		}
-//		System.out.println("process String END");
 		return NEs;
 	}
 

@@ -1,4 +1,5 @@
 
+
 //INITIALISE GLOBAL DATA FOR GRAPHS --------------------------------------------------------------------------->>
 var dataForDimpleWeek;
 var dataForDimpleMonth;
@@ -23,6 +24,7 @@ colour5.opacity = 1;
 
 //Initialisation methods -------------------------------------------------------------------------------------->>
 function initDimple(timeScale){
+
 	switch(timeScale){
 	case "WEEK":
 		if(dataForDimpleWeek == null){
@@ -52,6 +54,7 @@ function initDimple(timeScale){
 
 
 function initPie(timeScale){
+
 	switch(timeScale){
 	case "WEEK":
 		if(dataForPieWeek == null){
@@ -122,6 +125,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			drawBarChart(tileNo, "WEEK");
 		}
 	});
+
 	$.ajax({
 		aync : false,
 		url : '/TeamBravo/graphs/getSettings',
@@ -140,7 +144,6 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			$('#graphSetBtnMonth' + c).attr('data-tileno', c);
 		}
 	});
-	$
 }
 
 function drawBarChart(tileNo, timeScale){
@@ -153,7 +156,6 @@ function drawBarChart(tileNo, timeScale){
 	}else if(timeScale == "MONTH"){
 		src = dataForDimpleMonth;
 	}
-	
 	
 	//Get id and append SVG
 	var chartId = "#chart" + tileNo;
@@ -177,7 +179,6 @@ function drawBarChart(tileNo, timeScale){
 	];
 
 	barChart.draw();
-	//myAxis.gridlineShapes.selectAll().attr("stroke", "#FFFFFF");
 }
 
 //LINEGRAPH------------------------------------------------------------------------------------------->>
@@ -204,6 +205,7 @@ function drawLineGraph(tileNo,timeScale){
 	}else if(timeScale == "MONTH"){
 		srcLine = dataForDimpleMonth;
 	}
+
 		
 	var LinechartId = "#chart" + tileNo;
 	var svg1 = dimple.newSvg(LinechartId, "100%", "57%");
