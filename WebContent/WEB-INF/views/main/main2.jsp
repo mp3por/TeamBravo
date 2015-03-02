@@ -89,13 +89,10 @@
 							<div class="col-md-8">
 
 								<label class="radio" for="radios-0"> <input type="radio" name="type" id="radios-0" value="0" checked="checked"> Maps
-								</label> 
-								<label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
-								</label> 
-								<label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
-								</label> 
-								<label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
-								</label> 
+								</label> <label class="radio" for="radios-1"> <input type="radio" name="type" id="radios-1" value="1"> Graphs
+								</label> <label class="radio" for="radios-2"> <input type="radio" name="type" id="radios-2" value="2"> Tweet Wall
+								</label> <label class="radio" for="radios-3"> <input type="radio" name="type" id="radios-3" value="3"> Stastistics
+								</label>
 							</div>
 						</div>
 
@@ -120,6 +117,26 @@
 <footer> footer </footer>
 
 <script type="text/javascript">
+	$('#add_more_form').on('submit', function(e) { // use on if jQuery 1.7+
+		console.log("submit");
+		e.preventDefault(); // prevent form from submitting
+		var data = $("#add_more_form").serializeArray();
+		console.log(data[0].value);
+		var toAdd = data[0].value;
+		// debugger;
+		if (tile_template == null) {
+			$.ajax({
+				url : '/TeamBravo/main/tile_template',
+				success : function(data) {
+					tile_template = data;
+					addTile(toAdd);
+				}
+			});
+		} else {
+			addTile(toAdd);
+		}
+	});
+	
 	function submitTweetwallSettings(deb) {
 		console.log(deb);
 		var index = deb.getAttribute('index');
@@ -210,76 +227,7 @@
 	// 		$('#settings' + index).html
 	// 	}
 
-	function getMaps(container_id, index) {
-		console.log("getting maps: " + container_id);
-		$.ajax({
-			url : '/TeamBravo/maps/test3',
-			success : function(data) {
-				var longitudes = data['longitudes'];
-				var latitudes = data['latitudes'];
-				var tweets = data.text;
-				var needed = data.needed;
-				var users = data.user;
-				var time = data.time;
-
-				var tweets_info = {
-					"users" : users,
-					"time" : time,
-					"tweets" : tweets,
-					"longitudes" : longitudes,
-					"latitudes" : latitudes
-				}
-				initMaps(container_id, index, needed, tweets_info);
-			}
-		});
-		$.ajax({
-			url : '/TeamBravo/maps/maps/getSettings',
-			success : function(data) {
-				//console.log(data);
-				$('#settings' + index).html(data);
-				$('#settings_template_form').attr('tile', index);
-				$('#settings_template_form')
-						.attr('id', 'settings_form' + index);
-				$('#settings_button_template').attr('id',
-						'settings_button' + index);
-				$('#settings_button' + index).attr('tile', index);
-				$('#settings_form' + index).submit(function(e) {
-					e.preventDefault();
-					var index = $(this).attr('tile');
-					var data = $(this).serializeArray();
-					$('#tooltip_time' + index).hide();
-					$('#tooltip_text' + index).hide();
-					$('#tooltip_user' + index).hide();
-
-					for (var i = 0; i < data.length; i++) {
-						var p = data[i]["value"];
-						if (p == "text") {
-							$('#tooltip_text' + index).show();
-						} else if (p == "user") {
-							$('#tooltip_user' + index).show();
-						} else if (p == "time") {
-							$('#tooltip_time' + index).show();
-						}
-					}
-
-					//$('#settings_button'+index).click();
-				});
-			}
-		});
-	}
-
-	function initMaps(container_id, index, needed, tweets_info) {
-
-		//debugger;
-		console.log("init maps");
-		$('#' + container_id).append(needed);
-
-		$('#added_map_container').attr('id', 'map_container' + index);
-		$('#added_map_div').attr('id', 'map' + index);
-
-		google.maps.event.addDomListener(window, 'load', initialize('map'
-				+ index, index, tweets_info));
-	}
+	
 
 	function initWall(container_id, data, index) {
 

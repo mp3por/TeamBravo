@@ -28,27 +28,9 @@ $(document).ready(function() {
 
 var tile_template = null;
 var row_index = 0;
-var current_num_of_tiles = 0;
+var num_of_tiles_added = 0;
 
-$('#add_more_form').on('submit', function(e) { // use on if jQuery 1.7+
-	console.log("submit");
-	e.preventDefault(); // prevent form from submitting
-	var data = $("#add_more_form").serializeArray();
-	console.log(data[0].value);
-	var toAdd = data[0].value;
-	// debugger;
-	if (tile_template == null) {
-		$.ajax({
-			url : '/TeamBravo/main/tile_template',
-			success : function(data) {
-				tile_template = data;
-				addTile(toAdd);
-			}
-		});
-	} else {
-		addTile(toAdd);
-	}
-});
+
 
 function settingsButtonClick(clicked) {
 	// debugger;
@@ -76,9 +58,9 @@ function addTile(toAdd) {
 		// debugger;
 
 		console.log("addTile:" + toAdd);
-		console.log("curr:" + current_num_of_tiles);
+		console.log("curr:" + num_of_tiles_added);
 		
-		var c = current_num_of_tiles;
+		var c = num_of_tiles_added;
 		console.log("row_index: " + row_index);
 		var row = $('#row' + row_index);
 		var children = row.children();
@@ -109,7 +91,7 @@ function addTile(toAdd) {
 			getStastics("tile_content" + c, c);
 			break;
 		}
-		current_num_of_tiles += 1;
+		num_of_tiles_added += 1;
 	} else {
 		alert("Something is wrong! toAdd: " + toAdd + ", tile_template: "
 				+ tile_template);

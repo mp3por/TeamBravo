@@ -143,3 +143,74 @@ function clearClusters(e) {
 	e.stopPropagation();
 	markerClusterer.clearMarkers();
 }
+
+function getMaps(container_id, index) {
+	console.log("getting maps: " + container_id);
+	$.ajax({
+		url : '/TeamBravo/maps/test3',
+		success : function(data) {
+			var longitudes = data['longitudes'];
+			var latitudes = data['latitudes'];
+			var tweets = data.text;
+			var needed = data.needed;
+			var users = data.user;
+			var time = data.time;
+
+			var tweets_info = {
+				"users" : users,
+				"time" : time,
+				"tweets" : tweets,
+				"longitudes" : longitudes,
+				"latitudes" : latitudes
+			}
+			initMaps(container_id, index, needed, tweets_info);
+		}
+	});
+	$.ajax({
+		url : '/TeamBravo/maps/maps/getSettings',
+		success : function(data) {
+			//console.log(data);
+			$('#settings' + index).html(data);
+			$('#settings_template_form').attr('tile', index);
+			$('#settings_template_form')
+					.attr('id', 'settings_form' + index);
+			$('#settings_button_template').attr('id',
+					'settings_button' + index);
+			$('#settings_button' + index).attr('tile', index);
+			$('#settings_form' + index).submit(function(e) {
+				e.preventDefault();
+				var index = $(this).attr('tile');
+				var data = $(this).serializeArray();
+				$('#tooltip_time' + index).hide();
+				$('#tooltip_text' + index).hide();
+				$('#tooltip_user' + index).hide();
+
+				for (var i = 0; i < data.length; i++) {
+					var p = data[i]["value"];
+					if (p == "text") {
+						$('#tooltip_text' + index).show();
+					} else if (p == "user") {
+						$('#tooltip_user' + index).show();
+					} else if (p == "time") {
+						$('#tooltip_time' + index).show();
+					}
+				}
+
+				//$('#settings_button'+index).click();
+			});
+		}
+	});
+}
+
+function initMaps(container_id, index, needed, tweets_info) {
+
+	//debugger;
+	console.log("init maps");
+	$('#' + container_id).append(needed);
+
+	$('#added_map_container').attr('id', 'map_container' + index);
+	$('#added_map_div').attr('id', 'map' + index);
+
+	google.maps.event.addDomListener(window, 'load', initialize('map'
+			+ index, index, tweets_info));
+}
