@@ -77,7 +77,7 @@
 
 	<div class="container-fluid">
 
-		<div id="row0" class="row"></div>
+		<div id="row0" class="row BIG_ROW" row="0"></div>
 
 		<div class="row" id="last_row">
 			<div class="col-md-12">
