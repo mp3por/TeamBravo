@@ -63,10 +63,10 @@ var styles = [ [ {
 
 var markerClusterers = [];
 var maps = [];
-var infowindow = new google.maps.InfoWindow({
-	content : "what ?",
-	maxWidth : 250
-});
+//var infowindow = new google.maps.InfoWindow({
+//	content : "what ?",
+//	maxWidth : 250
+//});
 
 var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
 		+ 'chco=FFFFFF,008CFF,000000&ext=.png';
@@ -105,7 +105,10 @@ function refreshMap(tweets_info, index, map) {
 			map : map,
 			tweet : tooltip_template
 		});
-		
+		var infowindow = new google.maps.InfoWindow({
+			content : "what ?",
+			maxWidth : 250
+		});
 		google.maps.event.addListener(marker, 'click', function(e) {
 			infowindow.setContent(this.tweet);
 			infowindow.open(map, this);
