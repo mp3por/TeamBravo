@@ -250,8 +250,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		foo.next();
 		
 		ArrayList<Tweet> collectionList = new ArrayList<>();
-		while(foo.hasNext())
-			collectionList.add(new Tweet(foo.next().toMap()));			
+		while(foo.hasNext()){ 
+			collectionList.add(new Tweet(foo.next().toString(), foo.curr().toMap()));
+		}
 		
 		ArrayList<Tweet> resultsList = new ArrayList<>();
 		Tweet tweet;

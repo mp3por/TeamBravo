@@ -2,12 +2,9 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/graphs.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/tweets.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/styles.css" />"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/tweets.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/maps.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/c3CSS.css" />" rel="stylesheet">
 
@@ -15,27 +12,23 @@
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 
 <!-- maps -->
-<script
-	src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
-<script src="<c:url value="/resources/js/maps/markerclusterer.js" />"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&region=GB"></script>
+<script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
+<script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
 <!-- graphs -->
 <script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script
-	src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
 <script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
 
 
 <!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- bootstrap -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -56,10 +49,16 @@
 		</div>
 		<div id='cssmenu'>
 			<ul id='naviMenu'>
-				<li class='active'><a href='http://localhost:8080/TeamBravo/main/home'>
+				<li class='active'>
+					<a href='#'><span>Results Page</span></a>
+				</li>
+				<li><a href='http://localhost:8080/TeamBravo/main/home'>
 								<span>BACK TO MAIN PAGE</span></a></li>
+				
 			</ul>
+			<div id="search"></div>
 		</div>
+		
 	</header>
 	<!-- -------------------------------------------------------------- -->
 
@@ -100,6 +99,7 @@
 			addTile("1");
 			addTile("2");
 			addTile("3");
+			getSearchBox();
 		}
 	});
 
@@ -196,28 +196,100 @@
 	}
 
 	function getMaps(container_id, index) {
-		var img = document.createElement("img");
-		img.src = 
-			"https://dl-web.dropbox.com/get/fake_map.png?_subject_uid=96006775&w=AADfkGiai_-39KpvfdLdpfjNETeeyFtMG06rCWThgEeLoQ";
-		
-		img.style.height = '450px';
-	    img.style.width = '610px';
-		
-		var src = document.getElementById("tile0");
-		src.appendChild(img);
+		console.log("getting maps: " + container_id);
+		$.ajax({
+			url : '/TeamBravo/search/terrier/maps/{query}',
+			success : function(data) {
+				var longitudes = data['longitudes'];
+				var latitudes = data['latitudes'];
+				var tweets = data.text;
+				var needed = data.needed;
+				var users = data.user;
+				var time = data.time;
+
+				var tweets_info = {
+					"users" : users,
+					"time" : time,
+					"tweets" : tweets,
+					"longitudes" : longitudes,
+					"latitudes" : latitudes
+				}
+				initMaps(container_id, index, needed, tweets_info);
+			}
+		});
+		$.ajax({
+			url : '/TeamBravo/maps/maps/getSettings',
+			success : function(data) {
+				//console.log(data);
+				$('#settings' + index).html(data);
+				$('#settings_template_form').attr('tile', index);
+				$('#settings_template_form')
+						.attr('id', 'settings_form' + index);
+				$('#settings_button_template').attr('id',
+						'settings_button' + index);
+				$('#settings_button' + index).attr('tile', index);
+				$('#settings_form' + index).submit(function(e) {
+					e.preventDefault();
+					var index = $(this).attr('tile');
+					var data = $(this).serializeArray();
+					$('#tooltip_time' + index).hide();
+					$('#tooltip_text' + index).hide();
+					$('#tooltip_user' + index).hide();
+
+					for (var i = 0; i < data.length; i++) {
+						var p = data[i]["value"];
+						if (p == "text") {
+							$('#tooltip_text' + index).show();
+						} else if (p == "user"){
+							$('#tooltip_user'+index).show();
+						} else if (p == "time"){
+							$('#tooltip_time'+index).show();
+						}
+					}
+
+					//$('#settings_button'+index).click();
+				});
+			}
+		});
+	}
+
+	function initMaps(container_id, index, needed, tweets_info) {
+		//debugger;
+		console.log("init maps");
+		$('#' + container_id).append(needed);
+
+		$('#added_map_container').attr('id', 'map_container' + index);
+		$('#added_map_div').attr('id', 'map' + index);
+
+		google.maps.event.addDomListener(window, 'load', initialize('map'
+				+ index, index, tweets_info));
 	}
 		
 	function getTweetwall(container_id, index) {
-		var img = document.createElement("img");
-		img.src = 
-			"https://dl-web.dropbox.com/get/fake_tweetwall.png?_subject_uid=96006775&w=AAApjl53-8X1SK9x-1kDdBDe_VRil3oMN56aCsnbUUyUvQ";
-		
-		img.style.height = '450px';
-	    img.style.width = '610px';
-		
-		var src = document.getElementById("tile2");
-		src.appendChild(img);
-		
+		$.ajax({
+			url : '/TeamBravo/search/terrier/tweetwall/${query}',
+			success : function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content"+index, data, index);
+			}
+		});		
+	}
+	
+	function initWall(container_id, data, index) {
+
+		$('#tile_content' + index).append(data);
+		console.log("init wall");
+
+	}
+	
+	function getSearchBox() {
+		$.ajax({
+			url : '/TeamBravo/search/searchBox',
+			success : function(data) {
+				$("#search").html(data);
+			}
+		});
 	}
 
 	function fixTemplate(c) {

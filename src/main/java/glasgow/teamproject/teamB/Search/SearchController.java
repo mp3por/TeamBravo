@@ -1,29 +1,21 @@
 package glasgow.teamproject.teamB.Search;
 
-//import glasgow.teamproject.teamB.Graphs.GraphsController;
-//import glasgow.teamproject.teamB.Maps.MapsController;
-import glasgow.teamproject.teamB.Counter.CounterController;
-import glasgow.teamproject.teamB.Graphs.GraphsController;
-import glasgow.teamproject.teamB.Maps.MapsController;
 import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
-import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
-//import glasgow.teamproject.teamB.TwitterStreaming.TweetController;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
-
-
-
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -81,6 +73,23 @@ public class SearchController {
 		modelandview.addObject("numberOfTweets", dao.getResultsList().size());
 		modelandview.addObject("query", query);		
 		return modelandview;
+	}
+	
+	@RequestMapping("/terrier/tweetwall/{query}")
+	public ModelAndView tweetWall(@PathVariable("query") String query){
+//		dao.runQuery("normal", query);
+		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
+		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+		modelandview.addObject("query", query);
+		modelandview.addObject("tweets", tweets);
+		return modelandview;
+	}
+	
+	@RequestMapping("/terrier/maps/{query}")
+	@ResponseBody
+	public Map<String, ArrayList<String>> maps(@PathVariable("query") String query) throws FileNotFoundException, UnsupportedEncodingException{
+//		dao.runQuery("normal", query);
+		return dao.getDataForMaps();
 	}
 	
 	

@@ -68,7 +68,7 @@ public class TweetsRetriever {
 		ArrayList<HashMap<String,Object>> results = new ArrayList<>(); 
 		Map<String, Object> currentTweet;
 		for (int i = 0; i < this.resultsList.size(); i++){
-			currentTweet = this.resultsList.get(i).getTweet();
+			currentTweet = this.resultsList.get(i).getTweetMap();
 			HashMap<String, Object> tweet = new HashMap<>();
 			for (String key: currentTweet.keySet()) {
 				if (ProjectProperties.defaultNE.contains(key)) {
@@ -105,8 +105,8 @@ public class TweetsRetriever {
 		double[] coordinate = new double[2];
 //		Map<String, Object> map = tweet.getTweet();
 //		System.err.println(map);
-		if (tweet.getTweet().get("coordinates") != null){
-			String pairString = tweet.getTweet().get("coordinates").toString();
+		if (tweet.getTweetMap().get("coordinates") != null){
+			String pairString = tweet.getTweetMap().get("coordinates").toString();
 //			System.err.println(pairString);
 		
 			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
