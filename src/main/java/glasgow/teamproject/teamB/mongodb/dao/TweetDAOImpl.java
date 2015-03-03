@@ -68,7 +68,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		dbCollection.insert(ob);// stores the JSON
 
 		// Simple store as String
-		// mongoOps.insert(tweet, collectionName + "STRING"); // stores the
+		mongoOps.insert(tweet, "new_tweets"); // stores the
 		// tweet as string
 
 		System.out.println("SAVED in DB: " + tweet);

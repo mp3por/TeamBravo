@@ -47,7 +47,7 @@ public class StreamReaderService extends Observable {
 		serv = this;
 		System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
-		//readTwitterFeed();
+		readTwitterFeed();
 		System.out.println("\n\n\n");
 	}
 
@@ -59,6 +59,7 @@ public class StreamReaderService extends Observable {
 	}
 
 	public void readTwitterFeed() throws IOException {
+		System.out.println("OMG");
 		stream = this.twitterStreamBuilder.getStream();
 		
 		

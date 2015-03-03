@@ -41,11 +41,12 @@ public class NamedEntityParser implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("NamedEntityParse accept:" + twitie.accept());
 		if (twitie.accept()) {
 //			System.out.println("NamedEntity1: " + arg);
 			String rawString = (String) arg;
 			HashMap<String, ArrayList<String>> NEs = twitie.getNamedEntites(rawString);
-//			System.out.println("porno");
+			System.out.println("NamedEntityParse NEs:" + NEs.isEmpty());
 			if (NEs != null && !NEs.isEmpty()) {
 				StringBuilder sb = new StringBuilder(rawString);
 				sb.setLength(Math.max(sb.length() - 1, 0));
@@ -55,8 +56,7 @@ public class NamedEntityParser implements Observer {
 				}
 				sb.append("}");
 				rawString = sb.toString();
-
-//				System.out.println("porno2");
+				System.out.println("NamedEntityParser before save");
 				DB.addTweet(rawString, ProjectProperties.TWEET_COLLECTION);
 			}
 			//DB.addNamedEntitiesById(tweet.getString("id_str"), ProjectProperties.TWEET_COLLECTION, namedEntites);
