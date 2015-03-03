@@ -31,6 +31,18 @@ function submitTweetwallSettings (deb) {
 		});
 	}
 	
+	function makeTweetTimeLarger(index, inc) {
+		var s = index.getAttribute("id");
+		var parts = s.split("_");
+		var i = parts[parts.length-1];
+		$('.tweetwall_h4_'+i).each( function () {
+			 var size = parseFloat($(this).css("font-size"));
+
+			$(this).css('font-size', size+size*0.25*inc+"px");
+		});
+	}
+
+	
 	function makeAvatarLarger(index, inc) {
 		var s = index.getAttribute("id");
 		var parts = s.split("_");
@@ -74,9 +86,9 @@ function submitTweetwallSettings (deb) {
 
 		$('#settings'+index).html(
 					'<h4>Number of tweets to show:</h4>'+
-					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="25" name="demo3_22">'+
+					'<input id="tweetwallTweetNumber" class="intSpinner" type="text" value="10" name="demo3_22">'+
 					'<script>$("input[name=demo3_22]").TouchSpin({'+
-						'initval:40,min:1,max:100}'+
+						'min:1,max:100}'+
 						')'+';'+' </sc'+'ript>'+
 					//end of date & time picker	
 					//date & time picker:
@@ -94,10 +106,16 @@ function submitTweetwallSettings (deb) {
 					//submitTweetwallSettings should not be used in your component
 					'<button type="button" onclick="submitTweetwallSettings(this);" index="added_Submit_index" '+
 					'id="added_submitTweetwallSettings" class="btn btn-default added_submitTweetwallSettings">Submit settings</button><br/><br/>'+
-					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make User ID smaller</button>'+
-					'<button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User ID larger</button><br/>'+
+					
 					'<button type="button" onclick="makeAvatarLarger(this, -1);" index="added_smaller_avatar_index" id="added_smaller_avatar_index" class="btn btn-default added_smaller_avatar_index "><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make User Avatar smaller</button>'+
 					'<button type="button"  onclick="makeAvatarLarger(this, 1);" index="added_larger_avatar_index" id="added_larger_avatar_index" class="btn btn-default added_larger_avatar_index"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User Avatar larger</button><br/>'+
+
+					'<button type="button" onclick="makeUserIDLarger(this, -1);" index="added_smaller_index" id="added_makeUserIDSmaller" class="btn btn-default added_makeUserIDSmaller"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make User ID smaller</button>'+
+					'<button type="button" onclick="makeUserIDLarger(this, 1);" index="added_larger_index" id="added_makeUserIDLarger" class="btn btn-default added_makeUserIDLarger"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make User ID larger</button><br/>'+
+					
+					'<button type="button" onclick="makeTweetTimeLarger(this, -1);" index="added_makeTweetTimeSmaller" id="added_makeTweetTimeSmaller" class="btn btn-default added_makeTweetTimeSmaller"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make Tweet time smaller</button>'+
+					'<button type="button" onclick="makeTweetTimeLarger(this, 1);" index="added_makeTweetTimeLarger" id="added_makeTweetTimeLarger" class="btn btn-default added_makeTweetTimeLarger"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Make Tweet time larger</button><br/>'+
+					
 					'<button type="button" onclick="makeTweetLarger(this, -1);" index="added_smaller_tweet" id="added_smaller_tweet" class="btn btn-default added_smaller_tweet"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Make Tweet smaller</button>'+
 					'<button type="button"  onclick="makeTweetLarger(this, 1);" index="added_larger_tweet" id="added_larger_tweet" class="btn btn-default added_larger_tweet"><span class="glyphicon glyphicon-plus"  aria-hidden="true"></span> Make Tweet larger</button>'								
 		);
@@ -131,6 +149,14 @@ function submitTweetwallSettings (deb) {
 		});
 		$('#added_makeUserIDSmaller').each( function () {
 			$(this).attr("id", "makeUserIDSmaller_"+index);
+		});
+		
+		$('#added_makeTweetTimeLarger').each( function () {
+			$(this).attr("id", "makeTweetTimeLarger_"+index);
+		});
+		
+		$('#added_makeTweetTimeSmaller').each( function () {
+			$(this).attr("id", "makeTweetTimeSmaller_"+index);
 		});
 		
 		$('#tweetwallTweetNumber').attr("id", "tweetwallTweetNumber_"+index);
