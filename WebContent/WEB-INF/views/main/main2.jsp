@@ -165,12 +165,20 @@
 	function fixDatePickers (index) {
         $(function () {
             $('#datetimepicker_from_'+index).datetimepicker({
+            	format: 'ddd MMM DD HH:mm:ss YYYY',
             	sideBySide: true,
-            	format: 'ddd MMM DD HH:mm:ss YYYY'
+            	widgetPositioning: {
+            		horizontal: 'left',
+            		vertical: 'auto'
+            	}
             });
             $('#datetimepicker_to_'+index).datetimepicker({
+            	format: 'ddd MMM DD HH:mm:ss YYYY',
             	sideBySide: true,
-            	format: 'ddd MMM DD HH:mm:ss YYYY'
+                widgetPositioning: {
+                		horizontal: 'left',
+                		vertical: 'auto'
+                	}
             });
             $("#datetimepicker_from_"+index).on("dp.change",function (e) {
                 $('#datetimepicker_to_'+index).data("DateTimePicker").minDate(e.date);
