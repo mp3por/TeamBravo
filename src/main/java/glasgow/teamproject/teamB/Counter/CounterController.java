@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Counter;
 
+import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
@@ -27,7 +28,7 @@ public class CounterController {
 	public ModelAndView forTest() {
 		ModelAndView model = new ModelAndView("statistics");
 
-		DBHelper.dailyMapReduce(new Date());
+		DBHelper.dailyMapReduce(new Date(),ProjectProperties.TWEET_COLLECTION);
 
 		// TODO
 		Calendar stCal = Calendar.getInstance();

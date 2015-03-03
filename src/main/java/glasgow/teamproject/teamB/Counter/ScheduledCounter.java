@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Counter;
 
+import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
@@ -19,7 +20,7 @@ public class ScheduledCounter {
 	@Scheduled(cron="0 0/30 * * * ?")
     public void dailyMapReduce()
     {
-		tweetSaver.dailyMapReduce(new Date());
+		tweetSaver.dailyMapReduce(new Date(),ProjectProperties.TWEET_COLLECTION);
     }
 	
 	@Scheduled(cron="0 55 23 * * ?")
