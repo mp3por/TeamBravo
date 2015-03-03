@@ -54,7 +54,7 @@ public class NamedEntityParser implements Observer {
 				}
 				sb.append("}");
 				rawString = sb.toString();
-
+				DB.addTweet(rawString, "party_tweets");
 				DB.addTweet(rawString, ProjectProperties.TWEET_COLLECTION);
 			}
 			//DB.addNamedEntitiesById(tweet.getString("id_str"), ProjectProperties.TWEET_COLLECTION, namedEntites);

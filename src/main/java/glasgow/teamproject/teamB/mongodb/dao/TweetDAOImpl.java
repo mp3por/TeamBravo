@@ -72,7 +72,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		// mongoOps.insert(tweet, collectionName + "STRING"); // stores the
 		// tweet as string
 
-		System.out.println("SAVED in DB: " + tweet);
+		System.out.println("SAVED in collection(" + collectionName+ "): " + tweet);
 	}
 
 	@Override
@@ -353,11 +353,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 * @param date
 	 *            : tweet's created_at date
 	 */
-	public void dailyMapReduce(Date date) {
+	public void dailyMapReduce(Date date,String collectionName) {
 
 		DBCollection tweets = mongoOps
-				.getCollection(ProjectProperties.TWEET_COLLECTION);
-
+				.getCollection(collectionName);
+		System.out.println("Collection (tweets): " + tweets.count());
 		// convert date to twitter created_at format
 		String twitterFormatDateStr = new SimpleDateFormat("EEE MMM dd")
 				.format(date);
@@ -365,14 +365,37 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		BasicDBObject query = new BasicDBObject();
 		query.put("created_at",
 				java.util.regex.Pattern.compile(twitterFormatDateStr + ".*"));
+		
+		
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		
+		System.out.println("date: " + today.getTime().toString());
+		long today_beginning_timestamp = today.getTimeInMillis();
+		
+		today.set(Calendar.HOUR_OF_DAY, 23);
+		today.set(Calendar.MINUTE, 59);
+		today.set(Calendar.SECOND, 59);
 
+		System.out.println("date: " + today.getTime().toString());
+		long today_end_timestamp = today.getTimeInMillis();
+		
+		DBObject q = QueryBuilder.start("timestamp_ms").greaterThanEquals(Long.toString(today_beginning_timestamp)).lessThanEquals(Long.toString(today_end_timestamp)).get();
+		System.out.println("Query: " + q);
 		// create temporary collection for map-reduce
 		DBCollection temp = mongoOps.getCollection("temp");
-		DBCursor c = tweets.find(query);
+		System.out.println("Collection (temp): " + temp.count() );
+		DBCursor c = tweets.find(q);
+		System.out.println("Cursor :" + c.count());
+		//c.next();
+		System.out.println("Cursor :" + c.hasNext());
 		while (c.hasNext()) {
 			temp.insert(c.next());
 		}
-
+		
+		System.out.println("Collection (temp): " + temp.count());
 		// map function
 		String map = "function() {";
 		int i = 0;
@@ -419,9 +442,14 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 		// run map-reduce on the temporary collection, the output is in the file
 		// named outCollection
+		System.out.println("temp:"+temp.getName());
+		System.out.println("map:"+map);
+		System.out.println("reduce:"+reduce);
+		System.out.println("daily_collect_name:"+DAILY_COLLECT_NAME);
 		MapReduceCommand cmd = new MapReduceCommand(temp, map, reduce,
 				DAILY_COLLECT_NAME, MapReduceCommand.OutputType.MERGE, null);
 		temp.mapReduce(cmd);
+		System.out.println("nice");
 
 		// delete the temporary collection
 		temp.drop();
