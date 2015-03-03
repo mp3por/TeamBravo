@@ -47,7 +47,7 @@ public class StreamReaderService extends Observable {
 		serv = this;
 		System.out.println("\n\n\n");
 		System.out.println("RUNNIIINNGGGGG");
-		//readTwitterFeed();
+		readTwitterFeed();
 		System.out.println("\n\n\n");
 	}
 

@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<div id="template_settings_div" class="settings">
-			<span class="glyphicon glyphicon-ok"></span>
+		<!--	<span class="glyphicon glyphicon-ok"></span> -->
 		</div>
 		<div id="template_content"></div>
 	</div>

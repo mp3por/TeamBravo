@@ -10,12 +10,15 @@ var dataForPieMonth;
 var dataForCloudWeek;
 var dataForCloudMonth;
 
+var dataForSearchWeek;
+var dataForSearchMonth;
+
 //Default Colours
-var colour1 = new dimple.color("#134C7C");
-var colour2 = new dimple.color("#C01E11");
-var colour3 = new dimple.color("#92B710");
-var colour4 = new dimple.color("#FFE758");
-var colour5 = new dimple.color("#A002F1");
+var colour1 = new dimple.color("#AA3939"); //Red
+var colour2 = new dimple.color("#AA9739"); //Yellow
+var colour3 = new dimple.color("#403075"); //Blue
+var colour4 = new dimple.color("#2D882D"); //Green
+var colour5 = new dimple.color("#7C2969"); //Purple
 colour1.opacity = 1;
 colour2.opacity = 1;
 colour3.opacity = 1;
@@ -110,6 +113,25 @@ function initCloud(timeScale){
 	}
 }
 
+function initSearchGraphs(searchTerm){
+	
+	$.ajax({
+		async: false,
+		url : '/TeamBravo/graphs/search/WEEK/' + searchTerm,
+		success : function(data) {
+			dataForSearchWeek = data;
+		}
+	});
+	
+	$.ajax({
+		async: false,
+		url :  '/TeamBravo/graphs/search/MONTH/' + searchTerm,
+		success : function(data) {
+			dataForSearchMonth = data;
+		}
+	});
+}
+
 //Show chart methods--------------------------------------------------------------------------------------------->>
 
 //BARCHART------------------------------------------------------------------------------------------->>
@@ -122,7 +144,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			//reSet component's class
 			var chartClass = $('#chart' + tileNo).attr('class');
 			$('#chart' + tileNo).attr('class','bar' + chartClass);
-			drawBarChart(tileNo, "WEEK");
+			drawBarChart(tileNo, "WEEK", "MAIN", null);
 		}
 	});
 
@@ -131,7 +153,6 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 		url : '/TeamBravo/graphs/getSettings',
 		success : function(data) {
 			$('#settings' + tileNo).append(data);
-			debugger;
 			//Graph settings form
 			var c = tileNo;
 			$('#settingsForm').attr('id', 'settingsForm' + c);
@@ -146,15 +167,21 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 	});
 }
 
-function drawBarChart(tileNo, timeScale){
+function drawBarChart(tileNo, timeScale, page, searchTerm){
 	
-	initDimple(timeScale);
-	//Set data source week or month
 	var src;
-	if(timeScale == "WEEK"){
-		src = dataForDimpleWeek;
-	}else if(timeScale == "MONTH"){
-		src = dataForDimpleMonth;
+	
+	if(page == "MAIN"){
+		initDimple(timeScale);
+		//Set data source week or month
+		if(timeScale == "WEEK"){
+			src = dataForDimpleWeek;
+		}else if(timeScale == "MONTH"){
+			src = dataForDimpleMonth;
+		}
+	}else if(page == "SEARCH"){
+		initSearchGraphs(searchTerm);
+		src = dataForSearchWeek;
 	}
 	
 	//Get id and append SVG
@@ -171,11 +198,14 @@ function drawBarChart(tileNo, timeScale){
 	barChart.addSeries("Topic", dimple.plot.bar);
 	
 	var myLegend = barChart.addLegend("10%", "5%", "100%", "10%", "left");
-	myLegend.fontSize = "14px"
+	myLegend.paddin
+	myLegend.fontSize = "12px"
 	barChart.defaultColors = [
 		colour1,
 		colour2,
-		colour3
+		colour3,
+		colour4,
+		colour5
 	];
 
 	barChart.draw();
@@ -196,14 +226,21 @@ function showLineGraph(tileNo){
 	});
 }
 
-function drawLineGraph(tileNo,timeScale){
+function drawLineGraph(tileNo,timeScale, page, searchTerm){
 	
-	initDimple(timeScale);
 	var srcLine;
-	if(timeScale == "WEEK"){
-		srcLine = dataForDimpleWeek;
-	}else if(timeScale == "MONTH"){
-		srcLine = dataForDimpleMonth;
+	
+	if(page == "MAIN"){
+		initDimple(timeScale);
+		//Set data source week or month
+		if(timeScale == "WEEK"){
+			srcLine = dataForDimpleWeek;
+		}else if(timeScale == "MONTH"){
+			srcLine = dataForDimpleMonth;
+		}
+	}else if(page == "SEARCH"){
+		initSearchGraphs(searchTerm);
+		srcLine = dataForSearchMonth;
 	}
 
 		
@@ -224,9 +261,11 @@ function drawLineGraph(tileNo,timeScale){
 	var legend = myChart.addLegend("10%", "5%", "100%", "10%", "left");
 	legend.fontSize = "14px"
 	myChart.defaultColors = [
-	                  		colour1,
-	                  		colour2,
-	                  		colour3
+	                 		colour1,
+	                		colour2,
+	                		colour3,
+	                		colour4,
+	                		colour5
 	                  	];
 		
 	myChart.draw();
@@ -260,10 +299,10 @@ function drawPieChart(tileNo,timeScale){
 	}
 	
 	var pieChartId = "#chart" + tileNo;
-	var svgPie = dimple.newSvg(pieChartId, 550, 320);
+	var svgPie = dimple.newSvg(pieChartId, "100%", "57%"); //550, 320
 	
 	var myChart = new dimple.chart(svgPie, srcPie);
-	myChart.setBounds(1, 30, 500, 250)
+	myChart.setBounds("1%", "10%", "80%", "80%")
 	myChart.addMeasureAxis("p", "Tweets");
 	myChart.addSeries("Topic", dimple.plot.pie);
 	var legend = myChart.addLegend(400, 20, 100, 300, "left");
@@ -335,7 +374,7 @@ function drawWordCloud(tileNo,timeScale){
 	        })
 	        .text(function(d) { return d.Name; })
 			.on("click", function (d, i){
-				window.open("/TeamBravo/topic/specific/", "_blank");
+				window.open("/TeamBravo/search/terrier/" + d.Name);
 			});
 		}
 }
@@ -348,10 +387,10 @@ function reDrawGraph(tileNo, graphType, timeScale){
 	//Draw graph
 	switch(graphType) {
     case "LINEGRAPH":
-    	drawLineGraph(tileNo, timeScale);
+    	drawLineGraph(tileNo, timeScale, "MAIN", null);
         break;
     case "BARCHART":
-    	drawBarChart(tileNo, timeScale);
+    	drawBarChart(tileNo, timeScale, "MAIN", null);
         break;
     case "PIECHART":
     	drawPieChart(tileNo, timeScale);
@@ -361,4 +400,11 @@ function reDrawGraph(tileNo, graphType, timeScale){
         break;
     default:
 	} 	
+}
+
+//GRAPHS FOR SEARCH------------------------------------------------------------------------------------------>>
+function getGraphsForSearch(searchTerm){
+	debugger;
+	drawBarChart(1, null, "SEARCH", searchTerm);
+	drawLineGraph(2, null, "SEARCH", searchTerm);
 }
