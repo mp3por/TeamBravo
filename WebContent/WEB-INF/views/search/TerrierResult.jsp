@@ -16,13 +16,6 @@
 <script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
-<!-- graphs -->
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-
-
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
@@ -49,12 +42,16 @@
 		</div>
 		<div id='cssmenu'>
 			<ul id='naviMenu'>
-				<li class='active'>
-					<a href='#'><span>Results Page</span></a>
+				<li><a href='/TeamBravo/main/home'>
+								<span>Home</span></a>
 				</li>
-				<li><a href='http://localhost:8080/TeamBravo/main/home'>
-								<span>Back to main page</span></a></li>
-				
+				<li><a href='/TeamBravo/search/terrier/${query}'>
+								<span>Results Page</span></a>
+				</li>
+				<li>
+					<a href='/TeamBravo/search/graphs/${query}'>
+								<span>Graphs for ${query}</span></a>
+				</li>		
 			</ul>
 			<div id="search"></div>
 		</div>
@@ -69,7 +66,6 @@
 		<div id="row0" class="row"></div>
 		
 	</div>
-
 	<!-- -------------------------------------------- -->
 
 </body>
@@ -98,8 +94,6 @@
 			getSearchBox();
 			addTile("2");
 			addTile("0");
-			addTile("1");
-			addTile("3");
 		}
 	});
 
@@ -314,9 +308,9 @@
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
-					'<button type="button" onclick="rankedByRetweeted(tile_content2, 2);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
-					'<button type="button" onclick="rankedByFavourited(tile_content2, 2);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
-					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
+					'<button type="button" onclick="rankedByRetweeted(tile_content0, 0);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
+					'<button type="button" onclick="rankedByFavourited(tile_content0, 0);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
 					'<br/><br />');
 		
 		$('#rank_by_retweeted').each( function () {

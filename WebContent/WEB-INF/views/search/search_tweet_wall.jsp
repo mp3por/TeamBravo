@@ -105,9 +105,7 @@
 <div>
 	
 	<div class="col-md-12 col-sm-12 col-xs-12 tweetwall-container">
-	<p>
-		Query: get ${amount} ${query}.  
-	</p>
+	
 	<!-- Loop over the tweets  -->
 	<c:if test="${empty tweets}">
 		<h3>No tweets found for this query.</h3>
@@ -129,6 +127,10 @@
 					<h5 class="added_tweetwall_h4">
 						<b>${fn:substringBefore(tweet.created_at,'+')}</b>
 					</h5>
+					
+					<h6 class="added_tweetwall_h5">
+						<b>Retweeted times: ${tweet.retweet_count}</b> 
+					</h6>
 
 					<div class="addedTweetText" text="${tweet.text}"
 						person="${tweet.Person}" location="${tweet.Location}"

@@ -60,7 +60,6 @@ public class SearchController {
 	
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView searchPage(@PathVariable("query") String query){		
-		
 		dao.runQuery(query);
 		
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);
@@ -131,6 +130,13 @@ public class SearchController {
 	public Map<String, ArrayList<String>> maps(@PathVariable("query") String query) throws FileNotFoundException, UnsupportedEncodingException{
 //		dao.runQuery("normal", query);
 		return dao.getDataForMaps();
+	}
+	
+	@RequestMapping("/graphs/{query}")
+	public ModelAndView testGraphs(@PathVariable("query") String query){
+		ModelAndView mv = new ModelAndView("search_graphs");
+		mv.addObject("query", query);
+		return mv;
 	}
 	
 	

@@ -114,7 +114,11 @@ public class SearchDAOImpl {
 	
 	public void rankedByPostedTime(){
 //		System.err.println("Sorting by posted time");
-		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
+		try{
+		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);}
+		catch(IllegalArgumentException e){
+			System.err.println("Exception to be handled.");
+		}
 	}
 	
 	public void rankByFavourited(){
