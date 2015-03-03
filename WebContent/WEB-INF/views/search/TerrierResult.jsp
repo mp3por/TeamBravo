@@ -16,13 +16,6 @@
 <script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
-<!-- graphs -->
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-
-
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
@@ -49,12 +42,16 @@
 		</div>
 		<div id='cssmenu'>
 			<ul id='naviMenu'>
-				<li class='active'>
-					<a href='#'><span>Results Page</span></a>
+				<li><a href='/TeamBravo/main/home'>
+								<span>Home</span></a>
 				</li>
-				<li><a href='http://localhost:8080/TeamBravo/main/home'>
-								<span>Back to main page</span></a></li>
-				
+				<li><a href='/TeamBravo/search/terrier/${query}'>
+								<span>Results Page</span></a>
+				</li>
+				<li>
+					<a href='/TeamBravo/search/graphs/${query}'>
+								<span>Graphs for ${query}</span></a>
+				</li>		
 			</ul>
 			<div id="search"></div>
 		</div>
@@ -69,7 +66,6 @@
 		<div id="row0" class="row"></div>
 		
 	</div>
-
 	<!-- -------------------------------------------- -->
 
 </body>
@@ -98,8 +94,6 @@
 			getSearchBox();
 			addTile("2");
 			addTile("0");
-			addTile("1");
-			addTile("3");
 		}
 	});
 
@@ -339,35 +333,6 @@
 			url : '/TeamBravo/search/searchBox',
 			success : function(data) {
 				$("#search").html(data);
-			}
-		});
-	}
-	
-	function settingsButtonClick(clicked) {
-		//debugger;
-		var settings = $('#settings' + clicked.id);
-		var p = $(clicked).attr("opened");
-		if (p == '0') {
-			settings.show();
-			$(clicked).attr("opened", "1");
-		} else {
-			settings.hide();
-			$(clicked).attr("opened", "0");
-		}
-	}
-
-	function fixTemplate(c) {
-		console.log("fixTemplate " + c);
-		$('#template_column_id').attr('id', 'tile' + c);
-		$('#template_title').attr('id', 'tile_title' + c);
-		$('#template_submit_button').attr('id', c);
-		$('#template_settings_div').attr('id', 'settings' + c);
-		$('#template_content').attr('id', 'tile_content' + c);
-	}
-
-</script>
-</html>
-arch").html(data);
 			}
 		});
 	}

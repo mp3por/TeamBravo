@@ -132,5 +132,12 @@ public class SearchController {
 		return dao.getDataForMaps();
 	}
 	
+	@RequestMapping("/graphs/{query}")
+	public ModelAndView testGraphs(@PathVariable("query") String query){
+		ModelAndView mv = new ModelAndView("search_graphs");
+		mv.addObject("query", query);
+		return mv;
+	}
+	
 	
 }
