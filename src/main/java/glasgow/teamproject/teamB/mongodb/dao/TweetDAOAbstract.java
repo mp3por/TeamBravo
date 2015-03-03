@@ -15,9 +15,9 @@ public abstract class TweetDAOAbstract implements Observer, TweetDAO  {
 	@Autowired
 	private StreamReaderService serv;
 	
-	public TweetDAOAbstract(StreamReaderService s) {
-		this.serv = s;
-	}
+//	public TweetDAOAbstract(StreamReaderService s) {
+//		this.serv = s;
+//	}
 
 	@PostConstruct
 	private void setUp() {

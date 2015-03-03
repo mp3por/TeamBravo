@@ -45,10 +45,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 
 	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
-	 public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
-	 super(s);
-	 mongoOps = mongoOps2;
-	 }
+//	 public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
+//	 super(s);
+//	 mongoOps = mongoOps2;
+//	 }
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -69,7 +69,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		dbCollection.insert(ob);// stores the JSON
 
 		// Simple store as String
-		mongoOps.insert(tweet, "new_tweets"); // stores the
+		//mongoOps.insert(tweet, "new_tweets"); // stores the
 		// tweet as string
 
 		System.out.println("SAVED in collection(" + collectionName+ "): " + tweet);
