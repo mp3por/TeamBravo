@@ -336,7 +336,7 @@ function drawWordCloud(tileNo,timeScale){
 	        })
 	        .text(function(d) { return d.Name; })
 			.on("click", function (d, i){
-				window.open("/TeamBravo/topic/specific/", "_blank");
+				window.open("/TeamBravo/search/terrier/" + d.name);
 			});
 		}
 }
