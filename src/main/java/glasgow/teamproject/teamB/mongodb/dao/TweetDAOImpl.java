@@ -2,6 +2,7 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
+import glasgow.teamproject.teamB.Util.StreamReaderService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,10 +45,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 
 	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
-	// public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
-	// super(s);
-	// mongoOps = mongoOps2;
-	// }
+	 public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
+	 super(s);
+	 mongoOps = mongoOps2;
+	 }
 
 	@Override
 	public void update(Observable o, Object arg) {

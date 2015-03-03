@@ -28,11 +28,11 @@ public class NamedEntityParser implements Observer {
 	@Autowired
 	private TwitIE twitie;
 
-//	public NamedEntityParser(StreamReaderService s, TweetDAOAbstract db, TwitIE t) {
-//		this.serv = s;
-//		this.DB = db;
-//		this.twitie = t;
-//	}
+	public NamedEntityParser(StreamReaderService s, TweetDAOAbstract db, TwitIE t) {
+		this.serv = s;
+		this.DB = db;
+		this.twitie = t;
+	}
 
 	@PostConstruct
 	private void setUp() {
@@ -45,7 +45,6 @@ public class NamedEntityParser implements Observer {
 //			System.out.println("NamedEntity1: " + arg);
 			String rawString = (String) arg;
 			HashMap<String, ArrayList<String>> NEs = twitie.getNamedEntites(rawString);
-//			System.out.println("porno");
 			if (NEs != null && !NEs.isEmpty()) {
 				StringBuilder sb = new StringBuilder(rawString);
 				sb.setLength(Math.max(sb.length() - 1, 0));
@@ -56,7 +55,6 @@ public class NamedEntityParser implements Observer {
 				sb.append("}");
 				rawString = sb.toString();
 
-//				System.out.println("porno2");
 				DB.addTweet(rawString, ProjectProperties.TWEET_COLLECTION);
 			}
 			//DB.addNamedEntitiesById(tweet.getString("id_str"), ProjectProperties.TWEET_COLLECTION, namedEntites);

@@ -38,10 +38,10 @@ public class TwitIE {
 		interestedNE.add(s);
 	}
 
-//	public TwitIE() {
-//		// TODO Auto-generated constructor stub
-//		init();
-//	}
+	public TwitIE() {
+		// TODO Auto-generated constructor stub
+		init();
+	}
 
 	@PostConstruct
 	public void init() {
@@ -53,9 +53,9 @@ public class TwitIE {
 			System.out.println("added NE");
 
 			// Only god knows how it works
-			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+			//String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 
-			//String currentDir = "/Users/velin/Documents/Workspaces/3_Year/TP3/";
+			String currentDir = "/Users/velin/Documents/Workspaces/3_Year/TP3/";
 			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
 			System.out.println(currentDir);
 
