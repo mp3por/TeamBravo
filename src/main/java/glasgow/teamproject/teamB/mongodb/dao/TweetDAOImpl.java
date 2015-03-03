@@ -382,24 +382,38 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		System.out.println("date: " + today.getTime().toString());
 		long today_end_timestamp = today.getTimeInMillis();
 		
-		DBObject q = QueryBuilder.start("timestamp_ms").greaterThanEquals(Long.toString(today_beginning_timestamp)).lessThanEquals(Long.toString(today_end_timestamp)).get();
-		System.out.println("Query: " + q);
-		// create temporary collection for map-reduce
+//		DBObject q = QueryBuilder.start("timestamp_ms").greaterThanEquals(Long.toString(today_beginning_timestamp)).lessThanEquals(Long.toString(today_end_timestamp)).get();
+//		System.out.println("Query: " + q);
+//		// create temporary collection for map-reduce
+//		DBCollection temp = mongoOps.getCollection("temp");
+//		System.out.println("Collection (temp): " + temp.count() );
+//		DBCursor c = tweets.find(q);
+//		System.out.println("Cursor :" + c.count());
+//		//c.next();
+//		System.out.println("Cursor :" + c.hasNext());
+//		while (c.hasNext()) {
+//			temp.insert(c.next());
+//		}
+		DBObject q = new BasicDBObject("timestamp_ms", new BasicDBObject("$gte",Long.toString(today_beginning_timestamp)));
+		DBObject match = new BasicDBObject("$match",q);
+		DBObject output = new BasicDBObject("$out","temp");
+
+		// run aggregation
+		List<DBObject> pipeline = Arrays.asList(match, output);
+		AggregationOutput aggregation_output = tweets.aggregate(pipeline);
+		
 		DBCollection temp = mongoOps.getCollection("temp");
-		System.out.println("Collection (temp): " + temp.count() );
-		DBCursor c = tweets.find(q);
-		System.out.println("Cursor :" + c.count());
-		//c.next();
-		System.out.println("Cursor :" + c.hasNext());
-		while (c.hasNext()) {
-			temp.insert(c.next());
-		}
 		
 		System.out.println("Collection (temp): " + temp.count());
 		// map function
 		String map = "function() {";
 		int i = 0;
+		StringBuilder mapFunction = new StringBuilder("function() {");
 		for (Field field : Field.values()) {
+			mapFunction.append("var entity = this."+ field.toString() +";");
+			mapFunction.append("if ( entity ) { entity = entity.toString().toLowerCase().split(\",\");");
+			mapFunction.append("for ( var i = entity.length -1  ; i>=0 ;--i){");
+//			
 			map += "var entity" + i + " = this." + field.toString() + ";"
 					+ "if( entity" + i + " ) {" + "entity" + i + " = entity"
 					+ i + ".toString().toLowerCase()" + ".split(\",\"); "
@@ -407,9 +421,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 					+ ".length - 1; i >= 0; --i) {";
 
 			if (field.toString() == Field.PERSON.toString()) {
+				mapFunction.append("entity[i]=entity[i].replace(/[^a-zA-Z]/g, ' ');");
 				map += "entity" + i + "[i] = entity" + i + "[i]"
 						+ ".replace(/[^a-zA-Z]/g, ' ');";
 			} else if (field.toString() == Field.HASHTAG.toString()) {
+				mapFunction.append("entity[i]=entity[i].replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
 				map += "entity"
 						+ i
 						+ "[i] = entity"
@@ -417,6 +433,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 						+ "[i]"
 						+ ".replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
 			} else if (field.toString() != Field.URL.toString()) {
+				mapFunction.append("entity[i]=entity[i].replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
 				map += "entity"
 						+ i
 						+ "[i] = entity"
@@ -424,7 +441,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 						+ "[i]"
 						+ ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
 			}
-
+			
+			mapFunction.append("if ( entity[i] && entity[i].trim().length > 0 && entity[i] != '[]') { var values = { type: \"" + field.toString() + "\", count: 1 };");
+			mapFunction.append("emit( { id: entity[i].trim(), date: \"" + counterDateFormat.format(date)+ "\"}, values);}}}");
 			map += "if ( entity" + i + "[i] && entity" + i
 					+ "[i].trim().length > 0 && entity" + i + "[i] != '[]') { "
 					+ "var values = { type: \"" + field.toString() + "\", "
@@ -432,7 +451,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 					+ "[i].trim(), date: \"" + counterDateFormat.format(date)
 					+ "\"}, values);" + "}" + "}}";
 		}
+		mapFunction.append("};");
+		//map = mapFunction.toString();
 		map += "};";
+		
+		String map2 = mapFunction.toString();
 
 		// reduce function
 		String reduce = "function(key, values) {"
@@ -446,9 +469,13 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		System.out.println("map:"+map);
 		System.out.println("reduce:"+reduce);
 		System.out.println("daily_collect_name:"+DAILY_COLLECT_NAME);
-		MapReduceCommand cmd = new MapReduceCommand(temp, map, reduce,
-				DAILY_COLLECT_NAME, MapReduceCommand.OutputType.MERGE, null);
+		MapReduceCommand cmd = new MapReduceCommand(temp, map2, reduce,
+				DAILY_COLLECT_NAME+" STRINGBUILDER", MapReduceCommand.OutputType.MERGE, null);
+		
+		MapReduceCommand cmd1 = new MapReduceCommand(temp, map, reduce,
+				DAILY_COLLECT_NAME+" STRING", MapReduceCommand.OutputType.MERGE, null);
 		temp.mapReduce(cmd);
+		temp.mapReduce(cmd1);
 		System.out.println("nice");
 
 		// delete the temporary collection
