@@ -55,7 +55,7 @@ public interface TweetDAO {
 	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays);
 	
 	// For Counting
-	public void dailyMapReduce(Date date);
+	public void dailyMapReduce(Date date,String collectionName);
 	public void mergingMapReduce(TimePeriod timePeriod);
 
 	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,

@@ -38,10 +38,10 @@ public class TwitIE {
 		interestedNE.add(s);
 	}
 
-//	public TwitIE() {
-//		// TODO Auto-generated constructor stub
-//		init();
-//	}
+	public TwitIE() {
+		// TODO Auto-generated constructor stub
+		init();
+	}
 
 	@PostConstruct
 	public void init() {

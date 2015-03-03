@@ -21,7 +21,7 @@ import com.mongodb.MongoClient;
 public class MapReduceTest {
 
 	public static final String DB_NAME = "tweetsTest";
-	public static final String TWEETS_COLLECTION = "tweets";
+	public static final String TWEETS_COLLECTION = "party_tweets";
 	public static final String MONGO_HOST = "localhost";
 	public static final int MONGO_PORT = 27017;
 	
@@ -39,20 +39,31 @@ public class MapReduceTest {
 		boolean work = true;
 		while(work){
 			String j = i.next();
-			if(j.contentEquals("stop-work")){
-				work = false;
-			}else if (j.contentEquals("daily")){
-				doDaily();
-			}else if (j.contentEquals("merge")){
+			int  p = Integer.parseInt(j);
+			switch (p) {
+			case 2:
+				System.out.println("daily party");
+				doDaily(TWEETS_COLLECTION);
+				break;
+			case 3:
+				System.out.println("daily tweets");
+				doDaily(ProjectProperties.TWEET_COLLECTION);
+				break;
+			case 4:
+				System.out.println("merge");
 				doMerging();
+				break;
+
+			default:
+				break;
 			}
 		}
 		
 	}
 	
-	private static void doDaily(){
-		System.out.println("DAILY");
-		tweetSaver.dailyMapReduce(new Date());
+	private static void doDaily(String name){
+		System.out.println("DAILY -> " + name);
+		tweetSaver.dailyMapReduce(new Date(),name);
 	}
 
 	private static void doMerging() {

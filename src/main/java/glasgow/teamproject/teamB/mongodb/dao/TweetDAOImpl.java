@@ -2,6 +2,7 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
+import glasgow.teamproject.teamB.Util.StreamReaderService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,10 +45,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 
 	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
-	// public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
-	// super(s);
-	// mongoOps = mongoOps2;
-	// }
+	 public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
+	 super(s);
+	 mongoOps = mongoOps2;
+	 }
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -71,7 +72,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		mongoOps.insert(tweet, "new_tweets"); // stores the
 		// tweet as string
 
-		System.out.println("SAVED in DB: " + tweet);
+		System.out.println("SAVED in collection(" + collectionName+ "): " + tweet);
 	}
 
 	@Override
@@ -352,63 +353,55 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 * @param date
 	 *            : tweet's created_at date
 	 */
-	public void dailyMapReduce(Date date) {
+	public void dailyMapReduce(Date date,String collectionName) {
 
 		DBCollection tweets = mongoOps
-				.getCollection(ProjectProperties.TWEET_COLLECTION);
+				.getCollection(collectionName);
+		
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		
+		System.out.println("date: " + today.getTime().toString());
+		long today_beginning_timestamp = today.getTimeInMillis();
+		DBObject q = new BasicDBObject("timestamp_ms", new BasicDBObject("$gte",Long.toString(today_beginning_timestamp)));
+		DBObject match = new BasicDBObject("$match",q);
+		DBObject output = new BasicDBObject("$out","temp");
 
-		// convert date to twitter created_at format
-		String twitterFormatDateStr = new SimpleDateFormat("EEE MMM dd")
-				.format(date);
-		// query tweets where created_at LIKE dateStr%
-		BasicDBObject query = new BasicDBObject();
-		query.put("created_at",
-				java.util.regex.Pattern.compile(twitterFormatDateStr + ".*"));
-
-		// create temporary collection for map-reduce
+		// run aggregation
+		List<DBObject> pipeline = Arrays.asList(match, output);
+		AggregationOutput aggregation_output = tweets.aggregate(pipeline);
+		
 		DBCollection temp = mongoOps.getCollection("temp");
-		DBCursor c = tweets.find(query);
-		while (c.hasNext()) {
-			temp.insert(c.next());
-		}
-
+		
+		System.out.println("Collection (temp): " + temp.count());
+		
 		// map function
-		String map = "function() {";
-		int i = 0;
+		StringBuilder mapFunction = new StringBuilder("function() {");
 		for (Field field : Field.values()) {
-			map += "var entity" + i + " = this." + field.toString() + ";"
-					+ "if( entity" + i + " ) {" + "entity" + i + " = entity"
-					+ i + ".toString().toLowerCase()" + ".split(\",\"); "
-					+ "for ( var i = entity" + i
-					+ ".length - 1; i >= 0; --i) {";
+			mapFunction.append("var entity = this."+ field.toString() +";");
+			mapFunction.append("if ( entity ) { entity = entity.toString().toLowerCase().split(\",\");");
+			mapFunction.append("for ( var i = entity.length -1  ; i>=0 ;--i){");
 
 			if (field.toString() == Field.PERSON.toString()) {
-				map += "entity" + i + "[i] = entity" + i + "[i]"
-						+ ".replace(/[^a-zA-Z]/g, ' ');";
-			} else if (field.toString() == Field.HASHTAG.toString()) {
-				map += "entity"
-						+ i
-						+ "[i] = entity"
-						+ i
-						+ "[i]"
-						+ ".replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
-			} else if (field.toString() != Field.URL.toString()) {
-				map += "entity"
-						+ i
-						+ "[i] = entity"
-						+ i
-						+ "[i]"
-						+ ".replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');";
-			}
+				mapFunction.append("entity[i]=entity[i].replace(/[^a-zA-Z]/g, ' ');");
 
-			map += "if ( entity" + i + "[i] && entity" + i
-					+ "[i].trim().length > 0 && entity" + i + "[i] != '[]') { "
-					+ "var values = { type: \"" + field.toString() + "\", "
-					+ "count: 1 };" + "emit( { id: entity" + i
-					+ "[i].trim(), date: \"" + counterDateFormat.format(date)
-					+ "\"}, values);" + "}" + "}}";
+			} else if (field.toString() == Field.HASHTAG.toString()) {
+				mapFunction.append("entity[i]=entity[i].replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
+
+			} else if (field.toString() != Field.URL.toString()) {
+				mapFunction.append("entity[i]=entity[i].replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
+
+			}
+			
+			mapFunction.append("if ( entity[i] && entity[i].trim().length > 0 && entity[i] != '[]') { var values = { type: \"" + field.toString() + "\", count: 1 };");
+			mapFunction.append("emit( { id: entity[i].trim(), date: \"" + counterDateFormat.format(date)+ "\"}, values);}}}");
+
 		}
-		map += "};";
+		mapFunction.append("};");
+
+		String map2 = mapFunction.toString();
 
 		// reduce function
 		String reduce = "function(key, values) {"
@@ -418,9 +411,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 		// run map-reduce on the temporary collection, the output is in the file
 		// named outCollection
-		MapReduceCommand cmd = new MapReduceCommand(temp, map, reduce,
+		MapReduceCommand cmd = new MapReduceCommand(temp, map2, reduce,
 				DAILY_COLLECT_NAME, MapReduceCommand.OutputType.MERGE, null);
+		
 		temp.mapReduce(cmd);
+		System.out.println("nice");
 
 		// delete the temporary collection
 		temp.drop();

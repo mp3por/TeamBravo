@@ -31,7 +31,7 @@ public class StreamReaderService extends Observable {
 	/**
 	 * Just for testings
 	 * */
-	/*public StreamReaderService(ProjectProperties pr , TwitterStreamBuilderUtil ts) {
+	public StreamReaderService(ProjectProperties pr , TwitterStreamBuilderUtil ts) {
 		this.twitterStreamBuilder = ts;
 		this.projectProperties = pr;
 		try {
@@ -40,7 +40,7 @@ public class StreamReaderService extends Observable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 	@PostConstruct
 	public void run() throws IOException {
