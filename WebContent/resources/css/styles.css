@@ -1,7 +1,4 @@
-@import
-	url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600)
-	;
-
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600);
 @import url(http://fonts.googleapis.com/css?family=Lobster);
 
 #cssmenu {
@@ -156,13 +153,26 @@ h3.box {
 	margin-bottom: 0px;
 }
 
-div.block {
+div.block, div.blockLOCKED {
 	background-color: #656565;
 	margin-top: 20px;
 }
 
 div.settings{
 	display: none;
+}
+
+div.settings ul{
+	margin-left: -35px !important;
+}
+
+div.settings ul li{
+	display: inline;
+	margin-right: 5px !important;
+}
+
+div.settings ul button{
+	
 }
 
 h:FIRST-CHILD {
@@ -201,6 +211,17 @@ h:FIRST-CHILD {
 	-o-transition: all 0.7s ease 0s;
 	transition: all 0.7s ease 0s;
 }
+
+#timeButton1{
+	color: black;
+	background-color: #777777;
+}
+
+#timeButton2{
+	color: black;
+	background-color: #CCCCCC;
+}
+
 
 /*------------------Map-----------------*/
 /* #map, #map>div, #map>div>img {

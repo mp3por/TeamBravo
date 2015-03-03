@@ -1,64 +1,56 @@
 package glasgow.teamproject.teamB.Graphs;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class WordCloudHash {
+	
+	private final static int SIZEFORPIXELS = 40;
 
-	private static JSONArray hashedFrequencies;
+	private static List<HashMap<String,String>> hashedFrequencies;
 
-	public static JSONArray gethashedFrequencies(JSONArray frequencyList){
+	public static List<HashMap<String,String>> gethashedFrequencies(List<HashMap<String,String>> frequencyList){
 
 
-		hashedFrequencies = new JSONArray();
+		hashedFrequencies = new ArrayList<HashMap<String,String>>();
 		double n = 0; //The sum of all values
-		for (int i = 0; i < frequencyList.length(); i++) {
-			  try {
-				JSONObject item = frequencyList.getJSONObject(i);
-				n += (double) item.getInt("Tweets");
-			} catch (JSONException e) {
-				System.err.println("Exception: WordCloudHash.getFrequencies()");
-			}
+		for (int i = 0; i < frequencyList.size(); i++) {
+			HashMap<String,String> item = frequencyList.get(i);
+			n += Double.parseDouble(item.get("Tweets"));
 		}
 
 		double sum = 100/n; //For percentage
 
-		for (int i = 0; i < frequencyList.length(); i++) {
-			try {
-				JSONObject item = frequencyList.getJSONObject(i);
-
-				JSONObject hashedItem = new JSONObject();
-				hashedItem.put("Name", item.get("Name"));
-
-				//Rounding value to int
-				Integer intTweet = (Integer) item.get("Tweets");
-				Double value = new Double((double) intTweet);
-				value *= sum; //Get percentage
-				if(value > 99.0){
-					value = (double) Math.floor(value); //Rounds down to nearest whole
-				}else{
-					value = (double) Math.round(value); //Rounds to nearest whole
-				}
-				int intVal = value.intValue();
-
-				//Hash the value
-				int hashedValue = hashValue(intVal);
-				hashedItem.put("Tweets", hashedValue);
-
-				//Place into new array
-				hashedFrequencies.put(hashedItem);
-
-			} catch (JSONException e) {
-				System.err.println("Exception: WordCloudHash.getFrequencies()");
+		for (int i = 0; i < frequencyList.size(); i++) {
+			HashMap<String,String> item = frequencyList.get(i);
+	
+			HashMap<String,String> hashedItem = new HashMap<String,String>();
+			hashedItem.put("Name", item.get("Name"));
+	
+			//Rounding value to int
+			Integer intTweet = Integer.parseInt(item.get("Tweets"));
+			Double value = new Double((double) intTweet);
+			value *= sum; //Get percentage
+			if(value > 99.0){
+				value = (double) Math.floor(value); //Rounds down to nearest whole
+			}else{
+				value = (double) Math.round(value); //Rounds to nearest whole
 			}
+			int intVal = value.intValue();
+	
+			//Hash the value
+			int hashedValue = hashValue(intVal);
+			hashedItem.put("Tweets", Integer.toString(hashedValue));
+	
+			//Place into new array
+			hashedFrequencies.add(hashedItem);
 		}
 
 		return hashedFrequencies;
 	}
 
 	private static int hashValue(int value){
-		return value + 40;
+		return value + SIZEFORPIXELS;
 	}
 }

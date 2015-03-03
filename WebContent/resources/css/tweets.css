@@ -1,56 +1,52 @@
-.TweetWallheader {
-  font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
-}
- 
-.TweetAvatar {
-  float: left;
-  margin: 0 15px 0 0;
+.tweetwall-container {
+	height:400px;
+	overflow-y: scroll;
+	
+	padding-top: 10px;
+	
+	border-style: solid;
+    border-width: 5px;
+	border-color: #656565;
+	
+	/* gradient from top to bottom */
+	/* For Safari 5.1 to 6.0 */
+	background: -webkit-linear-gradient(#ffffff, #E8E8E8);
+	/* For Opera 11.1 to 12.0 */
+	background: -o-linear-gradient(#ffffff, #E8E8E8);
+	/* For Firefox 3.6 to 15 */
+	background: -moz-linear-gradient(#ffffff, #E8E8E8);
+	/* Standard syntax */
+	background: linear-gradient(#ffffff, #E8E8E8);
 }
 
-.icon_img {
-	width: 32px;
-	height: auto;
-	padding-left: 10px;
-	padding-right: 10px;
-	float: left;
+ul.tweetwall {
+	list-style:none;
+    padding-left:0;
 }
- 
-#avatar {
-	width: 100px;
-	float: left;
-	margin: 0 15px 0 0;
-}
- 
-.username {
-	font-size: 1.5em;
-	font-family: "Exo 2", "Helvetica Neue", Helvetica, sans-serif;
-	
-}
- 
+
 .tweet {
-  width: 95%;
-  overflow: auto;
-  border: dashed 1px blue;
-  margin-left: 5px;
-  margin-bottom: 15px;
-  
+	overflow: auto;
+	border: dashed 1px #656565;
+	margin-bottom: 10px;
 }
 
 .tweet:hover {
-	background: #282828;
+	background: #FFFFFF;
 	cursor: pointer;
 }
 
-#tweetText {
-	font-weight: 300;
-	font-size: 1.5em;
-	line-height: 1.5em;
-	color: #000000;
+#avatar {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #656565;
+	width: 100px;
+	height: 100px;
+	float: left;
+	margin-top: 8px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 8px;
 }
-
-#easyPaginate img {display:block;}
-.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
-
 
 
 a.tooltip {outline:none; }

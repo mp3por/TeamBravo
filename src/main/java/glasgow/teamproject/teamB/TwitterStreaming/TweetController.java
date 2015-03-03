@@ -32,6 +32,13 @@ public class TweetController {
 		
 		List<HashMap<String,Object>> tweets = getTweets(Integer.parseInt(amount), dateFrom, dateTo);
 		mv.addObject("tweets",tweets);
+		mv.addObject("amount", amount);
+		//mv.addObject("Dates:")
+		if ((dateFrom.compareTo("0")==0) || (dateFrom.compareTo("0") == 0)) 
+			mv.addObject("query", "latest tweets");
+		else 
+			mv.addObject("query", "tweets between "+dateFrom + " and " + dateTo);
+		
 		//mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
 		return mv;
 	}
@@ -49,7 +56,10 @@ public class TweetController {
 		else {
 		 t = tweetSaver.getTweetsForDate(amount, dateFrom, dateTo, "tweets");
 		}
-		System.out.println(t.size());
+		if (t == null) 
+			System.err.println("Nothing has been found for query: " + amount + "/" + dateFrom + "/" + dateTo);
+		else 
+			System.out.println(t.size());
 		return t;
 	
 	}

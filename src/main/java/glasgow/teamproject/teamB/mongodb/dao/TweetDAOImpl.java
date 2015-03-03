@@ -42,6 +42,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	@Autowired
 	private MongoOperations mongoOps;
 
+
 	// /Users/velin/Documents/Workspaces/3_Year/TP3/TeamBravo
 	// public TweetDAOImpl(MongoOperations mongoOps2,StreamReaderService s) {
 	// super(s);
@@ -166,6 +167,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 
 	private ArrayList<HashMap<String, Object>> traverseTheQuery (DBCursor dbCursor, int count) {
+		if (!dbCursor.hasNext()) 
+			return null;
 		dbCursor.next(); // this is needed as the first element is empty! Please do not touch this again.
 		System.out.println("DBCursor length:" + dbCursor);
 		ArrayList<HashMap<String,Object>> tweets = new ArrayList<>(); 
