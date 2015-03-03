@@ -161,26 +161,6 @@
 		settings.show();
 	}
 
-
-	function fixDatePickers (index) {
-        $(function () {
-            $('#datetimepicker_from_'+index).datetimepicker({
-            	sideBySide: true,
-            	format: 'ddd MMM DD HH:mm:ss YYYY'
-            });
-            $('#datetimepicker_to_'+index).datetimepicker({
-            	sideBySide: true,
-            	format: 'ddd MMM DD HH:mm:ss YYYY'
-            });
-            $("#datetimepicker_from_"+index).on("dp.change",function (e) {
-                $('#datetimepicker_to_'+index).data("DateTimePicker").minDate(e.date);
-            });
-            $("#datetimepicker_to_"+index).on("dp.change",function (e) {
-                $('#datetimepicker_from_'+index).data("DateTimePicker").maxDate(e.date);
-            });
-        });
-	}
-
 	function getSearchBox() {
 		$.ajax({
 			url : '/TeamBravo/search/searchBox',

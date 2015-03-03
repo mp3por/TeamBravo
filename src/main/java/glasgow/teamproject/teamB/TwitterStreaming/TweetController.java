@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -40,6 +41,13 @@ public class TweetController {
 			mv.addObject("query", "tweets between "+dateFrom + " and " + dateTo);
 		
 		//mv.addObject("needed","<div id='added_tweetwall_container' class='tweetwall-container'><div id='added_tweetwall_div' class='tweetwall'></div></div>");
+		return mv;
+	}
+	
+	@RequestMapping("/tweetWall/getSettings")
+	@ResponseBody
+	public ModelAndView getSettings() {
+		ModelAndView mv = new ModelAndView("setting-tweets");
 		return mv;
 	}
 	

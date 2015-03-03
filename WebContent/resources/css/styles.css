@@ -175,6 +175,14 @@ div.settings ul button{
 	
 }
 
+button.setting-btn {
+	margin-top: 10px;
+}
+
+h4.above_box {
+	color: white;
+}
+
 h:FIRST-CHILD {
 	font-family: 'Exo 2';
 	font-weight: 700;

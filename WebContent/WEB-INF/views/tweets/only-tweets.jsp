@@ -14,105 +14,91 @@
 <script type="text/javascript">
 	//Create the tooltips only when document ready
 
-	$(document)
-			.ready(
-					function() {
+	$(document).ready( function() {
 
-						$('.addedTweetText')
-								.each(
-										function() {
+		$('.addedTweetText').each( function() {
 
-											text = $(this).attr("text");
+			text = $(this).attr("text");
 
-											var tooltipValues = [
-													$(this).attr("person"),
-													$(this).attr("location"),
-													$(this)
-															.attr(
-																	"organization"),
-													$(this).attr("userID"),
-													$(this).attr("hashtag"),
-													$(this).attr("URL") ];
+			var tooltipValues = [
+					$(this).attr("person"),
+					$(this).attr("location"),
+					$(this).attr("organization"),
+					$(this).attr("userID"),
+					$(this).attr("hashtag"),
+					$(this).attr("URL") ];
 
-											var tooltipTexts = [
-													" is a person. Click to search for this place in Wikipedia",
-													" is a location. Click to search for this place in Google Maps",
-													" is an organization. Click to search for this place in Wikipedia",
-													" is a mentioned user on Twitter. Click to see the profile",
-													" is a hashtag. Click on it to search for this hashtag in Twitter",
-													" is an URL. Click on it to open it" ];
-											var tooltipImgs = [
-													"glyphicon glyphicon-user",
-													"glyphicon glyphicon-map-marker",
-													"glyphicon glyphicon-briefcase",
-													"glyphicon glyphicon-share-alt",
-													"glyphicon glyphicon-tag",
-													"glyphicon glyphicon-link" ];
-											var tooltipLinks = [
-													"http://en.wikipedia.org/w/index.php?search=",
-													"https://www.google.co.uk/maps/search/",
-													"http://en.wikipedia.org/w/index.php?search=",
-													"http://twitter.com/",
-													"https://twitter.com/hashtag/",
-													"" ];
-											for (i = 0; i < tooltipValues.length; i++) {
-												tooltipValues[i] = tooltipValues[i]
-														.replace("[", "");
-												tooltipValues[i] = tooltipValues[i]
-														.replace("]", "");
-												tooltipValues[i] = tooltipValues[i]
-														.split(",");
-												for (s in tooltipValues[i]) {
-													if (tooltipValues[i][s]
-															.trim()) {
-														var toReplace = tooltipValues[i][s]
-																.trim();
-														
-														var url = toReplace;
-														
-														if (i == 3) {
-															toReplace = "@"
-																	+ toReplace;
-														}
-														
-														if (i == 4) {
-															url = toReplace.replace("#", "");
-														}
+			var tooltipTexts = [
+					" is a person. Click to search for this place in Wikipedia",
+					" is a location. Click to search for this place in Google Maps",
+					" is an organization. Click to search for this place in Wikipedia",
+					" is a mentioned user on Twitter. Click to see the profile",
+					" is a hashtag. Click on it to search for this hashtag in Twitter",
+					" is an URL. Click on it to open it" ];
+			
+			var tooltipImgs = [
+					"glyphicon glyphicon-user",
+					"glyphicon glyphicon-map-marker",
+					"glyphicon glyphicon-briefcase",
+					"glyphicon glyphicon-share-alt",
+					"glyphicon glyphicon-tag",
+					"glyphicon glyphicon-link" ];
+			
+			var tooltipLinks = [
+					"http://en.wikipedia.org/w/index.php?search=",
+					"https://www.google.co.uk/maps/search/",
+					"http://en.wikipedia.org/w/index.php?search=",
+					"http://twitter.com/",
+					"https://twitter.com/hashtag/",
+					"" ];
+			
+			for (i = 0; i < tooltipValues.length; i++) {
+					tooltipValues[i] = tooltipValues[i].replace("[", "");
+					tooltipValues[i] = tooltipValues[i].replace("]", "");
+					tooltipValues[i] = tooltipValues[i].split(",");
+					for (s in tooltipValues[i]) {
+						
+						if (tooltipValues[i][s].trim()) {
+							var toReplace = tooltipValues[i][s].trim();
+							var url = toReplace;
+							
+							if (i == 3) {
+								toReplace = "@" + toReplace;
+							}
+									
+							if (i == 4) {
+								url = toReplace.replace("#","");
+							}
 
-														text = text
-																.replace(
-																		toReplace,
-																		"<a href='"+tooltipLinks[i]+url+"' class='URLTooltip' title='"
-																				+toReplace+tooltipTexts[i]+"'>"
-																				+ "<span class='"+tooltipImgs[i]+"'></span>"
-																				+ toReplace
-																				+ "</a>");
-														
-													}
-												}
-											}
-											$(this)
-													.html(
-															"<p class='tweetText' id='tweetText'>"
-																	+ text
-																	+ "</p>");
-										});
-						$(".URLTooltip").each(function() {
-							$(this).tooltip();
-						});
-					});
+							text = text.replace( toReplace,
+								"<a href='"+tooltipLinks[i]+url+"' class='URLTooltip' title='"
+								+toReplace+tooltipTexts[i]+"'>"
+								+ "<span class='"+tooltipImgs[i]+"'></span>"
+								+ toReplace + "</a>");
+
+						}
+					}
+			}
+			
+			$(this).html("<p class='tweetText' id='tweetText'>"+ text + "</p>");
+			
+		});
+		
+		$(".URLTooltip").each(function() {
+			$(this).tooltip();
+		});
+	});
 </script>
+
 <div>
-	
+
 	<div class="col-md-12 col-sm-12 col-xs-12 tweetwall-container">
-	<p>
-		Query: get ${amount} ${query}.  
-	</p>
-	<!-- Loop over the tweets  -->
-	<c:if test="${empty tweets}">
-		<h3>No tweets found for this query.</h3>
-	</c:if>
-	
+		<p>Query: get ${amount} ${query}.</p>
+		<!-- Loop over the tweets  -->
+		<c:if test="${empty tweets}">
+			<h3>No tweets found for this query.</h3>
+		</c:if>
+
 		<ul class="tweetwall">
 			<!-- Loop over the tweets  -->
 			<c:forEach var="tweet" items="${tweets}">
@@ -133,8 +119,7 @@
 					<div class="addedTweetText" text="${tweet.text}"
 						person="${tweet.Person}" location="${tweet.Location}"
 						organization="${tweet.Organization}" userID="${tweet.UserID}"
-						hashtag="${tweet.Hashtag}" URL="${tweet.URL}">
-					</div>
+						hashtag="${tweet.Hashtag}" URL="${tweet.URL}"></div>
 
 				</div>
 

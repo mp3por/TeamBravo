@@ -129,10 +129,10 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
-		/*c.dailyMapReduce(new Date());
-		c.mergingMapReduce(TimePeriod.PASTWEEK);
-		c.mergingMapReduce(TimePeriod.PASTMONTH);
-		*/
+//		c.dailyMapReduce(new Date());
+//		c.mergingMapReduce(TimePeriod.PASTWEEK);
+//		c.mergingMapReduce(TimePeriod.PASTMONTH);
+		
 		List<HashMap<String,String>> tweets = new ArrayList<>();
 		List<EntityCountPair> topics = null;
 		List<DateCountPair> topic1Dates = null;
