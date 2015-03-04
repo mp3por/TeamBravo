@@ -303,14 +303,29 @@
 		});
 	}
 	
+	function refresh(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/search/terrier/refresh/${query}',
+			success: function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content" + index, data, index);
+			}
+		});
+	}
+	
 	function initWall(container_id, data, index) {
 
+		console.log("INDEXWALL");
+		console.log(index);
+		
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
-					'<button type="button" onclick="rankedByRetweeted(tile_content0, 0);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
-					'<button type="button" onclick="rankedByFavourited(tile_content0, 0);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
-					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
+				'<button type="button" onclick="refresh(tile_content0, 0);" id="refresh" index="refresh" class="btn btn-default refresh">Reset</button>'+
+					'<button type="button" onclick="rankedByRetweeted(tile_content0, 0);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Most retweeted</button>'+
+					'<button type="button" onclick="rankedByFavourited(tile_content0, 0);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Most favourited</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">Most recent</button>'+			
 					'<br/><br />');
 		
 		$('#rank_by_retweeted').each( function () {
@@ -321,9 +336,41 @@
 			$(this).attr("index", index);
 		});
 		
+		$('.addTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
+		
 		$('#rank_by_posted').each( function () {
 			$(this).attr("index", index);
 		});
+		
+		$('#tile_content' + index).html(data);
+
+		$('.added_tweetwall_h3').each(function() {
+			console.log("I am here at h4");
+			$(this).attr('class', 'tweetwall_h3_' + index);
+		});
+		$('.added_tweetwall_h4').each(function() {
+			$(this).attr('class', 'tweetwall_h4_' + index);
+		});
+
+		$('.added_tweetwall_avatar').each(function() {
+			$(this).attr('class', 'avatar_' + index);
+		});
+
+		$('.added_tweetwall_tweet').each(function() {
+			$(this).attr('class', 'tweetwall_tweet_' + index);
+		});
+
+		$('.added_tweetwall_li').each(function() {
+			$(this).attr('class', 'tweetwall_li_' + index);
+		});
+
+		$('.addedTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
 		
 		console.log("init wall");
 	}
