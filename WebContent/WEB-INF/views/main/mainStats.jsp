@@ -1,19 +1,21 @@
 <script>
-	function reloadStats(param) {
-		console.log("Hey");
-		var index = param.data.param1
-		$(this).addClass('active').siblings().removeClass('active');
-		var time = $(this).text();
-		var linkStr;
-		if (time == 'past day')
-			linkStr = 'pastDay';
-		else if (time == 'past month')
-			linkStr = 'pastMonth';
-		else if (time == 'past week')
-			linkStr = 'pastWeek';
-		else
-			linkStr = 'allTime';
+	function reloadStats(data) {
+		
+		var s = data.getAttribute("id");
+		var parts = s.split("_");
+		var index = parts[parts.length - 1];
+		console.log(index);
+		
+		var linkStr = data.getAttribute("data_time");
 
+		$('.stat_time_picker_'+index).each(function(){
+			if (linkStr==$(this).attr("data_time")) {
+				$(this).addClass("active");
+			} else {
+				$(this).removeClass("active");
+			};
+		});
+		
 		$.ajax({
 			url : '/TeamBravo/counter/getStats/' + linkStr,
 			success : function(data) {
@@ -31,13 +33,17 @@
 			success : function(data) {
 				$('#settings' + index).html(data);
 				$('.added_stat_time_setting').attr('id',
-						'stat_time_setting' + index);
+						'stat_time_setting_' + index);
+				$('.added_stat_time_picker').attr('id',
+						'stat_time_picker_' + index);
 				$('#stat_time_setting_label').attr('for',
 						'stat_time_setting' + index);
 				$('.added_stat_time_picker').each(function(){
-					$(this).click({param1:index}, reloadStats);
+					$(this).attr("onclick","reloadStats(this)");
+					$(this).addClass("stat_time_picker_"+index);
+					$(this).removeClass("added_stat_time_picker");
 				});
-				$('#stat_time_setting' + index + ' button').on("click", "input", reloadStats);
+				//$('#stat_time_setting_' + index + ' button').on("click", "input", reloadStats);
 				/*click({
 					param1 : index
 				}, reloadStats);*/
