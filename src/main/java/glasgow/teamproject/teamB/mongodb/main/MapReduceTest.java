@@ -50,8 +50,12 @@ public class MapReduceTest {
 				doDaily(ProjectProperties.TWEET_COLLECTION);
 				break;
 			case 4:
-				System.out.println("merge");
-				doMerging();
+				System.out.println("merge week");
+				doMergingWeek();
+				break;
+			case 5:
+				System.out.println("merge month");
+				doMergingMonth();
 				break;
 
 			default:
@@ -66,10 +70,15 @@ public class MapReduceTest {
 		tweetSaver.dailyMapReduce(new Date(),name);
 	}
 
-	private static void doMerging() {
+	private static void doMergingWeek() {
 		System.out.println("MERGING");
 		tweetSaver.mergingMapReduce(TimePeriod.PASTWEEK);
 //		tweetSaver.mergingMapReduce(TimePeriod.PASTMONTH);
+	}
+	private static void doMergingMonth() {
+		System.out.println("MERGING");
+//		tweetSaver.mergingMapReduce(TimePeriod.PASTWEEK);
+		tweetSaver.mergingMapReduce(TimePeriod.PASTMONTH);
 	}
 
 	private static void startStreamerDBAndNE() {

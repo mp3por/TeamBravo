@@ -173,13 +173,13 @@ public class GraphsController {
 		//Get top 3 topics for the past time period
 		if(timePeriod.equals("WEEK")){
 			
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTDAY, 10);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 10);
 			noOfDays = 7;
 			
 			//Remove empty strings
 			for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
 				EntityCountPair topic = iterator.next();
-			    if (topic.getID().isEmpty()) {
+			    if (topic.getID().isEmpty()||topic.getID().equals("[]")||topic.getID().equals("[")||topic.getID().equals("]")) {
 			        // Remove the current element from the iterator and the list.
 			        iterator.remove();
 			    }
