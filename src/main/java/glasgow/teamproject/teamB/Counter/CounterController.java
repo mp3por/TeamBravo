@@ -27,8 +27,6 @@ public class CounterController {
 	@ResponseBody
 	public ModelAndView getStats(@PathVariable("timePeriod") String timePeriod) {
 		ModelAndView model = new ModelAndView("only-stats");
-		
-		//DBHelper.dailyMapReduce(new Date());
 
 		TimePeriod p;
 		Date stTime = null, edTime = null;

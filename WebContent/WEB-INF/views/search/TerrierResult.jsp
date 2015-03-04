@@ -316,6 +316,9 @@
 	
 	function initWall(container_id, data, index) {
 
+		console.log("INDEXWALL");
+		console.log(index);
+		
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
@@ -333,9 +336,41 @@
 			$(this).attr("index", index);
 		});
 		
+		$('.addTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
+		
 		$('#rank_by_posted').each( function () {
 			$(this).attr("index", index);
 		});
+		
+		$('#tile_content' + index).html(data);
+
+		$('.added_tweetwall_h3').each(function() {
+			console.log("I am here at h4");
+			$(this).attr('class', 'tweetwall_h3_' + index);
+		});
+		$('.added_tweetwall_h4').each(function() {
+			$(this).attr('class', 'tweetwall_h4_' + index);
+		});
+
+		$('.added_tweetwall_avatar').each(function() {
+			$(this).attr('class', 'avatar_' + index);
+		});
+
+		$('.added_tweetwall_tweet').each(function() {
+			$(this).attr('class', 'tweetwall_tweet_' + index);
+		});
+
+		$('.added_tweetwall_li').each(function() {
+			$(this).attr('class', 'tweetwall_li_' + index);
+		});
+
+		$('.addedTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
 		
 		console.log("init wall");
 	}

@@ -21,7 +21,7 @@ import com.mongodb.MongoClient;
 public class MapReduceTest {
 
 	public static final String DB_NAME = "tweetsTest";
-	public static final String TWEETS_COLLECTION = "party_tweets";
+	public static final String TWEETS_COLLECTION = "tweets";
 	public static final String MONGO_HOST = "localhost";
 	public static final int MONGO_PORT = 27017;
 	
@@ -33,7 +33,7 @@ public class MapReduceTest {
 
 	public static void main(String[] args) {
 		System.out.println("start");
-		startStreamerDBAndNE();
+		//startStreamerDBAndNE();
 		
 		Scanner i = new Scanner(System.in);
 		boolean work = true;
@@ -72,26 +72,26 @@ public class MapReduceTest {
 //		tweetSaver.mergingMapReduce(TimePeriod.PASTMONTH);
 	}
 
-	private static void startStreamerDBAndNE() {
-		try {
-			mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-			MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
-
-			serv = new StreamReaderService(new ProjectProperties(), new TwitterStreamBuilderUtil());
-			System.out.println("111111");
-
-			tweetSaver = new TweetDAOImpl(mongoOps, serv);
-			System.out.println("222222");
-			t = new TwitIE();
-			System.out.println("333333");
-			NE = new NamedEntityParser(serv, tweetSaver, t);
-			System.out.println("444444");
-			//serv.addObserver(tweetSaver);
-			serv.addObserver(NE);
-			System.out.println("555555: " + serv.countObservers());
-			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
+//	private static void startStreamerDBAndNE() {
+//		try {
+//			mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
+//			MongoOperations mongoOps = new MongoTemplate(mongo, DB_NAME);
+//
+//			serv = new StreamReaderService(new ProjectProperties(), new TwitterStreamBuilderUtil());
+//			System.out.println("111111");
+//
+//			tweetSaver = new TweetDAOImpl(mongoOps, serv);
+//			System.out.println("222222");
+//			t = new TwitIE();
+//			System.out.println("333333");
+//			NE = new NamedEntityParser(serv, tweetSaver, t);
+//			System.out.println("444444");
+//			//serv.addObserver(tweetSaver);
+//			serv.addObserver(NE);
+//			System.out.println("555555: " + serv.countObservers());
+//			
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
