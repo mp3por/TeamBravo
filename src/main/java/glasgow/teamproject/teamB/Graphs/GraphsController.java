@@ -1,5 +1,6 @@
 package glasgow.teamproject.teamB.Graphs;
 
+import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
@@ -7,6 +8,7 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -129,9 +131,16 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
-//		c.dailyMapReduce(new Date());
-//		c.mergingMapReduce(TimePeriod.PASTWEEK);
-//		c.mergingMapReduce(TimePeriod.PASTMONTH);
+//		Calendar today = Calendar.getInstance();
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+		c.mergingMapReduce(TimePeriod.PASTWEEK);
+		c.mergingMapReduce(TimePeriod.PASTMONTH);
 		
 		List<HashMap<String,String>> tweets = new ArrayList<>();
 		List<EntityCountPair> topics = null;
