@@ -657,7 +657,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		}
 	}
 
-	@Override
+	/*@Override
 	public HashMap<String, Object> getMostPopularTweet(Date stDate,
 			Date edDate, String compareKey) {
 		DBCollection tweets = mongoOps
@@ -686,7 +686,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			}
 		}
 		return tweet;
-	}
+	}*/
 
 	public String getMostActiveUser(Date stDate, Date edDate) {
 

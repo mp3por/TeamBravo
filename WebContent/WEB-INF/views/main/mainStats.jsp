@@ -55,6 +55,7 @@
 				$('#tile_content' + index).html(data);
 				$('#added_stat_container').attr('id',
 						'stat_container' + index);
+				
 			}
 		});
 	}

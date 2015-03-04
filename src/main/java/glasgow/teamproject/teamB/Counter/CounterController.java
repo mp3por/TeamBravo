@@ -7,7 +7,6 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,7 @@ public class CounterController {
 		model.addObject("total_retweets",
 				DBHelper.getTweetCount(stTime, edTime, true));
 
-		HashMap<String, Object> most_retweeted = DBHelper.getMostPopularTweet(
+		/*HashMap<String, Object> most_retweeted = DBHelper.getMostPopularTweet(
 				stTime, edTime, "retweet_count");
 		if (!most_retweeted.isEmpty()) {
 			model.addObject("most_retweeted_tweet", most_retweeted.get("text"));
@@ -81,7 +80,7 @@ public class CounterController {
 					+ most_fav.get("username") + "\">@"
 					+ most_fav.get("username") + "</a>";
 			model.addObject("most_fav_tweet_user", most_fav_link);
-		}
+		}*/
 
 		String most_active = DBHelper.getMostActiveUser(stTime, edTime);
 		if (most_active != null) {
@@ -93,44 +92,45 @@ public class CounterController {
 		}
 
 		List<EntityCountPair> most_pop_user = DBHelper.getTopEntities(
-				Field.USERID, p, 1);
+				Field.USERID, p, 5);
 		if (!most_pop_user.isEmpty()) {
 			String username = most_pop_user.get(0).getID();
 			String link = "<a href=\"https://twitter.com/" + username + "\">@"
 					+ username + "</a>";
 			model.addObject("most_mentioned_user", link);
 		} else {
-			model.addObject("most_pop_user", "-");
+			model.addObject("most_mentioned_user", "-");
 		}
 		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(
-				Field.HASHTAG, p, 1);
+				Field.HASHTAG, p, 5);
 		if (!most_pop_hashtag.isEmpty())
-			model.addObject("most_pop_hashtag",
+			model.addObject("most_pop_hashtag", 
+					
 					"<a href=\"/TeamBravo/search/terrier/"
 							+ most_pop_hashtag.get(0).getID() + "\">"
-							+ most_pop_hashtag.get(0).getID() + "</a>");
+							+ most_pop_hashtag.get(0).getID() + "</a>"); 
 		else
 			model.addObject("most_pop_hashtag", "-");
 
 		// /TeamBravo/
 
 		List<EntityCountPair> most_pop_location = DBHelper.getTopEntities(
-				Field.LOCATION, p, 1);
+				Field.LOCATION, p, 5);
 		if (!most_pop_location.isEmpty())
-			model.addObject("most_pop_location",
+			model.addObject("most_pop_location", 
 					"<a href=\"/TeamBravo/search/terrier/"
 							+ most_pop_location.get(0).getID() + "\">"
-							+ most_pop_location.get(0).getID() + "</a>");
-		else
+							+ most_pop_location.get(0).getID() + "</a>"); 
+							else
 			model.addObject("most_pop_location", "-");
 
 		List<EntityCountPair> most_pop_person = DBHelper.getTopEntities(
-				Field.PERSON, p, 1);
+				Field.PERSON, p, 5);
 		if (!most_pop_person.isEmpty())
 			model.addObject("most_pop_person",
 					"<a href=\"/TeamBravo/search/terrier/"
 							+ most_pop_person.get(0).getID() + "\">"
-							+ most_pop_person.get(0).getID() + "</a>");
+							+ most_pop_person.get(0).getID() + "</a>"); 
 		else
 			model.addObject("most_pop_person", "-");
 
