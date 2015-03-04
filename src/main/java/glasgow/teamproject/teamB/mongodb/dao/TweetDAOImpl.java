@@ -503,10 +503,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		if (!field.equals(Field.ALL)) {
 			findQuery = true;
-			if( timePeriod.equals(TimePeriod.PASTDAY) || timePeriod.equals(TimePeriod.ALLTIME) )
-				queryStr.put("value.type").is(field.toString());
-			else
-				queryStr.put("_id.type").is(field.toString());
+			queryStr.put("_id.type").is(field.toString());
 		}
 		
 		DBCursor c;
