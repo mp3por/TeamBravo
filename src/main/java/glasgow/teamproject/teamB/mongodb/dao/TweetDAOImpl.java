@@ -72,7 +72,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		//mongoOps.insert(tweet, "new_tweets"); // stores the
 		// tweet as string
 
-		System.out.println("SAVED in collection(" + collectionName+ "): " + tweet);
+		System.out.println("SAVED in collection(" + collectionName+ ")" );
 	}
 
 	@Override
@@ -363,7 +363,6 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		today.set(Calendar.MINUTE, 0);
 		today.set(Calendar.SECOND, 0);
 		
-		System.out.println("date: " + today.getTime().toString());
 		long today_beginning_timestamp = today.getTimeInMillis();
 		DBObject q = new BasicDBObject("timestamp_ms", new BasicDBObject("$gte",Long.toString(today_beginning_timestamp)));
 		DBObject match = new BasicDBObject("$match",q);
@@ -375,7 +374,6 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		DBCollection temp = mongoOps.getCollection("temp");
 		
-		System.out.println("Collection (temp): " + temp.count());
 		
 		// map function
 		StringBuilder mapFunction = new StringBuilder("function() {");
@@ -415,7 +413,6 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 				DAILY_COLLECT_NAME, MapReduceCommand.OutputType.MERGE, null);
 		
 		temp.mapReduce(cmd);
-		System.out.println("nice");
 
 		// delete the temporary collection
 		temp.drop();

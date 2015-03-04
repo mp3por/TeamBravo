@@ -84,7 +84,7 @@ public class TweetsIndexer implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		String tweet = (String) arg;
-		System.out.println("Index tweet: " +  tweet);
+		System.out.println("SEARCH index tweet");
 		indexTweet(tweet);
 	}
 

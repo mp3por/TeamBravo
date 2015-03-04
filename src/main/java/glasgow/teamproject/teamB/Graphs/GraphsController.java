@@ -173,7 +173,7 @@ public class GraphsController {
 		//Get top 3 topics for the past time period
 		if(timePeriod.equals("WEEK")){
 			
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 10);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTDAY, 10);
 			noOfDays = 7;
 			
 			//Remove empty strings
