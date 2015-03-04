@@ -58,8 +58,9 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
-			 var searchTerm = "${query}";
-		 	getGraphsForSearch(searchTerm);
+			var searchTerm = "${query}";
+			console.log("getting graph");
+			getGraphsForSearch(searchTerm);
 		 	
 		 	$.ajax({
 				url : '/TeamBravo/search/searchBox',
@@ -67,7 +68,7 @@
 					$("#search").html(data);
 				}
 			});
-			});	
+		});	
 	</script>
 
 	<!-- -------------------------------------------- -->

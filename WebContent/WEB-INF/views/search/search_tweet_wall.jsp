@@ -3,14 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<script type="text/javascript"
-	src="<c:url value="/resources/js/jquery.bootstrap-touchspin.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/moment.js" />"></script>
-
-<script type="text/javascript"
-	src="<c:url value="/resources/js/bootstrap-datetimepicker.js" />"></script>
-
 <script type="text/javascript">
 	//Create the tooltips only when document ready
 
@@ -87,15 +79,17 @@
 																				+ "<span class='"+tooltipImgs[i]+"'></span>"
 																				+ toReplace
 																				+ "</a>");
-														
+														console.log(text);
 													}
 												}
 											}
 											$(this)
 													.html(
-															"<p class='tweetText' id='tweetText'>"
+															"<p class='tweetTextWithTooltips' id='tweetText'>"
 																	+ text
 																	+ "</p>");
+											// this should work
+											$(this).attr("class", "addTweetText");
 										});
 						$(".URLTooltip").each(function() {
 							$(this).tooltip();
@@ -131,6 +125,10 @@
 					<h6 class="added_tweetwall_h5">
 						<b>Retweeted times: ${tweet.retweet_count}</b> 
 					</h6>
+					
+					<h7 class="added_tweetwall_h6">
+						<b style="font-size: 12px">Favorite times: ${tweet.favorite_count}</b> 
+					</h7>
 
 					<div class="addedTweetText" text="${tweet.text}"
 						person="${tweet.Person}" location="${tweet.Location}"
