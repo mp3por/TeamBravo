@@ -1,6 +1,6 @@
 <script>
 	function reloadStats(param) {
-
+		console.log("Hey");
 		var index = param.data.param1
 		$(this).addClass('active').siblings().removeClass('active');
 		var time = $(this).text();
@@ -17,6 +17,7 @@
 		$.ajax({
 			url : '/TeamBravo/counter/getStats/' + linkStr,
 			success : function(data) {
+				
 				$('#tile_content' + index).html(data);
 				$('#added_stat_container').attr('id',
 						'stat_container' + index);
@@ -29,13 +30,17 @@
 			url : '/TeamBravo/counter/stats/getSettings',
 			success : function(data) {
 				$('#settings' + index).html(data);
-				$('#stat_time_setting').attr('id',
+				$('.added_stat_time_setting').attr('id',
 						'stat_time_setting' + index);
 				$('#stat_time_setting_label').attr('for',
 						'stat_time_setting' + index);
-				$('#stat_time_setting' + index + ' button').click({
+				$('.added_stat_time_picker').each(function(){
+					$(this).click({param1:index}, reloadStats);
+				});
+				$('#stat_time_setting' + index + ' button').on("click", "input", reloadStats);
+				/*click({
 					param1 : index
-				}, reloadStats);
+				}, reloadStats);*/
 			}
 		});
 		$.ajax({
