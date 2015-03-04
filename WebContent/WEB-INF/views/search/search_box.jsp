@@ -1,4 +1,8 @@
 <!-- BEGIN TERRIER search box -->
+
+<script>
+	var full = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+</script> 
  
 <form method="get" target="_blank" action="/TeamBravo/search/terrier/" accept-charset="UTF-8" 
       onsubmit="window.open('/TeamBravo/search/terrier/' + encodeURIComponent(document.getElementById('TERRIER_SEARCH').value),'TERRIER'); return false;">
