@@ -7,6 +7,7 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public interface TweetDAO {
 	public void mergingMapReduce(TimePeriod timePeriod);
 
 	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
-			String dateFrom, String dateTo, String collectionName);
+			String dateFrom, String dateTo, String collectionName) throws ParseException;
 
 	
 

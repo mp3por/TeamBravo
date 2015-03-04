@@ -5,6 +5,7 @@ import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.Util.StreamReaderService;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -187,12 +188,29 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	
 	@Override
 	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
-			String dateFrom, String dateTo, String collectionName) {
+			String dateFrom, String dateTo, String collectionName) throws ParseException {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
+		SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM d HH:mm:ss YYYY");
+		Date dateFr = parserSDF.parse(dateFrom); 
+		Date dateT  = parserSDF.parse(dateTo);
+		
+		System.out.println(dateFr);
+		System.out.println(dateT);
+		
+		dateFrom = ((Long) dateFr.getTime()).toString();
+		dateTo = ((Long) dateT.getTime()).toString();
+		
+		//System.out.println((dateFrom.substring(dateFrom.length()-3).compareTo("000")));
+		//if ((dateFrom.substring(dateFrom.length()-3).compareTo("000") == 0) && (dateTo.substring(dateFrom.length()-3).compareTo("000") == 0)) {
+			//System.out.println("Replacing");
+			//dateFrom = dateFrom.replace("000", "");
+			//dateTo = dateTo.replace("000", "");		
+		//}
+		System.out.println(dateFrom + " to " +dateTo);
 		//DBCursor dbCursor = dbCollection.find().sort(new BasicDBObject("timestamp_ms", -1)).limit(count);
 	    BasicDBObject getQuery = new BasicDBObject();
-	    getQuery.put("created_at", new BasicDBObject("$gt", dateFrom).append("$lt", dateTo));
+	    getQuery.put("timestamp_ms", new BasicDBObject("$gt", dateFrom).append("$lt", dateTo));
 	    DBCursor dbCursor = dbCollection.find(getQuery).limit(count+1);
 
 		
