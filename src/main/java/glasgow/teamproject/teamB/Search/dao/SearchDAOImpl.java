@@ -60,6 +60,10 @@ public class SearchDAOImpl {
 	public void setUp() {
 		queryManager = new Manager(index);
 	}
+	
+	public int foo(){
+		return this.index.getProperties().size();
+	}
 
 	public List<Tweet> getResultsList() {
 

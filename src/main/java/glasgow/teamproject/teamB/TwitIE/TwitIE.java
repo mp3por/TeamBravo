@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.terrier.utility.ApplicationSetup;
 
 @Component
 public class TwitIE {
@@ -58,6 +59,16 @@ public class TwitIE {
 			//String currentDir = "C:\\Users\\velin\\GoogleDrive\\DOCUMENTS\\1111111\\3_Year\\Team Project\\";
 			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
 			System.out.println(currentDir);
+			
+			/****** TO BE MOVED BACK TO SEARCH CONTEXT ******/
+			String list = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+			list = list.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+			System.out.println("Search:" + list);
+			ApplicationSetup.setProperty("stopwords.filename", list);
+			// Comment the following two lines if you want to disable stemming (guessing words)
+			ApplicationSetup.setProperty("termpipelines","Stopwords");
+			System.err.println("Stemming has been disabled");
+			/****** TO BE MOVED BACK TO SEARCH CONTEXT ******/
 
 			File f = new File(currentDir);
 			Gate.setGateHome(f);

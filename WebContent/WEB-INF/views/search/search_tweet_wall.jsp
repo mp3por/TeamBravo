@@ -122,14 +122,6 @@
 						<b>${fn:substringBefore(tweet.created_at,'+')}</b>
 					</h5>
 					
-					<h6 class="added_tweetwall_h5">
-						<b>Retweeted times: ${tweet.retweet_count}</b> 
-					</h6>
-					
-					<h7 class="added_tweetwall_h6">
-						<b style="font-size: 12px">Favorite times: ${tweet.favorite_count}</b> 
-					</h7>
-
 					<div class="addedTweetText" text="${tweet.text}"
 						person="${tweet.Person}" location="${tweet.Location}"
 						organization="${tweet.Organization}" userID="${tweet.UserID}"
