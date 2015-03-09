@@ -53,9 +53,9 @@ public class TwitIE {
 			System.out.println("added NE");
 
 			// Only god knows how it works
-			//String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 
-			String currentDir = "C:\\Users\\velin\\GoogleDrive\\DOCUMENTS\\1111111\\3_Year\\Team Project\\";
+			//String currentDir = "C:\\Users\\velin\\GoogleDrive\\DOCUMENTS\\1111111\\3_Year\\Team Project\\";
 			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
 			System.out.println(currentDir);
 

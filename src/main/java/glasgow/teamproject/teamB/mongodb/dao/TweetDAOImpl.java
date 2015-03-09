@@ -702,7 +702,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	public String getMostActiveUser(Date stDate, Date edDate) {
 
-		DBCollection tweets = mongoOps.getCollection(ProjectProperties.WEEKLY_COLLECT_NAME);
+		DBCollection tweets = mongoOps.getCollection(ProjectProperties.TWEET_COLLECTION);
 
 		DBObject query = null;
 		if (stDate != null && edDate != null) {
