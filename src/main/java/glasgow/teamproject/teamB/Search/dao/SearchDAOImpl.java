@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 //import java.util.Set;
 
+
 import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+import org.terrier.utility.ApplicationSetup;
 
 //import org.terrier.realtime.memory.MemoryIndex;
 
@@ -58,6 +60,10 @@ public class SearchDAOImpl {
 
 	@PostConstruct
 	public void setUp() {
+		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+		System.out.println("Search:" + currentDir);
+		ApplicationSetup.setProperty("stopwords.filename", currentDir);		
 		queryManager = new Manager(index);
 	}
 	
