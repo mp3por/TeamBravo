@@ -149,7 +149,14 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
-//		c.dailyMapReduce(new Date());
+//		Calendar today = Calendar.getInstance();
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
+//		today.add(Calendar.DATE, -1);
+//		c.dailyMapReduce(today.getTime(), ProjectProperties.TWEET_COLLECTION);
 //		c.mergingMapReduce(TimePeriod.PASTWEEK);
 //		c.mergingMapReduce(TimePeriod.PASTMONTH);
 		

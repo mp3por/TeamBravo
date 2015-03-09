@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.terrier.utility.ApplicationSetup;
 
 @Component
 public class TwitIE {

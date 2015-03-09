@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Document;
 import org.terrier.indexing.TwitterJSONDocument;
+import org.terrier.utility.ApplicationSetup;
 
 /**
  * A TweetsIndexer object will take a Terrier collection object, then produce
@@ -59,6 +60,13 @@ public class TweetsIndexer implements Observer {
 
 	@PostConstruct
 	private void init() {
+//		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+//		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+//		System.out.println("Search:" + currentDir);
+//		ApplicationSetup.setProperty("stopwords.filename", currentDir);
+//		ApplicationSetup.setProperty("termpipelines","Stopwords");
+//		System.err.println("Steeming has been disabled");
+
 //		this.index = terrier.getMemoryIndex();
 		serv.addObserver(this);
 		indexTweets();
@@ -66,19 +74,22 @@ public class TweetsIndexer implements Observer {
 
 	public void indexTweets() {
 		System.out.println("Start indexing the tweets");
-		while (tweets.nextDocument()) {
+		int count = 0;
+		do {
 			Document tweet = tweets.getDocument();
 			try {
 				index.indexDocument(tweet);
+				count++;
 			} catch (Exception e) {
 				System.err.println("Failed to index tweets");
 			}
-		}
+		} while(tweets.nextDocument());
 		try {
 			tweets.close();
 		} catch (IOException e) {
 			System.err.println("Failed to close collection");
 		}
+		System.out.println("Indexed " + count + " tweets.");
 	}
 
 	@Override
