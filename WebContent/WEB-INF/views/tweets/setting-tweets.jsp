@@ -41,7 +41,7 @@
 		<button type="button" index="added_Submit_index"
 			id="added_submitTweetwallSettings"
 			class="btn btn-default btn-sm added_submitTweetwallSettings">Submit
-			Setting</button>
+			settings</button>
 
 	</div>
 
