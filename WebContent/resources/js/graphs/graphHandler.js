@@ -144,7 +144,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			//reSet component's class
 			var chartClass = $('#chart' + tileNo).attr('class');
 			$('#chart' + tileNo).attr('class','bar' + chartClass);
-			drawBarChart(tileNo, "WEEK", "MAIN", null);
+			drawBarChart(tileNo, "WEEK", "MAIN", null, null, null);
 		}
 	});
 
@@ -163,26 +163,48 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 			$('#graphSetBtnWeek' + c).attr('data-tileno', c);
 			$('#graphSetBtnMonth').attr('id','graphSetBtnMonth' + c);
 			$('#graphSetBtnMonth' + c).attr('data-tileno', c);
+			$('#topicChooserA').attr('id', 'topicChooserA' + c);
+			$('#topicChooserB').attr('id', 'topicChooserB' + c);
+			$('#topicChooserBtn').attr('id', 'topicChooserBtn' + c);
+			$('#topicChooserBtn' + c).attr('data-tileno', c);
 		}
 	});
 }
 
-function drawBarChart(tileNo, timeScale, page, searchTerm){
+function drawBarChart(tileNo, timeScale, page, searchTerm, from , to){
 	
 	var src;
+	var srcInit;
+	var srcBtwn;
+	from --; //decrease for actual array positions
+	to --;
 	
 	if(page == "MAIN"){
 		initDimple(timeScale);
 		//Set data source week or month
 		if(timeScale == "WEEK"){
-			src = dataForDimpleWeek;
+			srcInit = dataForDimpleWeek;
 		}else if(timeScale == "MONTH"){
-			src = dataForDimpleMonth;
+			srcInit = dataForDimpleMonth;
 		}
+		
+		if(from == null || to == null){
+			for(var i = 0; i < 5 ; i++){
+				srcBtwn[i] = srcInit[i];
+			}
+		}else{
+			var j = 0;
+			for(var i = from; i <= to; i++){
+				srcBtwn[j] = srcInit[i];
+				j++
+			}
+		}
+		src = srcBtwn;
 	}else if(page == "SEARCH"){
 		initSearchGraphs(searchTerm);
 		src = dataForSearchWeek;
 	}
+	
 	
 	//Get id and append SVG
 	var chartId = "#chart" + tileNo;
@@ -221,16 +243,22 @@ function showLineGraph(tileNo){
 			//reSet component's class
 			var chartClass = $('#chart' + tileNo).attr('class');
 			$('#chart' + tileNo).attr('class','line' + chartClass);
-			drawLineGraph(tileNo,"WEEK");
+			drawLineGraph(tileNo,"WEEK", null, null, null);
 		}
 	});
 }
 
-function drawLineGraph(tileNo,timeScale, page, searchTerm){
+function drawLineGraph(tileNo,timeScale, page, searchTerm, from, to){
 	
+	var src
 	var srcLine;
+	var srcLineBtwn
+	
+	from --;
+	to --;
 	
 	if(page == "MAIN"){
+		
 		initDimple(timeScale);
 		//Set data source week or month
 		if(timeScale == "WEEK"){
@@ -238,16 +266,30 @@ function drawLineGraph(tileNo,timeScale, page, searchTerm){
 		}else if(timeScale == "MONTH"){
 			srcLine = dataForDimpleMonth;
 		}
+		
+		if(from == null || to == null){
+			for(var i = 0; i < 5 ; i++){
+				srcLineBtwn[i] = srcLine[i];
+			}
+		}else{
+			var j = 0;
+			for(var i = from; i <= to; i++){
+				srcLineBtwn[j] = srcLine[i];
+				j++
+			}
+		}
+		
+		src = srcLineBtwn;
 	}else if(page == "SEARCH"){
 		initSearchGraphs(searchTerm);
-		srcLine = dataForSearchMonth;
+		src = dataForSearchMonth;
 	}
 
 		
 	var LinechartId = "#chart" + tileNo;
 	var svg1 = dimple.newSvg(LinechartId, "100%", "57%");
 	
-	var myChart = new dimple.chart(svg1, srcLine);
+	var myChart = new dimple.chart(svg1, src);
 	myChart.setBounds("10%", "20%", "80%", "60%");
 	  
 	var x = myChart.addCategoryAxis("x", "Day");
@@ -283,25 +325,38 @@ function showPieChart(tileNo){
 			//reSet component's class
 			var chartClass = $('#chart' + tileNo).attr('class');
 			$('#chart' + tileNo).attr('class','pie' + chartClass);
-			drawPieChart(tileNo, "SINGLE","WEEK"); //default
+			drawPieChart(tileNo, "SINGLE","WEEK", null, null); //default
 		}
 	});
 }
 
-function drawPieChart(tileNo,timeScale){
+function drawPieChart(tileNo,timeScale, from, to){
 	
 	initPie(timeScale);
 	var srcPie;
+	var srcBtwn;
 	if(timeScale == "WEEK"){
 		srcPie = dataForPieWeek;
 	}else if(timeScale == "MONTH"){
 		srcPie = dataForPieMonth;
 	}
 	
+	if(from == null || to == null){
+		for(var i = 0; i < 5 ; i++){
+			srcBtwn[i] = srcPie[i];
+		}
+	}else{
+		var j = 0;
+		for(var i = from; i <= to; i++){
+			srcBtwn[j] = srcPie[i];
+			j++
+		}
+	}
+	
 	var pieChartId = "#chart" + tileNo;
 	var svgPie = dimple.newSvg(pieChartId, "100%", "57%"); //550, 320
 	
-	var myChart = new dimple.chart(svgPie, srcPie);
+	var myChart = new dimple.chart(svgPie, srcBtwn);
 	myChart.setBounds("1%", "10%", "80%", "80%")
 	myChart.addMeasureAxis("p", "Tweets");
 	myChart.addSeries("Topic", dimple.plot.pie);
@@ -380,20 +435,20 @@ function drawWordCloud(tileNo,timeScale){
 }
 
 //RE-DRAW GRAPHS------------------------------------------------------------------------------------------->>
-function reDrawGraph(tileNo, graphType, timeScale){
+function reDrawGraph(tileNo, graphType, timeScale, from, to){
 	//Remove old SVG
 	d3.select('#chart' + tileNo).select("svg").remove();
 	
 	//Draw graph
 	switch(graphType) {
     case "LINEGRAPH":
-    	drawLineGraph(tileNo, timeScale, "MAIN", null);
+    	drawLineGraph(tileNo, timeScale, "MAIN", null, from , to);
         break;
     case "BARCHART":
-    	drawBarChart(tileNo, timeScale, "MAIN", null);
+    	drawBarChart(tileNo, timeScale, "MAIN", null, from, to);
         break;
     case "PIECHART":
-    	drawPieChart(tileNo, timeScale);
+    	drawPieChart(tileNo, timeScale, from, to);
         break;
     case "WORDCLOUD":
     	drawWordCloud(tileNo, timeScale);

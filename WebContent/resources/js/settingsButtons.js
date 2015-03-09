@@ -4,23 +4,27 @@ function settingsFormOptionSelect(dropDownList){
 	var componentOption = $('#settingsForm' + tileNo + 'Component').val();
 	var activeGraph = $('.graphActive');
 	var time = $('.graphActive').val();
-	
-	console.log("OptionSelected: tile-" + tileNo + " option-" + componentOption + " time-" + time);
-	reDrawGraph(tileNo, componentOption, time);
+	reDrawGraph(tileNo, componentOption, time, null, null);
 }
 
 function settingsFormTimeSelect(settingsForm){
 
-	$(settingsForm).addClass('graphActive').siblings().removeClass('graphActive');
+	$(settingsForm).addClass('graphActive').siblings().removeClass('graphActive'); //for button highlighting
 	var time = settingsForm.value;
-	console.log(time);
 	var tileNo = settingsForm.getAttribute('data-tileno');
-	console.log(tileNo);
 	var componentOption = $('#settingsForm' + tileNo + 'Component').val();
-	console.log(componentOption);
-	
-	console.log("TimeSelected: tile-" + tileNo + " option-" + componentOption + " time-" + time);
-	reDrawGraph(tileNo, componentOption, time);
+	reDrawGraph(tileNo, componentOption, time, null, null);
+}
+
+function settingsFormTopicSelect(topicForm){
+	var tileNo = topicForm.getAttribute('data-tileno');
+	console.log(tileNo);
+	var from = $('#topicChooserA' + tileNo).val();
+	console.log("From: " + from);
+	var to = $('#topicChooserB' + tileNo).val();
+	console.log("To: " + to);
+	var chartType = $('#settingsForm' + tileNo + 'Component').val();
+	redrawGraph(tileNo, componentOption, "WEEK", from, to);
 }
 
 
