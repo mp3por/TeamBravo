@@ -48,27 +48,33 @@
 				<h5 class="stat">
 					<small>HASHTAG </small>
 				</h5>
-				<ul id = "stat_hashtag_ul" class="list-unstyled">
-					<li>${most_pop_hashtag}</li>
-				</ul>
+				<ol id = "stat_hashtag_ol">
+					<c:forEach var="hashtag" items="${most_pop_hashtag}">
+						<li>${hashtag}</li>
+					</c:forEach>
+				</ol>
 			</div>
 
 			<div class="col-md-4 col-sm-4 col-xs-4">
 				<h5 class="stat">
 					<small>LOCATION</small>
 				</h5>
-				<ul id = "stat_location_ul" class="list-unstyled">
-					<li>${most_pop_location}</li>
-				</ul>
+				<ol id = "stat_location_ol">
+					<c:forEach var="location" items="${most_pop_location}">
+						<li>${location}</li>
+					</c:forEach>
+				</ol>
 			</div>
 
 			<div class="col-md-4 col-sm-4 col-xs-4">
 				<h5 class="stat">
 					<small>PERSON</small>
 				</h5>
-				<ul id = "stat_person_ul" class="list-unstyled">
-					<li>${most_pop_person}</li>
-				</ul>
+				<ol id = "stat_person_ol">
+					<c:forEach var="person" items="${most_pop_person}">
+						<li>${person}</li>
+					</c:forEach>
+				</ol>
 			</div>
 		</div>
 
