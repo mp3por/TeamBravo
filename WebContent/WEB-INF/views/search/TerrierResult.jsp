@@ -303,7 +303,7 @@
 		});
 	}
 	
-	function refresh(container_id, index){
+	function rankByRelevance(container_id, index){
 		$.ajax({
 			url : '/TeamBravo/search/terrier/refresh/${query}',
 			success: function(data) {
@@ -322,9 +322,7 @@
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
-				'<button type="button" onclick="refresh(tile_content0, 0);" id="refresh" index="refresh" class="btn btn-default refresh">Reset</button>'+
-					'<button type="button" onclick="rankedByRetweeted(tile_content0, 0);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Most retweeted</button>'+
-					'<button type="button" onclick="rankedByFavourited(tile_content0, 0);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Most favourited</button>'+
+					'<button type="button" onclick="rankByRelevance(tile_content0, 0);" id="refresh" index="refresh" class="btn btn-default refresh">Rank by Relevance</button>'+
 					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">Most recent</button>'+			
 					'<br/><br />');
 		
