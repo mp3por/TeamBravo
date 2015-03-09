@@ -189,12 +189,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			String dateFrom, String dateTo, String collectionName) throws ParseException {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 
-		SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM d HH:mm:ss YYYY");
+		SimpleDateFormat parserSDF = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy");
 		Date dateFr = parserSDF.parse(dateFrom); 
 		Date dateT  = parserSDF.parse(dateTo);
-		
-		System.out.println(dateFr);
-		System.out.println(dateT);
 		
 		dateFrom = ((Long) dateFr.getTime()).toString();
 		dateTo = ((Long) dateT.getTime()).toString();
