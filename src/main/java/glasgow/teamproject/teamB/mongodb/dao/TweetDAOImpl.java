@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
-import glasgow.teamproject.teamB.mongodb.main.FixDB.TimePeriod;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -527,11 +526,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			top = mongoOps.getCollection(MONTHLY_COLLECT_NAME);
 		} else {
 			top = mongoOps.getCollection(DAILY_COLLECT_NAME);
-			if ( timePeriod.equals(TimePeriod.PASTDAY) ) {
-				findQuery = true;
-				queryStr = queryStr.put("_id.date").is(
-						counterDateFormat.format(new Date()));
-			}
+			findQuery = true;
+			queryStr = queryStr.put("_id.date").is(
+					counterDateFormat.format(new Date()));
 		}
 		
 		if (!field.equals(Field.ALL)) {
@@ -541,9 +538,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		DBCursor c;
 		if( findQuery ) {
-			c = top.find(queryStr.get()).sort( new BasicDBObject("sum", -1) );
+			c = top.find(queryStr.get()).sort( new BasicDBObject("value", -1) );
 		} else {
-			c = top.find().sort( new BasicDBObject("sum", -1) );
+			c = top.find().sort( new BasicDBObject("value", -1) );
 		}
 		
 		int numAdded = 0;
@@ -551,7 +548,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			DBObject result = c.next();
 			DBObject idObj = (DBObject) result.get("_id");
 			String tri = (String) idObj.get("id");
-			Double d = (Double) result.get("sum");
+			Double d = (Double) result.get("value");
 			if (tri.trim().length() <= 0)
 				continue;
 			l.add(new EntityCountPair(tri, d));
@@ -570,10 +567,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 * @return list of (date string, number of tweets) sorted by date in
 	 *         ascending order
 	 */
-	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays) {
+	public List<HashMap<String, String>> getEntitiyTrend(String entity, int numDays) {
 
 		entity = entity.toLowerCase().trim();
-		ArrayList<DateCountPair> l = new ArrayList<DateCountPair>(numDays);
+		List<HashMap<String, String>> l = new ArrayList<HashMap<String, String>>(numDays);
 
 		Calendar today = Calendar.getInstance();
 		DBCollection dailyCollection = mongoOps
@@ -591,13 +588,13 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			Double count = 0.0;
 			while (cursor.hasNext()) {
 				DBObject obj = cursor.next();
-				BasicDBObject value = (BasicDBObject) obj.get("value");
-				count += (Double) value.get("count");
+				count += (Double) obj.get("value");
 			}
-			l.add(i,
-					new DateCountPair(
-							counterDateFormat.format(today.getTime()), count
-									.intValue()));
+			HashMap<String, String> h = new HashMap<String, String>();
+			h.put("Topic", entity);
+			h.put("Day", counterDateFormat.format(today.getTime()));
+			h.put("Tweets", count.toString());
+			l.add(i, h);
 		}
 
 		return l;
@@ -621,23 +618,23 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		}
 	}
 
-	public class DateCountPair {
-		private String date;
-		private int count;
-
-		public DateCountPair(String date, int count) {
-			this.date = date;
-			this.count = count;
-		}
-
-		public String getDate() {
-			return date;
-		}
-
-		public int getCount() {
-			return count;
-		}
-	}
+//	public class DateCountPair {
+//		private String date;
+//		private int count;
+//
+//		public DateCountPair(String date, int count) {
+//			this.date = date;
+//			this.count = count;
+//		}
+//
+//		public String getDate() {
+//			return date;
+//		}
+//
+//		public int getCount() {
+//			return count;
+//		}
+//	}
 
 	// ------------------------------------------------------------------------
 
@@ -705,7 +702,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	public String getMostActiveUser(Date stDate, Date edDate) {
 
-		DBCollection tweets = mongoOps.getCollection("tweets");
+		DBCollection tweets = mongoOps.getCollection(ProjectProperties.WEEKLY_COLLECT_NAME);
 
 		DBObject query = null;
 		if (stDate != null && edDate != null) {
@@ -748,10 +745,4 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return null;
 	}
 
-	@Override
-	public HashMap<String, Object> getMostPopularTweet(Date stDate,
-			Date edDate, String compareKey) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

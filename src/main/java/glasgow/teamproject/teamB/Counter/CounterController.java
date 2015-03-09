@@ -101,36 +101,52 @@ public class CounterController {
 		} else {
 			model.addObject("most_mentioned_user", "-");
 		}
+		
 		List<EntityCountPair> most_pop_hashtag = DBHelper.getTopEntities(
-				Field.HASHTAG, p, 5);
-		if (!most_pop_hashtag.isEmpty())
-			model.addObject("most_pop_hashtag", 
-					
-					"<a href=\"/TeamBravo/search/terrier/"
-							+ most_pop_hashtag.get(0).getID() + "\">"
-							+ most_pop_hashtag.get(0).getID() + "</a>"); 
+				Field.HASHTAG, p, 9);
+		String[] most_pop_hashtag_arry = new String[5];
+		for( int i = 0, j = 0; j < most_pop_hashtag.size() && i < 5; ++j ) {
+			String term = most_pop_hashtag.get(j).getID();
+			if( !term.equals("#glasgow" ) && !term.equals("#scotland") && !term.equals("#uk") ){
+				most_pop_hashtag_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
+						+ term + "\">" + term + "</a>";
+				++i;
+			}
+		}
+		if (!most_pop_hashtag.isEmpty()) {
+			model.addObject("most_pop_hashtag", most_pop_hashtag_arry);
+		}
 		else
 			model.addObject("most_pop_hashtag", "-");
 
-		// /TeamBravo/
-
 		List<EntityCountPair> most_pop_location = DBHelper.getTopEntities(
-				Field.LOCATION, p, 5);
-		if (!most_pop_location.isEmpty())
-			model.addObject("most_pop_location", 
-					"<a href=\"/TeamBravo/search/terrier/"
-							+ most_pop_location.get(0).getID() + "\">"
-							+ most_pop_location.get(0).getID() + "</a>"); 
-							else
+				Field.LOCATION, p, 9);
+		String[] most_pop_location_arry = new String[5];
+		for( int i = 0, j = 0; j < most_pop_location.size() && i < 5; ++j ) {
+			String term = most_pop_location.get(j).getID();
+			if( !term.equals("glasgow" ) && !term.equals("scotland") && !term.equals("uk") ){
+				most_pop_location_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
+						+ term + "\">" + term + "</a>";
+				++i;
+			}
+		}
+		if (!most_pop_location.isEmpty()) {
+			model.addObject("most_pop_location", most_pop_location_arry);
+		}
+		else
 			model.addObject("most_pop_location", "-");
 
 		List<EntityCountPair> most_pop_person = DBHelper.getTopEntities(
 				Field.PERSON, p, 5);
-		if (!most_pop_person.isEmpty())
-			model.addObject("most_pop_person",
-					"<a href=\"/TeamBravo/search/terrier/"
-							+ most_pop_person.get(0).getID() + "\">"
-							+ most_pop_person.get(0).getID() + "</a>"); 
+		String[] most_pop_person_arry = new String[5];
+		for( int i = 0, j = 0; j < most_pop_person.size() && i < 5; ++j, ++i ) {
+			String term = most_pop_person.get(j).getID();
+			most_pop_person_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
+						+ term + "\">" + term + "</a>";
+		}
+		if (!most_pop_person.isEmpty()) {
+			model.addObject("most_pop_person", most_pop_person_arry);
+		}
 		else
 			model.addObject("most_pop_person", "-");
 

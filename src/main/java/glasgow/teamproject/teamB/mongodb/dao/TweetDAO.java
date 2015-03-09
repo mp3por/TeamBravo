@@ -44,10 +44,10 @@ public interface TweetDAO {
 	// For Statistics
 	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted);
 	public String getMostActiveUser(Date stDate, Date edDate);
-	public HashMap<String, Object> getMostPopularTweet(Date stDate, Date edDate, String compareKey);
+	// public HashMap<String, Object> getMostPopularTweet(Date stDate, Date edDate, String compareKey);
 	public List<EntityCountPair> getTopEntities(Field field,
 			TimePeriod timePeriod, int numEntities);
-	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays);
+	public List<HashMap<String, String>> getEntitiyTrend(String entity, int numDays);
 	
 	// For Counting
 	public void dailyMapReduce(Date date,String collectionName);
