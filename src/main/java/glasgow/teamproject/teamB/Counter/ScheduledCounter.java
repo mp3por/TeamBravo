@@ -23,7 +23,7 @@ public class ScheduledCounter {
 		tweetSaver.dailyMapReduce(new Date(),ProjectProperties.TWEET_COLLECTION);
     }
 	
-	//@Scheduled(cron="0 55 23 * * ?")
+	@Scheduled(cron="0 55 23 * * ?")
 	public void mergingTables(){
 		tweetSaver.mergingMapReduce(TimePeriod.PASTWEEK);
 		tweetSaver.mergingMapReduce(TimePeriod.PASTMONTH);

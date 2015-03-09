@@ -2,6 +2,7 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
+import glasgow.teamproject.teamB.mongodb.main.FixDB.TimePeriod;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -366,56 +367,80 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 * @param date
 	 *            : tweet's created_at date
 	 */
-	public void dailyMapReduce(Date date,String collectionName) {
+	public void dailyMapReduce(Date date, String collectionName) {
 
 		DBCollection tweets = mongoOps.getCollection(collectionName);
-		
+
 		Calendar today = Calendar.getInstance();
+		today.setTime(date);
+
 		today.set(Calendar.HOUR_OF_DAY, 0);
 		today.set(Calendar.MINUTE, 0);
 		today.set(Calendar.SECOND, 0);
-		
+
 		long today_beginning_timestamp = today.getTimeInMillis();
-		DBObject q = new BasicDBObject("timestamp_ms", new BasicDBObject("$gte",Long.toString(today_beginning_timestamp)));
-		DBObject match = new BasicDBObject("$match",q);
-		DBObject output = new BasicDBObject("$out","temp");
+		System.out.println("Today beginning:" + today.getTime());
+
+		today.set(Calendar.HOUR_OF_DAY, 23);
+		today.set(Calendar.MINUTE, 59);
+		today.set(Calendar.SECOND, 59);
+		long today_ending_timestamp = today.getTimeInMillis();
+		System.out.println("Today ending:" + today.getTime());
+
+		DBObject condition = new BasicDBObject(2);
+		condition.put("$gte", Long.toString(today_beginning_timestamp));
+		condition.put("$lt", Long.toString(today_ending_timestamp));
+		DBObject q = new BasicDBObject("timestamp_ms", condition);
+		DBObject match = new BasicDBObject("$match", q);
+		DBObject output = new BasicDBObject("$out", "temp");
 
 		// run aggregation
 		List<DBObject> pipeline = Arrays.asList(match, output);
 		tweets.aggregate(pipeline);
-		
+
 		DBCollection temp = mongoOps.getCollection("temp");
 
-		
 		// map function
 		StringBuilder mapFunction = new StringBuilder("function() {");
 		for (Field field : Field.values()) {
-			mapFunction.append("var entity = this."+ field.toString() +";");
-			mapFunction.append("if ( entity ) { entity = entity.toString().toLowerCase().split(\",\");");
+			if (field == Field.ALL) {
+				continue;
+			}
+			mapFunction.append("var entity = this." + field.toString() + ";");
+			mapFunction
+					.append("if ( entity ) { entity = entity.toString().toLowerCase().split(',');");
 			mapFunction.append("for ( var i = entity.length -1  ; i>=0 ;--i){");
 
 			if (field.toString() == Field.PERSON.toString()) {
-				mapFunction.append("entity[i]=entity[i].replace(/[^a-zA-Z]/g, ' ');");
+				mapFunction
+						.append("entity[i]=entity[i].replace(/[^a-zA-Z]/g, ' ');");
 
 			} else if (field.toString() == Field.HASHTAG.toString()) {
-				mapFunction.append("entity[i]=entity[i].replace(/[`~!@$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
+				mapFunction
+						.append("entity[i]=entity[i].replace(/[`~!@$%^&*()_|+\\-=?;:\\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
 
 			} else if (field.toString() != Field.URL.toString()) {
-				mapFunction.append("entity[i]=entity[i].replace(/[`~!@#$%^&*()_|+\\-=?;:\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
+				mapFunction
+						.append("entity[i]=entity[i].replace(/[`~!@#$%^&*()_|+\\-=?;:\\'\".<>\\{\\}\\[\\]\\\\/]/gi, '');");
 			}
-			
-			mapFunction.append("if ( entity[i] && entity[i].trim().length > 0 && entity[i] != '[]') { var values = { count: 1 };");
-			mapFunction.append("emit( { id: entity[i].trim(), date: \"" + counterDateFormat.format(date)+ "\", type: \"" + field.toString() + "\"}, values);}}}");
+
+			mapFunction
+					.append("if ( entity[i] && entity[i].trim().length > 0 && entity[i] !== '[]') {");
+			mapFunction.append("emit( { id: entity[i].trim(), date: \""
+					+ counterDateFormat.format(date) + "\", type: \""
+					+ field.toString() + "\"}, 1);}}}");
 
 		}
 		mapFunction.append("};");
 		String map = mapFunction.toString();
+		System.out.println(map);
 
 		// reduce function
-		String reduce = "function(key, values) {"
-				+ "var outs = { count: 0 };"
-				+ "values.forEach( function(v) {"
-				+ "outs.count += v.count;" + "});" + "return outs;" + "}";
+		String reduce = "function(key, values) {" + "var sum = 0;"
+				+ "values.forEach( function(v) {" + "sum += v;" + "});"
+				+ "return sum;" + "}";
+
+		System.out.println(reduce);
 
 		// run map-reduce on the temporary collection, the output is in the file
 		// named outCollection
@@ -440,10 +465,11 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	 *            month collections from today
 	 */
 	public void mergingMapReduce(TimePeriod timePeriod) {
-		
+
 		System.out.println("Starting merging mapreduce...");
-		
-		DBCollection dailyCollection = mongoOps.getCollection(DAILY_COLLECT_NAME);
+
+		DBCollection dailyCollection = mongoOps
+				.getCollection(DAILY_COLLECT_NAME);
 
 		Calendar stDate = Calendar.getInstance();
 		if (timePeriod.equals(TimePeriod.PASTWEEK)) {
@@ -453,35 +479,37 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		} else {
 			return;
 		}
-		
+
 		System.out.println("Start date: " + stDate.getTime().toString());
-		
+
 		// create pipeline operations, first with the $match
-		DBObject matchObj = new BasicDBObject( "_id.date",
-				new BasicDBObject("$gte", counterDateFormat.format(stDate.getTime())));
+		DBObject matchObj = new BasicDBObject("_id.date", new BasicDBObject(
+				"$gte", counterDateFormat.format(stDate.getTime())));
 		DBObject match = new BasicDBObject("$match", matchObj);
-		
+
 		// build the $projection operation
 		DBObject fields = new BasicDBObject("_id.id", 1);
 		fields.put("_id.type", 1);
-		fields.put("value.count", 1);
+		fields.put("value", 1);
 		DBObject project = new BasicDBObject("$project", fields);
-		
+
 		// the $group operation
 		Map<String, Object> dbObjIdMap = new HashMap<String, Object>();
 		dbObjIdMap.put("id", "$_id.id");
 		dbObjIdMap.put("type", "$_id.type");
-		DBObject groupFields = new BasicDBObject("_id", new BasicDBObject(dbObjIdMap));
-		groupFields.put("sum", new BasicDBObject("$sum", "$value.count"));
+		DBObject groupFields = new BasicDBObject("_id", new BasicDBObject(
+				dbObjIdMap));
+		groupFields.put("value", new BasicDBObject("$sum", "$value"));
 		DBObject group = new BasicDBObject("$group", groupFields);
-		
+
 		// $out operation
-		DBObject out = new BasicDBObject("$out", (timePeriod.equals(TimePeriod.PASTWEEK) ? WEEKLY_COLLECT_NAME
-				: MONTHLY_COLLECT_NAME));
+		DBObject out = new BasicDBObject("$out",
+				(timePeriod.equals(TimePeriod.PASTWEEK) ? WEEKLY_COLLECT_NAME
+						: MONTHLY_COLLECT_NAME));
 
 		List<DBObject> pipeline = Arrays.asList(match, project, group, out);
 		dailyCollection.aggregate(pipeline);
-		
+
 		System.out.println("Finished merging mapreduce");
 	}
 
