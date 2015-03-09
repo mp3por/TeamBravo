@@ -55,7 +55,7 @@ public class NamedEntityParser implements Observer {
 				sb.append("}");
 				rawString = sb.toString();
 				
-				System.out.println("NamedEntityParser before save");
+				System.out.println("NamedEntityParser before save: " + rawString);
 				DB.addTweet(rawString, "party_tweets");
 				DB.addTweet(rawString, ProjectProperties.TWEET_COLLECTION);
 			}

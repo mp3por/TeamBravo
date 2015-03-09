@@ -185,7 +185,7 @@ public class GraphsController {
 			//Remove empty strings
 			for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
 				EntityCountPair topic = iterator.next();
-			    if (topic.getID().isEmpty()) {
+			    if (topic.getID().isEmpty()||topic.getID().equals("[]")||topic.getID().equals("[")||topic.getID().equals("]")) {
 			        // Remove the current element from the iterator and the list.
 			        iterator.remove();
 			    }
