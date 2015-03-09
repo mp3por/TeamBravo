@@ -73,7 +73,7 @@
 <div class="about-us" id="about-us">
 <legend>About us:</legend>
 <p><img src="<c:url value="/resources/img/uni_glasgow_logo.png" />" width="300px"><br/>
-<h4>"A Dasboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
+<h4>"A Dashboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
 <ul>
 <li>Prapaipim Junhavittaya</li>
 <li>Paulius Peciura</li>

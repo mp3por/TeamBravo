@@ -408,7 +408,6 @@ function reDrawGraph(tileNo, graphType, timeScale){
 
 //GRAPHS FOR SEARCH------------------------------------------------------------------------------------------>>
 function getGraphsForSearch(searchTerm){
-	debugger;
 	drawBarChart(1, null, "SEARCH", searchTerm);
 	drawLineGraph(2, null, "SEARCH", searchTerm);
 }
