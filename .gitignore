@@ -7,3 +7,4 @@
 target/
 *.json
 /mongo*
+/Logs
