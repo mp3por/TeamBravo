@@ -219,8 +219,16 @@
 	}
 	
 	function settingsButtonClick(clicked) {
+		//debugger;
 		var settings = $('#settings' + clicked.id);
-		settings.show();
+		var p = $(clicked).attr("opened");
+		if (p == '0') {
+			settings.show();
+			$(clicked).attr("opened", "1");
+		} else {
+			settings.hide();
+			$(clicked).attr("opened", "0");
+		}
 	}
 
 	function getSearchBox() {
