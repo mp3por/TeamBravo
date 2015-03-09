@@ -149,33 +149,10 @@ public class SearchDAOImpl {
 	 */
 	public ArrayList<HashMap<String, Object>> getTweetsForTweetWall(List<Tweet> list) {
 		ArrayList<HashMap<String, Object>> results = new ArrayList<>();
-		Map<String, Object> currentTweet;
-		for (int i = 0; i < list.size(); i++) {
-			currentTweet = list.get(i).getTweetMap();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key : currentTweet.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentTweet.get(key).toString();
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE : s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				} else {
-					tweet.put(key, currentTweet.get(key));
-				}
-			}
-			results.add(tweet);
-		}
+		
+		for (Tweet tweet: list)
+			results.add(tweet.getTweetMap());
+		
 		return results;
 	}
 
