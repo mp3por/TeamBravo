@@ -9,7 +9,9 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 //import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 
+
 import java.io.IOException;
+import java.util.LinkedList;
 //import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -36,7 +38,7 @@ public class TwitterMongoDAOCollection implements Collection{
 	/** logger for this class */	
 	protected static final Logger logger = Logger.getLogger(TwitterMongoDAOCollection.class);
 	
-	protected ArrayBlockingQueue<String> tweets;
+	protected LinkedList<String> tweets;
 	
 	/** The current document */
 	protected Document currentDocument;
@@ -83,7 +85,7 @@ public class TwitterMongoDAOCollection implements Collection{
 		logger.error("WARN: TwitterMongoDBCollection.reset() was called but it has not been implemented.");		
 	}
 	
-	public ArrayBlockingQueue<String> getAllTweets(){
+	public LinkedList<String> getAllTweets(){
 		return this.tweets;
 	}
 

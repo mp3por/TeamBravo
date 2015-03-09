@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -38,7 +39,7 @@ public interface TweetDAO {
 	
 	
 	// For Terrier
-	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
+	public LinkedList<String> getTweetsQueue(String collectionName);
 		
 	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
 	

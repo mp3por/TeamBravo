@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -251,11 +252,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	// For Terrier indexing
 	@Override
-	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName) {
+	public LinkedList<String> getTweetsQueue(String collectionName) {
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor foo = dbCollection.find();
-		ArrayBlockingQueue<String> tweets = new ArrayBlockingQueue<String>(
-				foo.size());
+		LinkedList<String> tweets = new LinkedList<String>();
 		foo.next();
 		while (foo.hasNext()) {
 			tweets.add(foo.next().toString());
