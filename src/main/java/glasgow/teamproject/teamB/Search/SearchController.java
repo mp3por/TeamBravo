@@ -98,7 +98,7 @@ public class SearchController {
 		System.err.println("mode is: " + mode);
 //		dao.rankedByPostedTime(); 
 		
-		List<Tweet> l;
+		List<Tweet> l = dao.getResultsList();
 		
 		if (mode.equals("retweeted")){
 			System.err.println("Ranking by retweeted times.");

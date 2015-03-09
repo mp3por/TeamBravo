@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 //import java.util.Set;
 
+
 import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+import org.terrier.utility.ApplicationSetup;
 
 //import org.terrier.realtime.memory.MemoryIndex;
 
@@ -58,6 +60,10 @@ public class SearchDAOImpl {
 
 	@PostConstruct
 	public void setUp() {
+		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+		System.out.println("Search:" + currentDir);
+		ApplicationSetup.setProperty("stopwords.filename", currentDir);		
 		queryManager = new Manager(index);
 	}
 	
@@ -149,33 +155,10 @@ public class SearchDAOImpl {
 	 */
 	public ArrayList<HashMap<String, Object>> getTweetsForTweetWall(List<Tweet> list) {
 		ArrayList<HashMap<String, Object>> results = new ArrayList<>();
-		Map<String, Object> currentTweet;
-		for (int i = 0; i < list.size(); i++) {
-			currentTweet = list.get(i).getTweetMap();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key : currentTweet.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentTweet.get(key).toString();
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE : s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				} else {
-					tweet.put(key, currentTweet.get(key));
-				}
-			}
-			results.add(tweet);
-		}
+		
+		for (Tweet tweet: list)
+			results.add(tweet.getTweetMap());
+		
 		return results;
 	}
 

@@ -263,7 +263,6 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		return tweets;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Tweet> getResultsList(String collectionName,
 			int[] resultsDocids) {
@@ -272,9 +271,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		DBCursor foo = dbCollection.find();
 		foo.next();
 
-		ArrayList<Tweet> collectionList = new ArrayList<>();
+		ArrayList<Tweet> collectionList = new ArrayList<>();		
 		while(foo.hasNext()){ 
-			collectionList.add(new Tweet(foo.next().toString(), foo.curr().toMap()));
+			collectionList.add(new Tweet(foo.next().toString(), parseDBObject((BasicDBObject)foo.curr())));
 		}
 		
 
@@ -296,12 +295,6 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			j.add(p);
 		}
 		return j;
-	}
-
-	@Override
-	public ArrayList<HashMap<String, Object>> getTweetsForId(int[] ids) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	// ------------------------------------------------------------------------
@@ -727,6 +720,13 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			return (String) result.get("_id");
 		}
 
+		return null;
+	}
+
+	@Override
+	public HashMap<String, Object> getMostPopularTweet(Date stDate,
+			Date edDate, String compareKey) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
