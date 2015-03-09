@@ -76,14 +76,20 @@
 			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
 				style="width: 30%;">
 		</div>
-		<div id='cssmenu'>
+		<div class="container-fluid">
+		<div class="row" id="top-menu">
+		
+		<div id='cssmenu' class="col-lg-4 col-lg-offset-2">
 			<ul id='naviMenu'>
-				<li class='active'><a href='#'><span>Home</span></a></li>
-				<li><a href='#'><span>Tweets</span></a></li>
-				<li><a href='#'><span>Map</span></a></li>
-				<li class='last'><a href='#'><span>Graphs</span></a></li>
+				<li class='active'>
+				<a href='#'><span>Home</span></a></li>
+				<li class='last'><a href='#about-us'><span>About Us</span></a></li>
 			</ul>
-			<div id="search"></div>
+		</div>
+		<div class="col-lg-4 col-lg-offset-1" id="search-padding">
+			<div id="search" ></div>
+			</div>
+		</div> <!-- row -->
 		</div>
 	</header>
 	<!-- -------------------------------------------------------------- -->
@@ -143,7 +149,27 @@
 	<!-- -------------------------------------------- -->
 
 </body>
-<footer> footer </footer>
+<footer> 
+<div class="about-us" id="about-us">
+<legend>About us:</legend>
+<p><img src="<c:url value="/resources/img/uni_glasgow_logo.png" />" width="300px"><br/>
+<h4>"A Dasboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
+<ul>
+<li>Prapaipim Junhavittaya</li>
+<li>Paulius Peciura</li>
+<li>Zijian Feng</li>
+<li>Steven McGuckin</li>
+<li>Velin Kerkov</li>
+</ul>
+<h4>Project supervisors:</h4>
+<ul>
+<li>Dr Iadh Ounis</li>
+<li>Richard McCreadie</li>
+</ul>
+<br/>
+<a href='#'><span>Back to the top</span></a></li>
+</div>
+</footer>
 
 <script type="text/javascript">
 	$('#add_more_form').on('submit', function(e) { // use on if jQuery 1.7+
