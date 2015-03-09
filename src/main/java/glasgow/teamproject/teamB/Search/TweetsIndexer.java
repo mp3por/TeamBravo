@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Document;
 import org.terrier.indexing.TwitterJSONDocument;
-import org.terrier.utility.ApplicationSetup;
 
 /**
  * A TweetsIndexer object will take a Terrier collection object, then produce

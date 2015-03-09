@@ -4,17 +4,11 @@ import glasgow.teamproject.teamB.TwitIE.NamedEntityParser;
 import glasgow.teamproject.teamB.TwitIE.TwitIE;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.Util.StreamReaderService;
-import glasgow.teamproject.teamB.Util.TwitterStreamBuilderUtil;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOAbstract;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Scanner;
-
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.mongodb.MongoClient;
 

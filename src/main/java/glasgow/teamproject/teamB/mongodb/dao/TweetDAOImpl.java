@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;

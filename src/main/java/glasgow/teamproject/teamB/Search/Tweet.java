@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.Search;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONObject;
 

@@ -8,12 +8,8 @@ import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 //import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
-
-
 import java.io.IOException;
 import java.util.LinkedList;
-//import java.net.UnknownHostException;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.annotation.PostConstruct;
 
@@ -25,7 +21,7 @@ import org.springframework.stereotype.Component;
 import org.terrier.indexing.Collection;
 import org.terrier.indexing.Document;
 import org.terrier.indexing.TwitterJSONDocument;
-import org.terrier.utility.ApplicationSetup;
+//import java.net.UnknownHostException;
 
 //import com.mongodb.MongoClient;
 

@@ -4,7 +4,6 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
