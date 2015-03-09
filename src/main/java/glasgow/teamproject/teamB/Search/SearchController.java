@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import org.json.JSONObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +60,6 @@ public class SearchController {
 	
 	@RequestMapping("/terrier/{query}")
 	public ModelAndView searchPage(@PathVariable("query") String query){		
-		
 		dao.runQuery(query);
 		
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);
@@ -86,7 +85,7 @@ public class SearchController {
 	public ModelAndView tweetWall(@PathVariable("query") String query){
 //		dao.runQuery("normal", query);
 		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
-		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall(dao.getResultsList());
 		modelandview.addObject("tweets", tweets);
 		return modelandview;
 	}
@@ -99,19 +98,21 @@ public class SearchController {
 		System.err.println("mode is: " + mode);
 //		dao.rankedByPostedTime(); 
 		
+		List<Tweet> l = dao.getResultsList();
+		
 		if (mode.equals("retweeted")){
 			System.err.println("Ranking by retweeted times.");
-			dao.rankedByRetweeted();
+			l = dao.rankedByRetweeted();
 		}
 		
-		if(mode.equals("recent")){
+		else if(mode.equals("recent")){
 			System.err.println("Ranking by posted time.");
-			dao.rankedByPostedTime();
+			l = dao.rankedByPostedTime();
 		}
 		
-		if(mode.equals("favourite")){
+		else{
 			System.err.println("Ranking by favourited times.");
-			dao.rankByFavourited();
+			l = dao.rankByFavourited();
 		}
 		
 //		List<Tweet> list = dao.getResultsList();
@@ -121,7 +122,22 @@ public class SearchController {
 //			System.out.println(js.get("retweet_count"));
 //		}
 		
-		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
+		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall(l);
+		modelandview.addObject("tweets", tweets);
+		return modelandview;
+	}
+	
+	@RequestMapping("/terrier/refresh/{query}")
+	public ModelAndView refresh(){
+		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
+		List<Tweet> list = dao.getResultsList();
+		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall(list);
+//		JSONObject js;
+//		for (Tweet t: list){
+//			js = new JSONObject(t.getTweet());
+//			System.out.println(js.get("text"));
+//		}
+		System.err.println("Resetting!");
 		modelandview.addObject("tweets", tweets);
 		return modelandview;
 	}
@@ -133,5 +149,11 @@ public class SearchController {
 		return dao.getDataForMaps();
 	}
 	
+	@RequestMapping("/graphs/{query}")
+	public ModelAndView testGraphs(@PathVariable("query") String query){
+		ModelAndView mv = new ModelAndView("search_graphs");
+		mv.addObject("query", query);
+		return mv;
+	}
 	
 }

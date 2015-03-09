@@ -3,6 +3,7 @@ package glasgow.teamproject.teamB.TwitterStreaming;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.net.UnknownHostException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -30,7 +32,17 @@ public class TweetController {
 	public ModelAndView allTweetsTest(@PathVariable("amount") String amount, @PathVariable("dateFrom") String dateFrom, @PathVariable("dateTo") String dateTo) throws UnknownHostException{
 		ModelAndView mv = new ModelAndView("only-tweets");
 		
-		List<HashMap<String,Object>> tweets = getTweets(Integer.parseInt(amount), dateFrom, dateTo);
+		List<HashMap<String, Object>> tweets = new ArrayList<HashMap<String,Object>>();
+		try {
+			tweets = getTweets(Integer.parseInt(amount), dateFrom, dateTo);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		mv.addObject("tweets",tweets);
 		mv.addObject("amount", amount);
 		//mv.addObject("Dates:")
@@ -43,12 +55,20 @@ public class TweetController {
 		return mv;
 	}
 	
+	@RequestMapping("/tweetWall/getSettings")
+	@ResponseBody
+	public ModelAndView getSettings() {
+		ModelAndView mv = new ModelAndView("setting-tweets");
+		return mv;
+	}
+	
 		
 	/**
 	 * This method will handle the connection to the db later
 	 * @throws UnknownHostException 
+	 * @throws ParseException 
 	 * */
-	private ArrayList<HashMap<String,Object>> getTweets(int amount, String dateFrom, String dateTo) throws UnknownHostException {
+	private ArrayList<HashMap<String,Object>> getTweets(int amount, String dateFrom, String dateTo) throws UnknownHostException, ParseException {
 		ArrayList<HashMap<String,Object>> t;		
 		if (dateFrom.compareTo("0") == 0) {
 		 t = tweetSaver.getLastTweets(amount, "tweets");

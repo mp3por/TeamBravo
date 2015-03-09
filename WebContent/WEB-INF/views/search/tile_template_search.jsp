@@ -2,17 +2,25 @@
 
 
 <div class="col-md-6 HOLDER" id="template_column_id">
-	<div class="block">
+	<div id='block' class="block">
 		<div class="row">
-			<div class="col-md-12">
-				<div class="above_box text-center" id="template_title">TITLE</div>
-				<div>
-					<button id="template_submit_button" type="button" class="btn btn-sm" settings_button_id="temlate" opened="0" onClick="settingsButtonClick(this)">Settings!</button>
-				</div>
+			<div class="col-md-10 col-sm-10 col-xs-10">
+				<h4 class="above_box text-center" id="template_title">TITLE</h4>
 			</div>
+
+			<div class="col-md-2 col-sm-2 col-xs-2">
+				<button id="template_submit_button" type="button"
+					 class="btn btn-sm setting-btn"
+					settings_button_id="temlate" opened="0"
+					onClick="settingsButtonClick(this)">
+					<span class="glyphicon glyphicon-wrench"></span>
+				</button>
+			</div>
+
 		</div>
-		<div id="template_settings_div" class="settings" >settings</div>
-		<div id="template_content">
+		<div id="template_settings_div" class="settings">
+			<span class="glyphicon glyphicon-ok"></span>
 		</div>
+		<div id="template_content"></div>
 	</div>
 </div>

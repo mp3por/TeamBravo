@@ -55,7 +55,7 @@ public class TwitIE {
 			// Only god knows how it works
 			String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 
-			//String currentDir = "/Users/velin/Documents/Workspaces/3_Year/TP3/";
+			//String currentDir = "C:\\Users\\velin\\GoogleDrive\\DOCUMENTS\\1111111\\3_Year\\Team Project\\";
 			currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo";
 			System.out.println(currentDir);
 

@@ -171,6 +171,7 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 	});
 }
 
+
 function drawBarChart(tileNo, timeScale, page, searchTerm, from , to){
 	
 	var src;
@@ -429,7 +430,9 @@ function drawWordCloud(tileNo,timeScale){
 	        })
 	        .text(function(d) { return d.Name; })
 			.on("click", function (d, i){
+
 				window.open("/TeamBravo/search/terrier/" + d.Name);
+
 			});
 		}
 }

@@ -7,9 +7,11 @@ import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -37,14 +39,12 @@ public interface TweetDAO {
 	
 	
 	// For Terrier
-	public ArrayBlockingQueue<String> getTweetsQueue(String collectionName);
+	public LinkedList<String> getTweetsQueue(String collectionName);
 		
 	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
 	
 	//For Terrier
 	public Queue<String> getCollection(String string);
-
-	public ArrayList<HashMap<String,Object>> getTweetsForId(int[] ids);
 
 	// For Statistics
 	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted);
@@ -55,11 +55,11 @@ public interface TweetDAO {
 	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays);
 	
 	// For Counting
-	public void dailyMapReduce(Date date);
+	public void dailyMapReduce(Date date,String collectionName);
 	public void mergingMapReduce(TimePeriod timePeriod);
 
 	public ArrayList<HashMap<String, Object>> getTweetsForDate(int count,
-			String dateFrom, String dateTo, String collectionName);
+			String dateFrom, String dateTo, String collectionName) throws ParseException;
 
 	
 

@@ -49,3 +49,21 @@ div.map {
 .item {
 	margin-left: 20px;
 }
+
+.map-container {
+	padding-top: 10px;
+	
+	border-style: solid;
+    border-width: 5px;
+	border-color: #656565;
+	
+	/* gradient from top to bottom */
+	/* For Safari 5.1 to 6.0 */
+	background: -webkit-linear-gradient(#ffffff, #E8E8E8);
+	/* For Opera 11.1 to 12.0 */
+	background: -o-linear-gradient(#ffffff, #E8E8E8);
+	/* For Firefox 3.6 to 15 */
+	background: -moz-linear-gradient(#ffffff, #E8E8E8);
+	/* Standard syntax */
+	background: linear-gradient(#ffffff, #E8E8E8);
+}

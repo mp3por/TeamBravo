@@ -1,6 +1,7 @@
 package glasgow.teamproject.teamB.Search;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -8,9 +9,9 @@ import org.json.JSONObject;
 public class Tweet{
 	
 	private String tweet;
-	private Map<String, Object> tweetMap;
+	private HashMap<String, Object> tweetMap;
 	
-	public Tweet (String tweet, Map<String, Object> tweetMap){
+	public Tweet (String tweet, HashMap<String, Object> tweetMap){
 		this.tweet = tweet;
 		this.tweetMap = tweetMap;
 	}
@@ -19,7 +20,7 @@ public class Tweet{
 		return this.tweet;
 	}
 	
-	public Map<String, Object> getTweetMap(){
+	public HashMap<String, Object> getTweetMap(){
 		return this.tweetMap;
 	}
 	

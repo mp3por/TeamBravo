@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 //import java.util.Set;
 
+
 import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+import org.terrier.utility.ApplicationSetup;
 
 //import org.terrier.realtime.memory.MemoryIndex;
 
@@ -58,7 +60,15 @@ public class SearchDAOImpl {
 
 	@PostConstruct
 	public void setUp() {
+		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+		System.out.println("Search:" + currentDir);
+		ApplicationSetup.setProperty("stopwords.filename", currentDir);		
 		queryManager = new Manager(index);
+	}
+	
+	public int foo(){
+		return this.index.getProperties().size();
 	}
 
 	public List<Tweet> getResultsList() {
@@ -107,53 +117,48 @@ public class SearchDAOImpl {
 		this.alreadyRunQuery = true;
 	}
 	
-	public void rankedByRetweeted(){
+	public List<Tweet> rankedByRetweeted(){
 //		System.err.println("Sorting by retweeted times");
-		Collections.sort(this.resultsList, Tweet.RetweetCountComparator);
+		List<Tweet> list = new ArrayList<>();
+		for(Tweet t: this.resultsList)
+			list.add(t);
+		Collections.sort(list, Tweet.RetweetCountComparator);
+		return list;
 	}
 	
-	public void rankedByPostedTime(){
+	public List<Tweet> rankedByPostedTime(){
 //		System.err.println("Sorting by posted time");
-		Collections.sort(this.resultsList, Tweet.PostedTimeComparator);
+		List<Tweet> list = new ArrayList<>();
+		for(Tweet t: this.resultsList)
+			list.add(t);
+		try{
+		Collections.sort(list, Tweet.PostedTimeComparator);}
+		catch(IllegalArgumentException e){
+			System.err.println("Exception to be handled.");
+		}
+		
+		return list;
 	}
 	
-	public void rankByFavourited(){
-		Collections.sort(this.resultsList, Tweet.MostFavouritedComparator);
+	public List<Tweet> rankByFavourited(){
+//		System.err.println("Sorting by retweeted times");
+		List<Tweet> list = new ArrayList<>();
+		for(Tweet t: this.resultsList)
+			list.add(t);
+		Collections.sort(list, Tweet.MostFavouritedComparator);
+		return list;
 	}
 
 	/*
 	 * Parse the results to ArrayList<HashMap<String, Object>> to display tweet
 	 * wall with NEs
 	 */
-	public ArrayList<HashMap<String, Object>> getTweetsForTweetWall() {
+	public ArrayList<HashMap<String, Object>> getTweetsForTweetWall(List<Tweet> list) {
 		ArrayList<HashMap<String, Object>> results = new ArrayList<>();
-		Map<String, Object> currentTweet;
-		for (int i = 0; i < this.resultsList.size(); i++) {
-			currentTweet = this.resultsList.get(i).getTweetMap();
-			HashMap<String, Object> tweet = new HashMap<>();
-			for (String key : currentTweet.keySet()) {
-				if (ProjectProperties.defaultNE.contains(key)) {
-					String s = currentTweet.get(key).toString();
-					if (s.length() == 2) {
-						tweet.put(key, null);
-						continue;
-					}
-
-					s = s.replace("[", "");
-					s = s.replace("]", "");
-
-					HashSet<String> NEs = new HashSet<String>();
-
-					for (String NE : s.split(",")) {
-						NEs.add(NE);
-					}
-					tweet.put(key, NEs);
-				} else {
-					tweet.put(key, currentTweet.get(key));
-				}
-			}
-			results.add(tweet);
-		}
+		
+		for (Tweet tweet: list)
+			results.add(tweet.getTweetMap());
+		
 		return results;
 	}
 

@@ -1,5 +1,5 @@
 .tweetwall-container {
-	height:400px;
+	height:410px;
 	overflow-y: scroll;
 	
 	padding-top: 10px;
@@ -35,6 +35,21 @@ ul.tweetwall {
 	cursor: pointer;
 }
 
+.tweetwall-label {
+	color: white;
+}
+
+.tweetwall-submit {
+	padding: 10px;
+	padding-left: 15px;
+}
+
+.tweetwall-setting {
+	background-color: #656565;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
 #avatar {
 	border-style: solid;
 	border-width: 1px;
@@ -58,7 +73,7 @@ a.tooltip:hover span{ display:inline; position:absolute; color:#111; border:1px 
 /*CSS3 extras*/
 a.tooltip span { border-radius:4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; -moz-box-shadow: 5px 5px 8px #CCC; -webkit-box-shadow: 5px 5px 8px #CCC; box-shadow: 5px 5px 8px #CCC; }
 
-
+/*
 .input-group {
 	width: 30%;
 }
@@ -99,4 +114,4 @@ a.tooltip span { border-radius:4px; -moz-border-radius: 4px; -webkit-border-radi
   left: 5px;
   font-size: 9px;
   font-weight: normal;
-}
+} */

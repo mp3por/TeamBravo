@@ -1,6 +1,6 @@
 package glasgow.teamproject.teamB.Search;
 
-import org.terrier.utility.ApplicationSetup;
+//import org.terrier.utility.ApplicationSetup;
 
 //@Component
 public class TerrierInitializer {
@@ -8,7 +8,10 @@ public class TerrierInitializer {
 	private SearchMemoryIndex memoryIndex;
 	
 	public TerrierInitializer() {
-		ApplicationSetup.setProperty("stopwords.filename", System.getProperty("user.dir") + "/stopword-list.txt");
+//		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+//		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+//		System.out.println("Search:" + currentDir);
+//		ApplicationSetup.setProperty("stopwords.filename", currentDir);		
 		this.memoryIndex = new SearchMemoryIndex();
 	}
 	

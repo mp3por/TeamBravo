@@ -16,13 +16,6 @@
 <script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
-<!-- graphs -->
-<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
-<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
-
-
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
@@ -44,21 +37,24 @@
 		<div id='logo'>
 			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
 				style="width: 30%;">
-			<img src="/TeamBravo/resources/img/Terrier.png"
-				style="width: 30%;">
 		</div>
-		<div id='cssmenu'>
-			<ul id='naviMenu'>
-				<li class='active'>
-					<a href='#'><span>Results Page</span></a>
-				</li>
-				<li><a href='http://localhost:8080/TeamBravo/main/home'>
-								<span>Back to main page</span></a></li>
-				
-			</ul>
-			<div id="search"></div>
-		</div>
+		<div class="container-fluid">
+		<div class="row" id="top-menu">
 		
+		<div id='cssmenu' class="col-lg-4 col-lg-offset-2">
+			<ul id='naviMenu'>
+				<li>
+				<a href='/TeamBravo/main/home'><span>Home</span></a></li>
+				<li>
+				<a href='/TeamBravo/search/graphs/${query}'><span>Graphs</span></a>
+				<li class='last'><a href='#about-us'><span>About Us</span></a></li>
+			</ul>
+		</div>
+		<div class="col-lg-4 col-lg-offset-1" id="search-padding">
+			<div id="search" ></div>
+			</div>
+		</div> <!-- row -->
+		</div>
 	</header>
 	<!-- -------------------------------------------------------------- -->
 
@@ -69,10 +65,31 @@
 		<div id="row0" class="row"></div>
 		
 	</div>
-
 	<!-- -------------------------------------------- -->
 
 </body>
+
+<footer> 
+<div class="about-us" id="about-us">
+<legend>About us:</legend>
+<p><img src="<c:url value="/resources/img/uni_glasgow_logo.png" />" width="300px"><br/>
+<h4>"A Dasboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
+<ul>
+<li>Prapaipim Junhavittaya</li>
+<li>Paulius Peciura</li>
+<li>Zijian Feng</li>
+<li>Steven McGuckin</li>
+<li>Velin Kerkov</li>
+</ul>
+<h4>Project supervisors:</h4>
+<ul>
+<li>Dr Iadh Ounis</li>
+<li>Richard McCreadie</li>
+</ul>
+<br/>
+<a href='#'><span>Back to the top</span></a></li>
+</div>
+</footer>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -96,10 +113,8 @@
 
 		function initPage() {
 			getSearchBox();
-			addTile("0");
-			addTile("1");
 			addTile("2");
-			addTile("3");
+			addTile("0");
 		}
 	});
 
@@ -191,7 +206,7 @@
 		img.src = 
 			"https://dl-web.dropbox.com/get/anychart1.jpg?_subject_uid=96006775&w=AABmUPooiXMworxwJmxaNjbhhCFAaQemNGnt7dlG9jClzQ";
 		
-		var src = document.getElementById("tile1");
+		var src = document.getElementById("tile2");
 		src.appendChild(img);
 	}
 
@@ -309,14 +324,27 @@
 		});
 	}
 	
+	function rankByRelevance(container_id, index){
+		$.ajax({
+			url : '/TeamBravo/search/terrier/refresh/${query}',
+			success: function(data) {
+				console.log("index: " + index);
+				console.log("cont_id: " + container_id);
+				initWall("tile_content" + index, data, index);
+			}
+		});
+	}
+	
 	function initWall(container_id, data, index) {
 
+		console.log("INDEXWALL");
+		console.log(index);
+		
 		$('#tile_content'+index).html(data);
 		
 		$('#settings'+index).html('<p>Rank the results</p>'+
-					'<button type="button" onclick="rankedByRetweeted(tile_content2, 2);" id="rank_retweeted" index="rank_by_retweeted" class="btn btn-default rank_retweeted">Rank by retweeted times</button>'+
-					'<button type="button" onclick="rankedByFavourited(tile_content2, 2);" id="rank_favourited" index="rank_by_favourited" class="btn btn-default rank_favourited">Rank by favourited times</button>'+
-					'<button type="button" onclick="rankedByPosted(tile_content2, 2);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">See most recent tweets</button>'+			
+					'<button type="button" onclick="rankByRelevance(tile_content0, 0);" id="refresh" index="refresh" class="btn btn-default refresh">Rank by Relevance</button>'+
+					'<button type="button" onclick="rankedByPosted(tile_content0, 0);" id="rank_posted" index="rank_by_posted" class="btn btn-default rank_posted">Most recent</button>'+			
 					'<br/><br />');
 		
 		$('#rank_by_retweeted').each( function () {
@@ -327,9 +355,41 @@
 			$(this).attr("index", index);
 		});
 		
+		$('.addTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
+		
 		$('#rank_by_posted').each( function () {
 			$(this).attr("index", index);
 		});
+		
+		$('#tile_content' + index).html(data);
+
+		$('.added_tweetwall_h3').each(function() {
+			console.log("I am here at h4");
+			$(this).attr('class', 'tweetwall_h3_' + index);
+		});
+		$('.added_tweetwall_h4').each(function() {
+			$(this).attr('class', 'tweetwall_h4_' + index);
+		});
+
+		$('.added_tweetwall_avatar').each(function() {
+			$(this).attr('class', 'avatar_' + index);
+		});
+
+		$('.added_tweetwall_tweet').each(function() {
+			$(this).attr('class', 'tweetwall_tweet_' + index);
+		});
+
+		$('.added_tweetwall_li').each(function() {
+			$(this).attr('class', 'tweetwall_li_' + index);
+		});
+
+		$('.addedTweetText').each(function() {
+			$(this).attr('class', 'tweetText_' + index);
+		});
+
 		
 		console.log("init wall");
 	}
