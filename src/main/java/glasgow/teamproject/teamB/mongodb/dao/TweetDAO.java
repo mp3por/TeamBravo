@@ -36,7 +36,7 @@ public interface TweetDAO {
 	// For Terrier
 	public LinkedList<String> getTweetsQueue(String collectionName);
 		
-	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
+	public List<Tweet> getResultsList(String collectionName, List<String> idList);
 	
 	//For Terrier
 	public Queue<String> getCollection(String string);

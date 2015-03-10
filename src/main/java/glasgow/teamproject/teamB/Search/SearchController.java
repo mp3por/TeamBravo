@@ -25,8 +25,8 @@ public class SearchController {
 	@Autowired
 	private TweetDAO tweetSaver;
 	
-	@Autowired
-	private TweetsIndexer indexer;
+//	@Autowired
+//	private TweetsIndexer indexer;
 	
 	@Autowired
 	private SearchDAOImpl dao;

@@ -11,7 +11,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Document;
-import org.terrier.indexing.TwitterJSONDocument;
+import org.terrier.structures.MetaIndex;
+//import org.terrier.utility.ApplicationSetup;
 
 /**
  * A TweetsIndexer object will take a Terrier collection object, then produce
@@ -28,10 +29,10 @@ public class TweetsIndexer implements Observer {
 	@Autowired
 	private TwitterMongoDAOCollection tweets;
 
-//	@Autowired
-//	private TerrierInitializer terrier;
-	
 	@Autowired
+	private TerrierInitializer terrier;
+	
+//	@Autowired
 	private SearchMemoryIndex index;
 	
 	@Autowired
@@ -51,7 +52,7 @@ public class TweetsIndexer implements Observer {
 	 * */
 	public void indexTweet(String tweet) {
 		try {
-			index.indexDocument(new TwitterJSONDocument(tweet));
+			this.index.indexDocument(new TwitterJSONDocument(tweet));
 		} catch (Exception e) {
 			System.err.println("Failed to index tweet:" + tweet);
 		}
@@ -59,6 +60,7 @@ public class TweetsIndexer implements Observer {
 
 	@PostConstruct
 	private void init() {
+		index = terrier.getMemoryIndex();
 //		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 //		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
 //		System.out.println("Search:" + currentDir);
@@ -67,6 +69,8 @@ public class TweetsIndexer implements Observer {
 //		System.err.println("Steeming has been disabled");
 
 //		this.index = terrier.getMemoryIndex();
+//		ApplicationSetup.setProperty("indexer.meta.forward.keys", "docno,text");
+//		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		serv.addObserver(this);
 		indexTweets();
 	}
@@ -77,7 +81,7 @@ public class TweetsIndexer implements Observer {
 		do {
 			Document tweet = tweets.getDocument();
 			try {
-				index.indexDocument(tweet);
+				this.index.indexDocument(tweet);
 				count++;
 			} catch (Exception e) {
 				System.err.println("Failed to index tweets");
@@ -89,6 +93,10 @@ public class TweetsIndexer implements Observer {
 			System.err.println("Failed to close collection");
 		}
 		System.out.println("Indexed " + count + " tweets.");
+	}
+	
+	public MetaIndex getMetaIndex(){
+		return this.index.getMetaIndex();
 	}
 
 	@Override
