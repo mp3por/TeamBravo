@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Collection;
 import org.terrier.indexing.Document;
-import org.terrier.indexing.TwitterJSONDocument;
+
 //import java.net.UnknownHostException;
 
 //import com.mongodb.MongoClient;

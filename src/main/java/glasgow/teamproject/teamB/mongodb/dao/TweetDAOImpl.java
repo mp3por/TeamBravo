@@ -263,24 +263,29 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	}
 
 	@Override
-	public ArrayList<Tweet> getResultsList(String collectionName,
-			int[] resultsDocids) {
+	public List<Tweet> getResultsList(String collectionName, List<String> idList) {
 
-		DBCollection dbCollection = mongoOps.getCollection(collectionName);
-		DBCursor foo = dbCollection.find();
-		foo.next();
-
-		ArrayList<Tweet> collectionList = new ArrayList<>();		
-		while(foo.hasNext()){ 
-			collectionList.add(new Tweet(foo.next().toString(), parseDBObject((BasicDBObject)foo.curr())));
+		List<Tweet> resultsList = new ArrayList<Tweet>();
+		String[] ids = new String[idList.size()];
+		
+		for (int i = 0; i < ids.length; i++){
+			ids[i] = idList.get(i);
 		}
 		
-
-		ArrayList<Tweet> resultsList = new ArrayList<>();
-		Tweet tweet;
-		for (int i = 0; i < resultsDocids.length; i++) {
-			tweet = collectionList.get(resultsDocids[i]);
+		
+		DBObject query = QueryBuilder.start("text").in(ids).get();
+		
+		DBCollection dbCollection = mongoOps.getCollection(collectionName);
+		DBCursor cursor = dbCollection.find(query);
+        
+        DBObject currentObj;
+        Tweet tweet;
+        int count = 0;
+		while(cursor.hasNext() && count < 1000){
+			currentObj = cursor.next();
+			tweet = new Tweet(currentObj.toString(), parseDBObject((BasicDBObject)currentObj));
 			resultsList.add(tweet);
+			count++;
 		}
 
 		return resultsList;

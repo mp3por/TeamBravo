@@ -60,7 +60,7 @@ public class TweetsRetriever {
         queryManager.runPostFilters(srq);
         
         int[] resultsDocids = srq.getResultSet().getDocids();
-        this.resultsList = this.tweetSaver.getResultsList(ProjectProperties.TWEET_COLLECTION, resultsDocids);
+//        this.resultsList = this.tweetSaver.getResultsList(ProjectProperties.TWEET_COLLECTION, resultsDocids);
 	}
 	
 	/* Parse the results to ArrayList<HashMap<String, Object>> to display tweet wall with NEs */

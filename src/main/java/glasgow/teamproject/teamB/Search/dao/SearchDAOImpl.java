@@ -1,11 +1,13 @@
 package glasgow.teamproject.teamB.Search.dao;
 
 import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
+//import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 //import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 //import java.util.Collection;
@@ -18,6 +20,11 @@ import java.util.Map;
 //import java.util.Set;
 
 
+
+
+
+
+
 import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
@@ -25,8 +32,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
+import org.terrier.matching.ResultSet;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+import org.terrier.structures.MetaIndex;
 import org.terrier.utility.ApplicationSetup;
 
 //import org.terrier.realtime.memory.MemoryIndex;
@@ -63,7 +72,9 @@ public class SearchDAOImpl {
 		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
 		System.out.println("Search:" + currentDir);
-		ApplicationSetup.setProperty("stopwords.filename", currentDir);		
+		ApplicationSetup.setProperty("stopwords.filename", currentDir);	
+//		ApplicationSetup.setProperty("indexer.meta.forward.keys", "docno,text");
+//		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		queryManager = new Manager(index);
 	}
 	
@@ -110,11 +121,38 @@ public class SearchDAOImpl {
 		queryManager.runPostProcessing(srq);
 		queryManager.runPostFilters(srq);
 
-		int[] resultsDocids = srq.getResultSet().getDocids();
+		List<String> tweetidList = this.populateTweetidList(srq.getResultSet().getDocids());
+		
+		System.err.println("Got " + tweetidList.size() + " ids");
+		
 		this.resultsList = this.tweetSaver.getResultsList(
-				ProjectProperties.TWEET_COLLECTION, resultsDocids);
+				ProjectProperties.TWEET_COLLECTION, tweetidList);
 
 		this.alreadyRunQuery = true;
+	}
+	
+	private List<String> populateTweetidList(int[] resultsDocids){
+		System.out.println("Populating list!!!");
+		List<String> tweetidList = new ArrayList<String>();
+		tweetidList = new ArrayList<String>();
+		
+		MetaIndex mt = this.index.getMetaIndex();
+		String[] fields = mt.getKeys();
+		
+		for (String s: fields)
+			System.out.println("I am fields: " + s);
+		
+//		String tmp;
+		for(int i = 0; i < resultsDocids.length; i++)
+			try {
+//				System.out.println(index);
+//				System.err.println("yayayaya" + tmp);
+//				System.out.println(mt.getItem("text", resultsDocids[i]));
+				tweetidList.add(mt.getItem("text", resultsDocids[i]));
+			} catch (IOException e) {
+				System.out.println("Counldn't add docno for tweets " + resultsDocids[i]);
+			}
+		return tweetidList;
 	}
 	
 	public List<Tweet> rankedByRetweeted(){
