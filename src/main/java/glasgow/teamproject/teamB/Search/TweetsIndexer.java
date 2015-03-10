@@ -29,10 +29,10 @@ public class TweetsIndexer implements Observer {
 	@Autowired
 	private TwitterMongoDAOCollection tweets;
 
-//	@Autowired
-//	private TerrierInitializer terrier;
-	
 	@Autowired
+	private TerrierInitializer terrier;
+	
+//	@Autowired
 	private SearchMemoryIndex index;
 	
 	@Autowired
@@ -60,6 +60,7 @@ public class TweetsIndexer implements Observer {
 
 	@PostConstruct
 	private void init() {
+		index = terrier.getMemoryIndex();
 //		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 //		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
 //		System.out.println("Search:" + currentDir);

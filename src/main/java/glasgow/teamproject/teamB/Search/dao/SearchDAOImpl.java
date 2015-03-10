@@ -1,6 +1,7 @@
 package glasgow.teamproject.teamB.Search.dao;
 
 import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
+import glasgow.teamproject.teamB.Search.TerrierInitializer;
 //import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
 import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 //import java.util.Set;
+
 
 
 
@@ -54,9 +56,12 @@ public class SearchDAOImpl {
 	@Autowired
 	private TweetDAO tweetSaver;
 
-	@Autowired
+	//@Autowired
 	SearchMemoryIndex index;
 
+	@Autowired
+	TerrierInitializer ti;
+	
 	private List<Tweet> resultsList;
 	private boolean alreadyRunQuery = false;
 	private Manager queryManager;
@@ -69,10 +74,11 @@ public class SearchDAOImpl {
 
 	@PostConstruct
 	public void setUp() {
-		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
-		System.out.println("Search:" + currentDir);
-		ApplicationSetup.setProperty("stopwords.filename", currentDir);	
+		index = ti.getMemoryIndex();
+//		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+//		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
+//		System.out.println("Search:" + currentDir);
+//		ApplicationSetup.setProperty("stopwords.filename", currentDir);	
 //		ApplicationSetup.setProperty("indexer.meta.forward.keys", "docno,text");
 //		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		queryManager = new Manager(index);
