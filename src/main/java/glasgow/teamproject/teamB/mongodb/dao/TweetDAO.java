@@ -2,7 +2,6 @@ package glasgow.teamproject.teamB.mongodb.dao;
 
 
 import glasgow.teamproject.teamB.Search.Tweet;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.Field;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
