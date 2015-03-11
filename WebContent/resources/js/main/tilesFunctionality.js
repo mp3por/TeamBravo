@@ -19,9 +19,10 @@ function getTemplate() {
 
 function initPage() {
 	addTile("0");
-	addTile("1");
-	addTile("0");
 	addTile("2");
+	addTile("1");
+	addTile("1");
+	addTile("3");
 	getSearchBox();
 }
 
