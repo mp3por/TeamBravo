@@ -2,9 +2,7 @@ package glasgow.teamproject.teamB.Graphs;
 
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.DateCountPair;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.EntityCountPair;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl.TimePeriod;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,6 +114,28 @@ public class GraphsController {
 		List<EntityCountPair> topics = null;
 		int noOfDays = 0;
 		
+		List<HashMap<String, String>> topic1Dates = null;
+		List<HashMap<String, String>> topic2Dates = null;
+		List<HashMap<String, String>> topic3Dates = null;
+		List<HashMap<String, String>> topic4Dates = null;
+		List<HashMap<String, String>> topic5Dates = null;
+		List<HashMap<String, String>> topic6Dates = null;
+		List<HashMap<String, String>> topic7Dates = null;
+		List<HashMap<String, String>> topic8Dates = null;
+		List<HashMap<String, String>> topic9Dates = null;
+		List<HashMap<String, String>> topic10Dates = null;
+		List<HashMap<String, String>> topic11Dates = null;
+		List<HashMap<String, String>> topic12Dates = null;
+		List<HashMap<String, String>> topic13Dates = null;
+		List<HashMap<String, String>> topic14Dates = null;
+		List<HashMap<String, String>> topic15Dates = null;
+		List<HashMap<String, String>> topic16Dates = null;
+		List<HashMap<String, String>> topic17Dates = null;
+		List<HashMap<String, String>> topic18Dates = null;
+		List<HashMap<String, String>> topic19Dates = null;
+		List<HashMap<String, String>> topic20Dates = null;
+		
+		
 		//Get top 3 topics for the past time period
 		if(timePeriod.equals("WEEK")){
 			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 20);
@@ -124,32 +144,33 @@ public class GraphsController {
 			//Remove square brackets and empty strings
 			for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
 				EntityCountPair topic = iterator.next();
+
 			    if (topic.getID().equals("[]") || topic.getID().isEmpty()) {
 			        // Remove the current element from the iterator and the list.
 			        iterator.remove();
 			    }
 			}
 			
-			List<HashMap<String, String>> topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
-			List<HashMap<String, String>> topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
-			List<HashMap<String, String>> topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
-			List<HashMap<String, String>> topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
-			List<HashMap<String, String>> topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
-			List<HashMap<String, String>> topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
-			List<HashMap<String, String>> topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
-			List<HashMap<String, String>> topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
-			List<HashMap<String, String>> topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
-			List<HashMap<String, String>> topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
-			List<HashMap<String, String>> topic11Dates = c.getEntitiyTrend(topics.get(10).getID(), 7);
-			List<HashMap<String, String>> topic12Dates = c.getEntitiyTrend(topics.get(11).getID(), 7);
-			List<HashMap<String, String>> topic13Dates = c.getEntitiyTrend(topics.get(12).getID(), 7);
-			List<HashMap<String, String>> topic14Dates = c.getEntitiyTrend(topics.get(13).getID(), 7);
-			List<HashMap<String, String>> topic15Dates = c.getEntitiyTrend(topics.get(14).getID(), 7);
-			List<HashMap<String, String>> topic16Dates = c.getEntitiyTrend(topics.get(15).getID(), 7);
-			List<HashMap<String, String>> topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
-			List<HashMap<String, String>> topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
-			List<HashMap<String, String>> topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
-			List<HashMap<String, String>> topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
+			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
+			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
+			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
+			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
+			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
+			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
+			topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
+			topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
+			topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
+			topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
+			topic11Dates = c.getEntitiyTrend(topics.get(10).getID(), 7);
+			topic12Dates = c.getEntitiyTrend(topics.get(11).getID(), 7);
+			topic13Dates = c.getEntitiyTrend(topics.get(12).getID(), 7);
+			topic14Dates = c.getEntitiyTrend(topics.get(13).getID(), 7);
+			topic15Dates = c.getEntitiyTrend(topics.get(14).getID(), 7);
+			topic16Dates = c.getEntitiyTrend(topics.get(15).getID(), 7);
+			topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
+			topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
+			topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
+			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
 			
 			
 		}else if(timePeriod.equals("MONTH")){
@@ -165,26 +186,26 @@ public class GraphsController {
 			    }
 			}
 			
-			List<HashMap<String, String>> topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
-			List<HashMap<String, String>> topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
-			List<HashMap<String, String>> topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
-			List<HashMap<String, String>> topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
-			List<HashMap<String, String>> topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
-			List<HashMap<String, String>> topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
-			List<HashMap<String, String>> topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
-			List<HashMap<String, String>> topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
-			List<HashMap<String, String>> topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
-			List<HashMap<String, String>> topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
-			List<HashMap<String, String>> topic11Dates = c.getEntitiyTrend(topics.get(10).getID(), 7);
-			List<HashMap<String, String>> topic12Dates = c.getEntitiyTrend(topics.get(11).getID(), 7);
-			List<HashMap<String, String>> topic13Dates = c.getEntitiyTrend(topics.get(12).getID(), 7);
-			List<HashMap<String, String>> topic14Dates = c.getEntitiyTrend(topics.get(13).getID(), 7);
-			List<HashMap<String, String>> topic15Dates = c.getEntitiyTrend(topics.get(14).getID(), 7);
-			List<HashMap<String, String>> topic16Dates = c.getEntitiyTrend(topics.get(15).getID(), 7);
-			List<HashMap<String, String>> topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
-			List<HashMap<String, String>> topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
-			List<HashMap<String, String>> topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
-			List<HashMap<String, String>> topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
+			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
+			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
+			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
+			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
+			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
+			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
+			topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
+			topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
+			topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
+			topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
+			topic11Dates = c.getEntitiyTrend(topics.get(10).getID(), 7);
+			topic12Dates = c.getEntitiyTrend(topics.get(11).getID(), 7);
+			topic13Dates = c.getEntitiyTrend(topics.get(12).getID(), 7);
+			topic14Dates = c.getEntitiyTrend(topics.get(13).getID(), 7);
+			topic15Dates = c.getEntitiyTrend(topics.get(14).getID(), 7);
+			topic16Dates = c.getEntitiyTrend(topics.get(15).getID(), 7);
+			topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
+			topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
+			topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
+			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
 			
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
@@ -219,7 +240,7 @@ public class GraphsController {
 	
 	public List<HashMap<String,String>> getGraphSearchList(String searchTerm, String timePeriod){
 		List<HashMap<String,String>> trend = new ArrayList<>();
-		List<DateCountPair> topicDates = new ArrayList<DateCountPair>();
+		List<HashMap<String, String>> topicDates = new ArrayList<HashMap<String, String>>();
 		int daysForNull = 0;
 		
 		if(timePeriod.equals("WEEK")){
@@ -240,10 +261,10 @@ public class GraphsController {
 				trend.add(topic);
 			}
 		}else{
-			for(DateCountPair d : topicDates){
+			for(HashMap<String, String> d : topicDates){
 				HashMap<String,String> topic = new HashMap<String,String>();
-				topic.put("Day",d.getDate());
-				topic.put("Tweets",Integer.toString(d.getCount()));
+				topic.put("Day",d.get("Day"));
+				topic.put("Tweets",d.get("Tweets"));
 				topic.put("Topic", searchTerm);
 				trend.add(topic);
 			}

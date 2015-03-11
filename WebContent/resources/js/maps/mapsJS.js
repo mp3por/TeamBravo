@@ -63,10 +63,10 @@ var styles = [ [ {
 
 var markerClusterers = [];
 var maps = [];
-//var infowindow = new google.maps.InfoWindow({
-//	content : "what ?",
-//	maxWidth : 250
-//});
+// var infowindow = new google.maps.InfoWindow({
+// content : "what ?",
+// maxWidth : 250
+// });
 
 var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
 		+ 'chco=FFFFFF,008CFF,000000&ext=.png';
@@ -74,6 +74,8 @@ var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&'
 var long1 = "-4.287393";
 var lat = "55.873714";
 var myCenter = new google.maps.LatLng(lat, long1);
+var startDate;
+var endDate;
 
 function refreshMap(tweets_info, index, map) {
 	// debugger;
@@ -88,8 +90,9 @@ function refreshMap(tweets_info, index, map) {
 	if (typeof markerClusterer != 'undefined') {
 		markerClusterer.clearMarkers();
 	}
-	
-//	var tooltip_template = "<div><label>Time:</label>1</div><div><label>user:</label>2</div><div><label>text:</label>3</div>"
+
+	// var tooltip_template =
+	// "<div><label>Time:</label>1</div><div><label>user:</label>2</div><div><label>text:</label>3</div>"
 	var tooltip_template;
 	var markerImage = new google.maps.MarkerImage(imageUrl,
 			new google.maps.Size(24, 32));
@@ -97,7 +100,12 @@ function refreshMap(tweets_info, index, map) {
 
 	for (var i = 0; i < latitudes.length; i++) {
 		var latLng = new google.maps.LatLng(latitudes[i], longitudes[i])
-		tooltip_template = "<div id='tooltip_time"+index+"'><label>Time:</label>"+time[i]+"</div><div id='tooltip_user"+index+"'><label>user:</label>"+users[i]+"</div><div id='tooltip_text"+index+"'><label>text:</label>"+tweets[i]+"</div>"
+		tooltip_template = "<div id='tooltip_time" + index
+				+ "'><label>Time:</label>" + time[i]
+				+ "</div><div id='tooltip_user" + index
+				+ "'><label>user:</label>" + users[i]
+				+ "</div><div id='tooltip_text" + index
+				+ "'><label>text:</label>" + tweets[i] + "</div>"
 		var marker = new google.maps.Marker({
 			position : latLng,
 			draggable : false,
@@ -169,13 +177,12 @@ function getMaps(container_id, index) {
 	$.ajax({
 		url : '/TeamBravo/maps/maps/getSettings',
 		success : function(data) {
-			//console.log(data);
+			// console.log(data);
 			$('#settings' + index).html(data);
 			$('#settings_template_form').attr('tile', index);
-			$('#settings_template_form')
-					.attr('id', 'settings_form' + index);
-			$('#settings_button_template').attr('id',
-					'settings_button' + index);
+			$('#settings_template_form').attr('id', 'settings_form' + index);
+			$('#settings_button_template')
+					.attr('id', 'settings_button' + index);
 			$('#settings_button' + index).attr('tile', index);
 			$('#settings_form' + index).submit(function(e) {
 				e.preventDefault();
@@ -196,21 +203,29 @@ function getMaps(container_id, index) {
 					}
 				}
 
-				//$('#settings_button'+index).click();
+				// $('#settings_button'+index).click();
 			});
+
+			$("#added_datetimepicker_from").attr("id",
+					"datetimepicker_from_" + index);
+			$("#added_datetimepicker_to").attr("id",
+					"datetimepicker_to_" + index);
+
+			fixDatePickers(index);
+
 		}
 	});
 }
 
 function initMaps(container_id, index, needed, tweets_info) {
 
-	//debugger;
+	// debugger;
 	console.log("init maps");
 	$('#' + container_id).append(needed);
 
 	$('#added_map_container').attr('id', 'map_container' + index);
 	$('#added_map_div').attr('id', 'map' + index);
 
-	google.maps.event.addDomListener(window, 'load', initialize('map'
-			+ index, index, tweets_info));
+	google.maps.event.addDomListener(window, 'load', initialize('map' + index,
+			index, tweets_info));
 }

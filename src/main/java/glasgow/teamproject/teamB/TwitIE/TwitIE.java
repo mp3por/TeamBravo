@@ -74,6 +74,7 @@ public class TwitIE {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+		
 		//System.out.println("twirie init END");
 	}
 

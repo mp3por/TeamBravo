@@ -27,7 +27,6 @@ public class TweetWriter {
 			String user = t.getUser().getScreenName();
 			String msg = t.getText();
 			date = t.getCreatedAt();
-			String time = date.toString();
 			long id = t.getId();
 			JSONObject hashtags = new JSONObject();
 			int j = 0;

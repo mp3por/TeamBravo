@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700|Exo+2:300,600);
 @import url(http://fonts.googleapis.com/css?family=Lobster);
 
+
 #top-menu {
 	background: #CCCCCC;
 	width: 100%;
@@ -167,7 +168,7 @@ h3.box {
 }
 
 div.block, div.blockLOCKED {
-	background-color: #656565;
+	background-color: #CCCCCC;
 	margin-top: 20px;
 }
 
@@ -306,3 +307,10 @@ h:FIRST-CHILD {
 	padding: 2.5%;
 
 	}
+
+#terrierGraphs {
+	width: 95%;
+	margin-right: 2.5%;
+	margin-left: 2.5%;
+}
+

@@ -4,7 +4,8 @@
 
 <link href="<c:url value="/resources/css/graphs.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
-
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <!-- jQuery -->
 <script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 
@@ -51,16 +52,19 @@
 	<!-- -------------------------------------------------------------- -->
 
 	<!-- MAIN OUTLOOK TABLE  -->
-	
+	<br/>
+	<div id="terrierGraphs">
+	<legend>Weekly trend</legend>	
 	<div id="chart1"></div>
+	<legend>Monthly trend</legend>
 	<div id="chart2"></div>
-	
+	</div>
 	<footer> 
 	
     <div class="about-us" id="about-us">
 	<legend>About us:</legend>
 	<p><img src="<c:url value="/resources/img/uni_glasgow_logo.png" />" width="300px"><br/>
-	<h4>"A Dasboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
+	<h4>"A Dashboard for Monitoring Tweets in Glasgow" is a Team Project made by level 3 students at University of Glasgow. Team members:</h4>
 	<ul>
 	<li>Prapaipim Junhavittaya</li>
 	<li>Paulius Peciura</li>

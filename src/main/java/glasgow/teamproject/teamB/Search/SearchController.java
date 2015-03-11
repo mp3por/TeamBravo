@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +25,8 @@ public class SearchController {
 	@Autowired
 	private TweetDAO tweetSaver;
 	
-	@Autowired
-	private TweetsIndexer indexer;
+//	@Autowired
+//	private TweetsIndexer indexer;
 	
 	@Autowired
 	private SearchDAOImpl dao;

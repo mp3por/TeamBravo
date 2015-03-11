@@ -1,5 +1,9 @@
 package glasgow.teamproject.teamB.TwitIE;
 
+import glasgow.teamproject.teamB.Util.ProjectProperties;
+import glasgow.teamproject.teamB.Util.StreamReaderService;
+import glasgow.teamproject.teamB.mongodb.dao.TweetDAOAbstract;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -7,12 +11,6 @@ import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 
-import glasgow.teamproject.teamB.Util.ProjectProperties;
-import glasgow.teamproject.teamB.Util.StreamReaderService;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
-import glasgow.teamproject.teamB.mongodb.dao.TweetDAOAbstract;
-
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -57,7 +55,7 @@ public class NamedEntityParser implements Observer {
 				sb.append("}");
 				rawString = sb.toString();
 				
-				System.out.println("NamedEntityParser before save");
+				System.out.println("NamedEntityParser before save: " + rawString);
 				DB.addTweet(rawString, "party_tweets");
 				DB.addTweet(rawString, ProjectProperties.TWEET_COLLECTION);
 			}

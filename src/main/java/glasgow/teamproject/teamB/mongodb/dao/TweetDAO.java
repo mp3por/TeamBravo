@@ -13,12 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import org.json.JSONObject;
 
 
 public interface TweetDAO {
@@ -41,7 +36,7 @@ public interface TweetDAO {
 	// For Terrier
 	public LinkedList<String> getTweetsQueue(String collectionName);
 		
-	public ArrayList<Tweet> getResultsList(String collectionName, int[] resultsDocids);
+	public List<Tweet> getResultsList(String collectionName, List<String> idList);
 	
 	//For Terrier
 	public Queue<String> getCollection(String string);
@@ -49,10 +44,10 @@ public interface TweetDAO {
 	// For Statistics
 	public long getTweetCount(Date stDate, Date edDate, boolean isRetweeted);
 	public String getMostActiveUser(Date stDate, Date edDate);
-	public HashMap<String, Object> getMostPopularTweet(Date stDate, Date edDate, String compareKey);
+	// public HashMap<String, Object> getMostPopularTweet(Date stDate, Date edDate, String compareKey);
 	public List<EntityCountPair> getTopEntities(Field field,
 			TimePeriod timePeriod, int numEntities);
-	public ArrayList<DateCountPair> getEntitiyTrend(String entity, int numDays);
+	public List<HashMap<String, String>> getEntitiyTrend(String entity, int numDays);
 	
 	// For Counting
 	public void dailyMapReduce(Date date,String collectionName);

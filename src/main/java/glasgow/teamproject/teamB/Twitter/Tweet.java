@@ -19,7 +19,6 @@ public class Tweet {
 	private String lon, lat;
 	private long tweetID;
 	
-	@SuppressWarnings("deprecation")
 	public Tweet (JSONObject jsonObj) throws JSONException {
 		message = jsonObj.getString("message");
 		author = jsonObj.getString("author");
