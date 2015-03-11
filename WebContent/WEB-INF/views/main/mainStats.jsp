@@ -50,7 +50,7 @@
 			}
 		});
 		$.ajax({
-			url : '/TeamBravo/counter/getStats/allTime',
+			url : '/TeamBravo/counter/getStats/pastMonth',
 			success : function(data) {
 				$('#tile_content' + index).html(data);
 				$('#added_stat_container').attr('id',
