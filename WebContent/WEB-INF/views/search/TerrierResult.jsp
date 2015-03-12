@@ -16,6 +16,14 @@
 <script src="<c:url value="/resources/js/maps/markerclustererplus.js" />"></script>
 <script src="<c:url value="/resources/js/maps/mapsJS.js" />"></script>
 
+<!-- graphs -->
+<script src="<c:url value="/resources/js/graphs/d3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/c3.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/dimple.v2.1.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/d3.layout.cloud.js" />"></script>
+<script src="<c:url value="/resources/js/graphs/graphHandler.js" />"></script>
+
+
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
@@ -37,6 +45,8 @@
 		<div id='logo'>
 			<img src="/TeamBravo/resources/img/GreyRedMackintosh2.png"
 				style="width: 30%;">
+			<img src="/TeamBravo/resources/img/Terrier.png"
+				style="width: 30%;">
 		</div>
 		<div class="container-fluid">
 		<div class="row" id="top-menu">
@@ -44,9 +54,7 @@
 		<div id='cssmenu' class="col-lg-4 col-lg-offset-2">
 			<ul id='naviMenu'>
 				<li>
-				<a href='/TeamBravo/main/home'><span>Home</span></a></li>
-				<li>
-				<a href='/TeamBravo/search/graphs/${query}'><span>Graphs</span></a>
+				<a href='/TeamBravo/main/home'><span>Back to Main Page</span></a></li>
 				<li class='last'><a href='#about-us'><span>About Us</span></a></li>
 			</ul>
 		</div>
@@ -61,13 +69,31 @@
 	<!-- MAIN OUTLOOK TABLE  -->
 
 	<div class="container-fluid">
-		Search returned ${numberOfTweets} tweets for keywords "${query}".
+		Showing ${numberOfTweetsToShow} tweets with keywords "${query}".
 		<div id="row0" class="row"></div>
 		
 	</div>
 	<!-- -------------------------------------------- -->
 
 </body>
+
+<br/>
+	<div id="terrierGraphs">
+	<legend>Weekly trend of term '${query}'</legend>	
+	<div id="chart1"></div>
+	<legend>Monthly trend of term '${query}'</legend>
+	<div id="chart2"></div>
+	</div> 
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			var searchTerm = "${query}";
+			console.log(searchTerm);
+			console.log("getting graph");
+			getGraphsForSearch(searchTerm);
+		});	
+</script>
+
 
 <footer> 
 <div class="about-us" id="about-us">

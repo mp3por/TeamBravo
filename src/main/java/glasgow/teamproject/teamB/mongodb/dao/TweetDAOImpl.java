@@ -281,6 +281,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
         DBObject currentObj;
         Tweet tweet;
         int count = 0;
+        /*
+         * Showing at most 1000 of them if search returns more than 1000 tweets
+         */
 		while(cursor.hasNext() && count < 1000){
 			currentObj = cursor.next();
 			tweet = new Tweet(currentObj.toString(), parseDBObject((BasicDBObject)currentObj));

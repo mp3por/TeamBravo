@@ -74,8 +74,8 @@ public class SearchController {
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
 //		modelandview.addObject("tweets", tweets);
 //		
-//		modelandview.addObject("count", tweets.size());
-		modelandview.addObject("numberOfTweets", dao.getResultsList().size());
+		modelandview.addObject("numberOfTweetsToShow", dao.getResultsList().size());
+		modelandview.addObject("numberOfTweets", dao.getResultsCount());
 		modelandview.addObject("query", query);		
 		return modelandview;
 	}

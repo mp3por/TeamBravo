@@ -16,6 +16,7 @@ import org.terrier.realtime.memory.MemoryIndex;
 /**
  * A TweetsRetriver object takes an index object produced by a TweetsIndexer.
  * Then query the collection based on the given query as a String.
+ * It is only used for testing
  * @author vincentfung13
  *
  */

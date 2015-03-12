@@ -28,6 +28,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * Modified the provided TwitterJSONDOcument class in Terrier a bit 
+ * so it fits the need of indexing DBObject
+ * @author vincentfung13
+ *
+ */
+
+
 public class TwitterJSONDocument implements Document{
 	
 	private static JsonParser parser = new JsonParser();

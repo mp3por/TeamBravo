@@ -66,6 +66,7 @@ public class SearchDAOImpl {
 	private boolean alreadyRunQuery = false;
 	private Manager queryManager;
 	private String query;
+	private int resultCount = 0;
 
 	// public SearchDAO(TweetDAO tweetSaver){
 	// this.tweetSaver = tweetSaver;
@@ -135,6 +136,7 @@ public class SearchDAOImpl {
 				ProjectProperties.TWEET_COLLECTION, tweetidList);
 
 		this.alreadyRunQuery = true;
+		this.resultCount = srq.getResultSet().getDocids().length;
 	}
 	
 	private List<String> populateTweetidList(int[] resultsDocids){
@@ -209,8 +211,7 @@ public class SearchDAOImpl {
 	/*
 	 * The following three functions retrieve coordinates of geo tagged results
 	 * for mapping
-	 */
-	
+	 */	
 	public Map<String, ArrayList<String>> getDataForMaps() throws FileNotFoundException, UnsupportedEncodingException {
 		
 		HashSet<String> tweetsForMaps = new HashSet<String>(this.getResultsListString());
@@ -322,6 +323,10 @@ public class SearchDAOImpl {
 	
 	public String getQuery(){
 		return this.query;
+	}
+	
+	public int getResultsCount(){
+		return this.resultCount;
 	}
 
 	/* To be added for graphs */

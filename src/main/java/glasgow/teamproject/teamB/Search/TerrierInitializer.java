@@ -11,7 +11,7 @@ public class TerrierInitializer {
 	private SearchMemoryIndex memoryIndex;
 
 	public TerrierInitializer() {
-		ApplicationSetup.setProperty("indexer.meta.forward.keys", "id,text");
+		ApplicationSetup.setProperty("indexer.meta.forward.keys", "user.screen_name,text");
 		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
