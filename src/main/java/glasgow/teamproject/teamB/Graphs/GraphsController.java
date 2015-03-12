@@ -34,9 +34,9 @@ public class GraphsController {
 		List<EntityCountPair> topics = new ArrayList<EntityCountPair>();
 		
 		if(timePeriod.equals("WEEK")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 15);
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 15);
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
 		}
@@ -55,7 +55,7 @@ public class GraphsController {
 			String topicDirty = e.getID().replace("[", "");
 			String topicClean = topicDirty.replace("]", "");
 			topic.put("Name", topicClean);
-			topic.put("Tweets", Integer.toString(e.getCount().intValue()));
+			topic.put("Tweets", Integer.toString(e.getCount()));
 			unhashedTopics.add(topic);
 		}
 		
@@ -69,12 +69,13 @@ public class GraphsController {
 		List<EntityCountPair> topics = null;
 		
 		if(timePeriod.equals("WEEK")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 6);
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 6);
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
 		}
+		
 		
 		//Remove square brackets
 		for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
@@ -98,7 +99,7 @@ public class GraphsController {
 		for(EntityCountPair e: topics){
 			HashMap<String,String> topic = new HashMap<String,String>();
 			topic.put("Topic", e.getID());
-			topic.put("Tweets", Integer.toString(e.getCount().intValue()));
+			topic.put("Tweets", Integer.toString(e.getCount()));
 			tweets.add(topic);
 		}
 		
@@ -107,8 +108,6 @@ public class GraphsController {
 	
 	//GET WEEK OR MONTH LIST FOR DIMPLE GRAPHS
 	public List<HashMap<String,String>> getGraphList(String timePeriod){
-		
-		//c.mergingMapReduce(TimePeriod.PASTWEEK);
 	
 		List<HashMap<String,String>> tweets = new ArrayList<>();
 		List<EntityCountPair> topics = null;
@@ -120,7 +119,7 @@ public class GraphsController {
 		List<HashMap<String, String>> topic4Dates = null;
 		List<HashMap<String, String>> topic5Dates = null;
 		List<HashMap<String, String>> topic6Dates = null;
-		List<HashMap<String, String>> topic7Dates = null;
+		/*List<HashMap<String, String>> topic7Dates = null;
 		List<HashMap<String, String>> topic8Dates = null;
 		List<HashMap<String, String>> topic9Dates = null;
 		List<HashMap<String, String>> topic10Dates = null;
@@ -133,15 +132,15 @@ public class GraphsController {
 		List<HashMap<String, String>> topic17Dates = null;
 		List<HashMap<String, String>> topic18Dates = null;
 		List<HashMap<String, String>> topic19Dates = null;
-		List<HashMap<String, String>> topic20Dates = null;
+		List<HashMap<String, String>> topic20Dates = null;*/
 		
 		
 		//Get top 3 topics for the past time period
 		if(timePeriod.equals("WEEK")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTWEEK, 6);
 			noOfDays = 7;
 			
-			//Remove square brackets and empty strings
+			/*//Remove square brackets and empty strings
 			for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
 				EntityCountPair topic = iterator.next();
 
@@ -149,15 +148,15 @@ public class GraphsController {
 			        // Remove the current element from the iterator and the list.
 			        iterator.remove();
 			    }
-			}
+			}*/
 			
-			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
-			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
-			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
-			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
-			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
-			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
-			topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
+			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), noOfDays);
+			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), noOfDays);
+			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), noOfDays);
+			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), noOfDays);
+			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), noOfDays);
+			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), noOfDays);
+			/*topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
 			topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
 			topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
 			topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
@@ -170,29 +169,20 @@ public class GraphsController {
 			topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
 			topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
 			topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
-			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
+			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);*/
 			
 			
 		}else if(timePeriod.equals("MONTH")){
-			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 20);
+			topics = c.getTopEntities(TweetDAOImpl.Field.ALL, TweetDAOImpl.TimePeriod.PASTMONTH, 6);
 			noOfDays = 30;
 			
-			//Remove square brackets and empty strings
-			for (Iterator<EntityCountPair> iterator = topics.iterator(); iterator.hasNext();) {
-				EntityCountPair topic = iterator.next();
-			    if (topic.getID().equals("[]") || topic.getID().isEmpty()) {
-			        // Remove the current element from the iterator and the list.
-			        iterator.remove();
-			    }
-			}
-			
-			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), 7);
-			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), 7);
-			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), 7);
-			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), 7);
-			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), 7);
-			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), 7);
-			topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
+			topic1Dates = c.getEntitiyTrend(topics.get(0).getID(), noOfDays);
+			topic2Dates = c.getEntitiyTrend(topics.get(1).getID(), noOfDays);
+			topic3Dates = c.getEntitiyTrend(topics.get(2).getID(), noOfDays);
+			topic4Dates = c.getEntitiyTrend(topics.get(3).getID(), noOfDays);
+			topic5Dates = c.getEntitiyTrend(topics.get(4).getID(), noOfDays);
+			topic6Dates = c.getEntitiyTrend(topics.get(5).getID(), noOfDays);
+			/*topic7Dates = c.getEntitiyTrend(topics.get(6).getID(), 7);
 			topic8Dates = c.getEntitiyTrend(topics.get(7).getID(), 7);
 			topic9Dates = c.getEntitiyTrend(topics.get(8).getID(), 7);
 			topic10Dates = c.getEntitiyTrend(topics.get(9).getID(), 7);
@@ -205,7 +195,7 @@ public class GraphsController {
 			topic17Dates = c.getEntitiyTrend(topics.get(16).getID(), 7);
 			topic18Dates = c.getEntitiyTrend(topics.get(17).getID(), 7);
 			topic19Dates = c.getEntitiyTrend(topics.get(18).getID(), 7);
-			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);
+			topic20Dates = c.getEntitiyTrend(topics.get(19).getID(), 7);*/
 			
 		}else{
 			System.err.print("Error: " + timePeriod + " Not a valid time period.");
@@ -219,7 +209,7 @@ public class GraphsController {
 			tweets.add(topic4Dates.get(i));
 			tweets.add(topic5Dates.get(i));
 			tweets.add(topic6Dates.get(i));
-			tweets.add(topic7Dates.get(i));
+			/*tweets.add(topic7Dates.get(i));
 			tweets.add(topic8Dates.get(i));
 			tweets.add(topic9Dates.get(i));
 			tweets.add(topic10Dates.get(i));
@@ -232,7 +222,7 @@ public class GraphsController {
 			tweets.add(topic17Dates.get(i));
 			tweets.add(topic18Dates.get(i));
 			tweets.add(topic19Dates.get(i));
-			tweets.add(topic20Dates.get(i));
+			tweets.add(topic20Dates.get(i));*/
 		}
 		
 		return tweets;

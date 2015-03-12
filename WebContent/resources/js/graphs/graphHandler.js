@@ -19,6 +19,8 @@ var colour2 = new dimple.color("#AA9739"); //Yellow
 var colour3 = new dimple.color("#403075"); //Blue
 var colour4 = new dimple.color("#2D882D"); //Green
 var colour5 = new dimple.color("#7C2969"); //Purple
+var colour6 = new dimple.color("#246D5E"); //
+var colour7 = new dimple.color("#A3A838"); //
 colour1.opacity = 1;
 colour2.opacity = 1;
 colour3.opacity = 1;
@@ -175,32 +177,33 @@ function showBarChart(tileNo){ //Change this to showChart(type) to just load def
 function drawBarChart(tileNo, timeScale, page, searchTerm, from , to){
 	
 	var src;
-	var srcInit;
-	var srcBtwn;
-	from --; //decrease for actual array positions
-	to --;
-	
+	debugger;
 	if(page == "MAIN"){
+	
 		initDimple(timeScale);
+		src = new Array();
 		//Set data source week or month
 		if(timeScale == "WEEK"){
-			srcInit = dataForDimpleWeek;
+			src = dataForDimpleWeek;
 		}else if(timeScale == "MONTH"){
-			srcInit = dataForDimpleMonth;
+			src = dataForDimpleMonth;
 		}
-		
+		/*
 		if(from == null || to == null){
-			for(var i = 0; i < 5 ; i++){
-				srcBtwn[i] = srcInit[i];
+			for(var i = 0; i < 100 ; i++){
+				src[i] = srcInit[i];
 			}
 		}else{
+			from --; //decrease for actual array positions
+			to --;
+			
 			var j = 0;
-			for(var i = from; i <= to; i++){
-				srcBtwn[j] = srcInit[i];
+			var i = 0;
+			for(i = (from + 20); i <= to; i++){
+				src[j] = srcInit[i];
 				j++
 			}
-		}
-		src = srcBtwn;
+		}*/
 	}else if(page == "SEARCH"){
 		initSearchGraphs(searchTerm);
 		src = dataForSearchWeek;
@@ -228,7 +231,8 @@ function drawBarChart(tileNo, timeScale, page, searchTerm, from , to){
 		colour2,
 		colour3,
 		colour4,
-		colour5
+		colour5,
+		colour6
 	];
 
 	barChart.draw();
@@ -252,35 +256,32 @@ function showLineGraph(tileNo){
 function drawLineGraph(tileNo,timeScale, page, searchTerm, from, to){
 	
 	var src
-	var srcLine;
-	var srcLineBtwn
-	
-	from --;
-	to --;
 	
 	if(page == "MAIN"){
 		
 		initDimple(timeScale);
 		//Set data source week or month
 		if(timeScale == "WEEK"){
-			srcLine = dataForDimpleWeek;
+			src = dataForDimpleWeek;
 		}else if(timeScale == "MONTH"){
-			srcLine = dataForDimpleMonth;
+			src = dataForDimpleMonth;
 		}
 		
+		/*
 		if(from == null || to == null){
 			for(var i = 0; i < 5 ; i++){
 				srcLineBtwn[i] = srcLine[i];
 			}
 		}else{
+			from --;
+			to --;
 			var j = 0;
-			for(var i = from; i <= to; i++){
+			var i = 0;
+			for(i = from; i <= to; i++){
 				srcLineBtwn[j] = srcLine[i];
 				j++
 			}
-		}
-		
-		src = srcLineBtwn;
+		}*/
 	}else if(page == "SEARCH"){
 		initSearchGraphs(searchTerm);
 		src = dataForSearchMonth;
@@ -308,7 +309,8 @@ function drawLineGraph(tileNo,timeScale, page, searchTerm, from, to){
 	                		colour2,
 	                		colour3,
 	                		colour4,
-	                		colour5
+	                		colour5,
+	                		colour6
 	                  	];
 		
 	myChart.draw();
@@ -335,29 +337,32 @@ function drawPieChart(tileNo,timeScale, from, to){
 	
 	initPie(timeScale);
 	var srcPie;
-	var srcBtwn;
 	if(timeScale == "WEEK"){
 		srcPie = dataForPieWeek;
 	}else if(timeScale == "MONTH"){
 		srcPie = dataForPieMonth;
 	}
 	
+	/*
 	if(from == null || to == null){
 		for(var i = 0; i < 5 ; i++){
 			srcBtwn[i] = srcPie[i];
 		}
 	}else{
+		from --;
+		to --;
 		var j = 0;
-		for(var i = from; i <= to; i++){
+		var i = 0;
+		for(i = from; i <= to; i++){
 			srcBtwn[j] = srcPie[i];
 			j++
 		}
-	}
+	}*/
 	
 	var pieChartId = "#chart" + tileNo;
 	var svgPie = dimple.newSvg(pieChartId, "100%", "57%"); //550, 320
 	
-	var myChart = new dimple.chart(svgPie, srcBtwn);
+	var myChart = new dimple.chart(svgPie, srcPie);
 	myChart.setBounds("1%", "10%", "80%", "80%")
 	myChart.addMeasureAxis("p", "Tweets");
 	myChart.addSeries("Topic", dimple.plot.pie);
@@ -368,7 +373,9 @@ function drawPieChart(tileNo,timeScale, from, to){
 		                  		colour2,
 		                  		colour3,
 		                  		colour4,
-		                  		colour5
+		                  		colour5,
+		                  		colour6,
+		                  		colour7
 		                  	];
     myChart.draw()
 }

@@ -18,7 +18,7 @@
 		</div>
 	
 	</form>
-	
+	<!--  
 	<div class="spinnerContainer">
 	
 		<div id="topicChooserFrom">
@@ -43,3 +43,4 @@
 	       	
 	    <button id="topicChooserBtn" type="button" class="btn btn-default topicBtn" data-tileno="tileNo" onClick="settingsFormTopicSelect(this)">Show Topics</button>
 	</div>
+	-->
