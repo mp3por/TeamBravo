@@ -19,6 +19,7 @@ import java.util.Observable;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -553,10 +554,10 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 		
 		int numAdded = 0;
 		while( c.hasNext() ) {
-			DBObject result = c.next();
+			BasicDBObject result = (BasicDBObject) c.next();
 			DBObject idObj = (DBObject) result.get("_id");
 			String tri = (String) idObj.get("id");
-			int d = (int) result.get("value");
+			int d = result.getInt("value");
 			if (tri.trim().length() <= 0)
 				continue;
 			l.add(new EntityCountPair(tri, d));
@@ -595,8 +596,8 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			DBCursor cursor = dailyCollection.find(query);
 			Double count = 0.0;
 			while (cursor.hasNext()) {
-				DBObject obj = cursor.next();
-				count += (int) obj.get("value");
+				BasicDBObject obj = (BasicDBObject) cursor.next();
+				count += obj.getInt("value");
 			}
 			HashMap<String, String> h = new HashMap<String, String>();
 			h.put("Topic", entity);
