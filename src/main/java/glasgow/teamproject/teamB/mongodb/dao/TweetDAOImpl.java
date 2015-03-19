@@ -556,7 +556,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			DBObject result = c.next();
 			DBObject idObj = (DBObject) result.get("_id");
 			String tri = (String) idObj.get("id");
-			int d = (int) result.get("value");
+			double d = (double) result.get("value");
 			if (tri.trim().length() <= 0)
 				continue;
 			l.add(new EntityCountPair(tri, d));
@@ -596,7 +596,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			Double count = 0.0;
 			while (cursor.hasNext()) {
 				DBObject obj = cursor.next();
-				count += (int) obj.get("value");
+				count += (double) obj.get("value");
 			}
 			HashMap<String, String> h = new HashMap<String, String>();
 			h.put("Topic", entity);
@@ -610,9 +610,9 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 
 	public class EntityCountPair {
 		private String id;
-		private int count;
+		private double count;
 
-		public EntityCountPair(String id, int count) {
+		public EntityCountPair(String id, double count) {
 			this.id = id;
 			this.count = count;
 		}
@@ -621,7 +621,7 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 			return id;
 		}
 
-		public int getCount() {
+		public double getCount() {
 			return count;
 		}
 	}

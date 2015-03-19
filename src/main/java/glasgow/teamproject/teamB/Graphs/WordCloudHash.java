@@ -29,8 +29,9 @@ public class WordCloudHash {
 			hashedItem.put("Name", item.get("Name"));
 	
 			//Rounding value to int
-			Integer intTweet = Integer.parseInt(item.get("Tweets"));
-			Double value = new Double((double) intTweet);
+			//Integer intTweet = Integer.parseInt(item.get("Tweets"));
+			Double intTweet = Double.parseDouble(item.get("Tweets"));
+			Double value = (double) intTweet.intValue();
 			value *= sum; //Get percentage
 			if(value > 99.0){
 				value = (double) Math.floor(value); //Rounds down to nearest whole

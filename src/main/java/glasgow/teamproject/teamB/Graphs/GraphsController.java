@@ -55,7 +55,7 @@ public class GraphsController {
 			String topicDirty = e.getID().replace("[", "");
 			String topicClean = topicDirty.replace("]", "");
 			topic.put("Name", topicClean);
-			topic.put("Tweets", Integer.toString(e.getCount()));
+			topic.put("Tweets", Double.toString(e.getCount()));
 			unhashedTopics.add(topic);
 		}
 		
@@ -99,7 +99,7 @@ public class GraphsController {
 		for(EntityCountPair e: topics){
 			HashMap<String,String> topic = new HashMap<String,String>();
 			topic.put("Topic", e.getID());
-			topic.put("Tweets", Integer.toString(e.getCount()));
+			topic.put("Tweets", Double.toString(e.getCount()));
 			tweets.add(topic);
 		}
 		
