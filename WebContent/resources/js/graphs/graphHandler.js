@@ -437,8 +437,10 @@ function drawWordCloud(tileNo,timeScale){
 	        })
 	        .text(function(d) { return d.Name; })
 			.on("click", function (d, i){
-
-				window.open("/TeamBravo/search/terrier/" + d.Name);
+				var query = d.Name;
+				if (query[0] == "#")
+					query = query.substring(1);
+				window.open("/TeamBravo/search/terrier/" + query);
 
 			});
 		}
