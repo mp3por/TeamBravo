@@ -113,7 +113,10 @@ public class SearchDAOImpl {
 
 	public void runQuery(String query) {
 
-		System.err.println("Running search for " + query);
+		if (query.startsWith("#"))
+			query = query.substring(1);
+		
+//		System.err.println("Running search for " + query);
 		StringBuffer sb = new StringBuffer();
 		sb.append(CollectionEnrichment.normaliseString(query));
 		SearchRequest srq = queryManager.newSearchRequest("query",

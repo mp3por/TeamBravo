@@ -69,7 +69,7 @@
 	<!-- MAIN OUTLOOK TABLE  -->
 
 	<div class="container-fluid">
-		Showing ${numberOfTweetsToShow} tweets with keywords "${query}".
+		Showing ${numberOfTweetsToShow} tweets with keywords "${unformattedQuery}".
 		<div id="row0" class="row"></div>
 		
 	</div>
@@ -79,9 +79,9 @@
 
 <br/>
 	<div id="terrierGraphs">
-	<legend>Weekly trend of term '${query}'</legend>	
+	<legend>Weekly trend of term '${unformattedQuery}'</legend>	
 	<div id="chart1"></div>
-	<legend>Monthly trend of term '${query}'</legend>
+	<legend>Monthly trend of term '${unformattedQuery}'</legend>
 	<div id="chart2"></div>
 	</div> 
 
@@ -192,19 +192,19 @@
 			//debugger;
 			switch (toAdd) {
 			case "0":// add map
-				tile_title.text("Locations of Tweets with Keyword '${query}'");
+				tile_title.text("Locations of Tweets with Keyword '${unformattedQuery}'");
 				getMaps('tile_content' + c, c);
 				break;
 			case "1":// add graphs
-				tile_title.text("Graphs for Tweets with Keyword '${query}'");
+				tile_title.text("Graphs for Tweets with Keyword '${unformattedQuery}'");
 				getGraphs("tile_content" + c, c);
 				break;
 			case "2":// add tweetwall
-				tile_title.text("Tweet Wall for Tweets with Keyword '${query}'");
+				tile_title.text("Tweet Wall for Tweets with Keyword '${unformattedQuery}'");
 				getTweetwall("tile_content" + c, c);
 				break;
 			case "3":
-				tile_title.text("General Statistics for Tweets with Keyword '$query'");
+				tile_title.text("General Statistics for Tweets with Keyword '${unformattedQuery}'");
 				getStastics("tile_content" + c, c);
 				break;
 			}

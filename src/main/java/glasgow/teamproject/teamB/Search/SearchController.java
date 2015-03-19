@@ -30,6 +30,8 @@ public class SearchController {
 	
 	@Autowired
 	private SearchDAOImpl dao;
+	
+
 //	
 //	@Autowired
 //	private MapsController maps;
@@ -58,7 +60,8 @@ public class SearchController {
 	}
 	
 	@RequestMapping("/terrier/{query}")
-	public ModelAndView searchPage(@PathVariable("query") String query){		
+	public ModelAndView searchPage(@PathVariable("query") String query){
+		
 		dao.runQuery(query);
 		
 //    	Set<String> resultSet = dao.getTweetsForQuery(query);
@@ -73,10 +76,11 @@ public class SearchController {
     	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
 //		modelandview.addObject("tweets", tweets);
-//		
+		String reformattedQuery = reformatQuery(query);
 		modelandview.addObject("numberOfTweetsToShow", dao.getResultsList().size());
 		modelandview.addObject("numberOfTweets", dao.getResultsCount());
-		modelandview.addObject("query", query);		
+		modelandview.addObject("unformattedQuery", query);
+		modelandview.addObject("query", reformattedQuery);		
 		return modelandview;
 	}
 	
@@ -153,6 +157,12 @@ public class SearchController {
 		ModelAndView mv = new ModelAndView("search_graphs");
 		mv.addObject("query", query);
 		return mv;
+	}
+	
+	private String reformatQuery(String query){
+		if (query.startsWith("#"))
+			query = query.substring(1);
+		return query;
 	}
 	
 }
