@@ -108,8 +108,9 @@ public class CounterController {
 		for( int i = 0, j = 0; j < most_pop_hashtag.size() && i < 5; ++j ) {
 			String term = most_pop_hashtag.get(j).getID();
 			if( !term.equals("#glasgow" ) && !term.equals("#scotland") && !term.equals("#uk") ){
+				String searchTerm = term.substring(1);
 				most_pop_hashtag_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
-						+ term + "\">" + term + "</a>";
+						+ searchTerm + "\">" + term + "</a>";
 				++i;
 			}
 		}
@@ -126,7 +127,7 @@ public class CounterController {
 			String term = most_pop_location.get(j).getID();
 			if( !term.equals("glasgow" ) && !term.equals("scotland") && !term.equals("uk") ){
 				most_pop_location_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
-						+ term + "\">" + term + "</a>";
+						+ term.substring(1) + "\">" + term + "</a>";
 				++i;
 			}
 		}
@@ -142,7 +143,7 @@ public class CounterController {
 		for( int i = 0, j = 0; j < most_pop_person.size() && i < 5; ++j, ++i ) {
 			String term = most_pop_person.get(j).getID();
 			most_pop_person_arry[i] = "<a href=\"/TeamBravo/search/terrier/"
-						+ term + "\">" + term + "</a>";
+						+ term.substring(1) + "\">" + term + "</a>";
 		}
 		if (!most_pop_person.isEmpty()) {
 			model.addObject("most_pop_person", most_pop_person_arry);
