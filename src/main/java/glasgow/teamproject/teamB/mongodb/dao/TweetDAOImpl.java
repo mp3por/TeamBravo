@@ -264,17 +264,17 @@ public class TweetDAOImpl extends TweetDAOAbstract {
 	}
 
 	@Override
-	public List<Tweet> getResultsList(String collectionName, List<String> idList) {
+	public List<Tweet> getResultsList(String collectionName, List<String> textList) {
 
 		List<Tweet> resultsList = new ArrayList<Tweet>();
-		String[] ids = new String[idList.size()];
+		String[] texts = new String[textList.size()];
 		
-		for (int i = 0; i < ids.length; i++){
-			ids[i] = idList.get(i);
+		for (int i = 0; i < texts.length; i++){
+			texts[i] = textList.get(i);
 		}
 		
 		
-		DBObject query = QueryBuilder.start("text").in(ids).get();
+		DBObject query = QueryBuilder.start("text").in(texts).get();
 		
 		DBCollection dbCollection = mongoOps.getCollection(collectionName);
 		DBCursor cursor = dbCollection.find(query);
