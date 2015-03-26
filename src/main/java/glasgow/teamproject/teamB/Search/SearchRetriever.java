@@ -1,31 +1,17 @@
-package glasgow.teamproject.teamB.Search.dao;
+package glasgow.teamproject.teamB.Search;
 
-import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
-import glasgow.teamproject.teamB.Search.TerrierInitializer;
-//import glasgow.teamproject.teamB.Search.SearchMemoryIndex;
-import glasgow.teamproject.teamB.Search.Tweet;
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-//import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-//import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-//import java.util.Set;
-
-
-
-
-
-
-
 
 import javax.annotation.PostConstruct;
 
@@ -34,13 +20,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.applications.secondary.CollectionEnrichment;
-import org.terrier.matching.ResultSet;
 import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
+import org.terrier.realtime.memory.MemoryIndex;
 import org.terrier.structures.MetaIndex;
-import org.terrier.utility.ApplicationSetup;
-
-//import org.terrier.realtime.memory.MemoryIndex;
 
 /**
  * A TweetsRetriver object takes an index object produced by a TweetsIndexer.
@@ -51,13 +34,12 @@ import org.terrier.utility.ApplicationSetup;
  */
 
 @Component
-public class SearchDAOImpl {
+public class SearchRetriever {
 
 	@Autowired
 	private TweetDAO tweetSaver;
 
-	//@Autowired
-	SearchMemoryIndex index;
+	MemoryIndex index;
 
 	@Autowired
 	TerrierInitializer ti;
@@ -68,24 +50,13 @@ public class SearchDAOImpl {
 	private String query;
 	private int resultCount = 0;
 
-	// public SearchDAO(TweetDAO tweetSaver){
-	// this.tweetSaver = tweetSaver;
-	// alreadyRunQuery = false;
-	// }
-
 	@PostConstruct
 	public void setUp() {
 		index = ti.getMemoryIndex();
-//		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-//		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
-//		System.out.println("Search:" + currentDir);
-//		ApplicationSetup.setProperty("stopwords.filename", currentDir);	
-//		ApplicationSetup.setProperty("indexer.meta.forward.keys", "docno,text");
-//		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		queryManager = new Manager(index);
 	}
 	
-	public int foo(){
+	public int getIndexSize(){
 		return this.index.getProperties().size();
 	}
 
@@ -107,16 +78,13 @@ public class SearchDAOImpl {
 		return results;
 	}
 
-	// public void sortResults(Comparator<Tweet> cmp) {
-	// this.resultsList.sort(cmp);
-	// }
 
 	public void runQuery(String query) {
 
 		if (query.startsWith("#"))
 			query = query.substring(1);
 		
-//		System.err.println("Running search for " + query);
+		System.err.println("Running search for " + query);
 		StringBuffer sb = new StringBuffer();
 		sb.append(CollectionEnrichment.normaliseString(query));
 		SearchRequest srq = queryManager.newSearchRequest("query",
@@ -133,8 +101,6 @@ public class SearchDAOImpl {
 
 		List<String> tweetidList = this.populateTweetidList(srq.getResultSet().getDocids());
 		
-		System.err.println("Got " + tweetidList.size() + " ids");
-		
 		this.resultsList = this.tweetSaver.getResultsList(
 				ProjectProperties.TWEET_COLLECTION, tweetidList);
 
@@ -143,22 +109,14 @@ public class SearchDAOImpl {
 	}
 	
 	private List<String> populateTweetidList(int[] resultsDocids){
-		System.out.println("Populating list!!!");
+
 		List<String> tweetidList = new ArrayList<String>();
 		tweetidList = new ArrayList<String>();
 		
 		MetaIndex mt = this.index.getMetaIndex();
-		String[] fields = mt.getKeys();
 		
-		for (String s: fields)
-			System.out.println("I am fields: " + s);
-		
-//		String tmp;
 		for(int i = 0; i < resultsDocids.length; i++)
 			try {
-//				System.out.println(index);
-//				System.err.println("yayayaya" + tmp);
-//				System.out.println(mt.getItem("text", resultsDocids[i]));
 				tweetidList.add(mt.getItem("text", resultsDocids[i]));
 			} catch (IOException e) {
 				System.out.println("Counldn't add docno for tweets " + resultsDocids[i]);
@@ -167,7 +125,6 @@ public class SearchDAOImpl {
 	}
 	
 	public List<Tweet> rankedByRetweeted(){
-//		System.err.println("Sorting by retweeted times");
 		List<Tweet> list = new ArrayList<>();
 		for(Tweet t: this.resultsList)
 			list.add(t);
@@ -176,7 +133,6 @@ public class SearchDAOImpl {
 	}
 	
 	public List<Tweet> rankedByPostedTime(){
-//		System.err.println("Sorting by posted time");
 		List<Tweet> list = new ArrayList<>();
 		for(Tweet t: this.resultsList)
 			list.add(t);
@@ -190,7 +146,6 @@ public class SearchDAOImpl {
 	}
 	
 	public List<Tweet> rankByFavourited(){
-//		System.err.println("Sorting by retweeted times");
 		List<Tweet> list = new ArrayList<>();
 		for(Tweet t: this.resultsList)
 			list.add(t);
@@ -270,59 +225,6 @@ public class SearchDAOImpl {
 
 		return data;
 	}
-
-	/* { "type" : "Point" , "coordinates" : [ -4.292994 , 55.874865]} */
-//	private double[] getCoordinate(Tweet tweet) {
-//
-//		double[] coordinate = new double[2];
-//		// Map<String, Object> map = tweet.getTweet();
-//		// System.err.println(map);
-//		if (tweet.getTweet().get("coordinates") != null) {
-//			String pairString = tweet.getTweet().get("coordinates").toString();
-//			// System.err.println(pairString);
-//
-//			int startOfCoordinate = pairString.lastIndexOf('[') + 2;
-//			int comma = pairString.lastIndexOf(',');
-//			int endOfCoordinate = pairString.lastIndexOf(']') - 1;
-//
-//			String latitude = pairString
-//					.substring(startOfCoordinate, comma - 1);
-//			String longtitude = pairString.substring(comma + 2,
-//					endOfCoordinate + 1);
-//
-//			coordinate[0] = Double.parseDouble(latitude);
-//			coordinate[1] = Double.parseDouble(longtitude);
-//
-//			return coordinate;
-//		} else
-//			return null;
-//	}
-//
-//	public ArrayList<Double> latitudesForMaps() {
-//
-//		ArrayList<Double> latitudes = new ArrayList<>();
-//		double[] coordinate;
-//		for (int i = 0; i < this.resultsList.size(); i++) {
-//			coordinate = this.getCoordinate(this.resultsList.get(i));
-//			if (coordinate != null)
-//				latitudes.add(coordinate[0]);
-//		}
-//		// System.err.println("latitudes list created");
-//		return latitudes;
-//	}
-//
-//	public ArrayList<Double> longtitudesForMaps() {
-//
-//		ArrayList<Double> longtitudes = new ArrayList<>();
-//		double[] coordinate;
-//		for (int i = 0; i < this.resultsList.size(); i++) {
-//			coordinate = this.getCoordinate(this.resultsList.get(i));
-//			if (coordinate != null)
-//				longtitudes.add(coordinate[1]);
-//		}
-//		// System.err.println(longtitudes);
-//		return longtitudes;
-//	}
 	
 	public String getQuery(){
 		return this.query;
@@ -331,7 +233,5 @@ public class SearchDAOImpl {
 	public int getResultsCount(){
 		return this.resultCount;
 	}
-
-	/* To be added for graphs */
 
 }

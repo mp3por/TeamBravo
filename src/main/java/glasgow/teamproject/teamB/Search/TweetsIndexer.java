@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Document;
+import org.terrier.realtime.memory.MemoryIndex;
 import org.terrier.structures.MetaIndex;
-//import org.terrier.utility.ApplicationSetup;
 
 /**
  * A TweetsIndexer object will take a Terrier collection object, then produce
@@ -32,8 +32,7 @@ public class TweetsIndexer implements Observer {
 	@Autowired
 	private TerrierInitializer terrier;
 	
-//	@Autowired
-	private SearchMemoryIndex index;
+	private MemoryIndex index;
 	
 	@Autowired
 	private StreamReaderService serv;
@@ -42,7 +41,7 @@ public class TweetsIndexer implements Observer {
 		return this.tweets;
 	}
 
-	public SearchMemoryIndex getIndex() {
+	public MemoryIndex getIndex() {
 		return this.index;
 	}
 
@@ -61,20 +60,14 @@ public class TweetsIndexer implements Observer {
 	@PostConstruct
 	private void init() {
 		index = terrier.getMemoryIndex();
-//		String currentDir = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-//		currentDir = currentDir.replace("file:", "").split("\\.")[0] + "TeamBravo/stopword-list.txt";
-//		System.out.println("Search:" + currentDir);
-//		ApplicationSetup.setProperty("stopwords.filename", currentDir);
-//		ApplicationSetup.setProperty("termpipelines","Stopwords");
-//		System.err.println("Steeming has been disabled");
-
-//		this.index = terrier.getMemoryIndex();
-//		ApplicationSetup.setProperty("indexer.meta.forward.keys", "docno,text");
-//		ApplicationSetup.setProperty("indexer.meta.forward.keylens", "20,200");
 		serv.addObserver(this);
 		indexTweets();
 	}
 
+	
+	/*
+	 * This function indexes all the tweets in the database
+	 */
 	public void indexTweets() {
 		System.out.println("Start indexing the tweets");
 		int count = 0;

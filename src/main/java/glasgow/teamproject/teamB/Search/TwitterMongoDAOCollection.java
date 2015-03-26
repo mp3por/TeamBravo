@@ -1,12 +1,7 @@
 package glasgow.teamproject.teamB.Search;
 
-/**
- * An abstraction of all the tweets stored in the database.
- */
-
 import glasgow.teamproject.teamB.Util.ProjectProperties;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
-//import glasgow.teamproject.teamB.mongodb.dao.TweetDAOImpl;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -15,25 +10,29 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.mongodb.core.MongoOperations;
-//import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.terrier.indexing.Collection;
 import org.terrier.indexing.Document;
 
-//import java.net.UnknownHostException;
-
-//import com.mongodb.MongoClient;
+/**
+ * A TwitterMongoDAOCollection object is an abstraction of all the tweets stored in the master collection of the database.
+ */
 
 @Component
 public class TwitterMongoDAOCollection implements Collection{
 
+	/*
+	 * The database layer.
+	 */
 	@Autowired
 	private TweetDAO tweetSaver;
 	
 	/** logger for this class */	
 	protected static final Logger logger = Logger.getLogger(TwitterMongoDAOCollection.class);
 	
+	/*
+	 * A linked list is used to store all the tweets just in case there are too many of them.
+	 */
 	protected LinkedList<String> tweets;
 	
 	/** The current document */
@@ -67,7 +66,6 @@ public class TwitterMongoDAOCollection implements Collection{
 	
 	public String readTweet(){
 		String tweet = tweets.poll();
-//		System.out.println(tweet);
 		return tweet;
 	}
 

@@ -28,16 +28,6 @@ public class Tweet{
 		return this.tweet;
 	}
 
-//	@Override
-//	public int compareTo(Tweet o) {
-//		JSONObject js1 = new JSONObject(this.getTweet());
-//		JSONObject js2 = new JSONObject(o.getTweet());
-//		
-//		int posted_time1 = Integer.parseInt(js1.get("timestamp_ms").toString());
-//		int posted_time2 = Integer.parseInt(js2.get("timestamp_ms").toString());
-//		
-//		return posted_time2 - posted_time1;
-//	}
 	
 	public static Comparator<Tweet> RetweetCountComparator = new Comparator<Tweet>(){
 		@Override
@@ -66,7 +56,7 @@ public class Tweet{
 			return (int) (posted_time2 - posted_time1);
 		}
 	};
-	//favorite_count
+	
 	public static Comparator<Tweet> MostFavouritedComparator = new Comparator<Tweet>(){
 			@Override
 			public int compare(Tweet tweet1, Tweet tweet2){

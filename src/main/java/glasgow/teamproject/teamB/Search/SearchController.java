@@ -1,10 +1,8 @@
 package glasgow.teamproject.teamB.Search;
 
-import glasgow.teamproject.teamB.Search.dao.SearchDAOImpl;
 import glasgow.teamproject.teamB.mongodb.dao.TweetDAO;
 
 import java.io.FileNotFoundException;
-//import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,26 +23,10 @@ public class SearchController {
 	@Autowired
 	private TweetDAO tweetSaver;
 	
-//	@Autowired
-//	private TweetsIndexer indexer;
-	
 	@Autowired
-	private SearchDAOImpl dao;
+	private SearchRetriever dao;
 	
-
-//	
-//	@Autowired
-//	private MapsController maps;
-//	
-//	@Autowired
-//	private TweetController tweets;
 	
-//	@Autowired
-//	private GraphsController graphs;
-	
-//	@Autowired
-//	private CounterController counter;
-//	
 	@RequestMapping("/searchBox")
 	public ModelAndView searchBox(){
 		String now = (new Date()).toString();
@@ -63,19 +45,8 @@ public class SearchController {
 	public ModelAndView searchPage(@PathVariable("query") String query){
 		
 		dao.runQuery(query);
-		
-//    	Set<String> resultSet = dao.getTweetsForQuery(query);
-    	// TODO : vili find a way to do this AspectOriented
-    	// String resultMaps = maps.getResultsForSetOfTweets(tweetsSet);
-    	// String resultTweetWall = tweetWall.getResultsForSetOfTweets(tweetsSet);
-    	// String resultGraphs = graphs.getResultsForSetOfTweets(tweetSet);
-    	
-//    	System.err.println(dao.getResultsList().get(2).toString());
-    	
-//    	List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall();
     	
 		ModelAndView modelandview = new ModelAndView("TerrierResult");
-//		modelandview.addObject("tweets", tweets);
 		String reformattedQuery = reformatQuery(query);
 		modelandview.addObject("numberOfTweetsToShow", dao.getResultsList().size());
 		modelandview.addObject("numberOfTweets", dao.getResultsCount());
@@ -95,11 +66,10 @@ public class SearchController {
 	
 	@RequestMapping("/terrier/tweetwall/{mode}/{query}")
 	public ModelAndView tweetWallRanked(@PathVariable Map<String, String> pathVar) {
-//		System.err.println("Ranking by " + pathVar.get("mode"));
+		
 		String mode = pathVar.get("mode");
 		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
 		System.err.println("mode is: " + mode);
-//		dao.rankedByPostedTime(); 
 		
 		List<Tweet> l = dao.getResultsList();
 		
@@ -118,13 +88,6 @@ public class SearchController {
 			l = dao.rankByFavourited();
 		}
 		
-//		List<Tweet> list = dao.getResultsList();
-//		JSONObject js;
-//		for (Tweet t: list){
-//			js = new JSONObject(t.getTweet());
-//			System.out.println(js.get("retweet_count"));
-//		}
-		
 		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall(l);
 		modelandview.addObject("tweets", tweets);
 		return modelandview;
@@ -135,11 +98,7 @@ public class SearchController {
 		ModelAndView modelandview = new ModelAndView("search_tweet_wall");
 		List<Tweet> list = dao.getResultsList();
 		List<HashMap<String,Object>> tweets = dao.getTweetsForTweetWall(list);
-//		JSONObject js;
-//		for (Tweet t: list){
-//			js = new JSONObject(t.getTweet());
-//			System.out.println(js.get("text"));
-//		}
+
 		System.err.println("Resetting!");
 		modelandview.addObject("tweets", tweets);
 		return modelandview;
@@ -148,15 +107,7 @@ public class SearchController {
 	@RequestMapping("/terrier/maps/{query}")
 	@ResponseBody
 	public Map<String, ArrayList<String>> maps(@PathVariable("query") String query) throws FileNotFoundException, UnsupportedEncodingException{
-//		dao.runQuery("normal", query);
 		return dao.getDataForMaps();
-	}
-	
-	@RequestMapping("/graphs/{query}")
-	public ModelAndView testGraphs(@PathVariable("query") String query){
-		ModelAndView mv = new ModelAndView("search_graphs");
-		mv.addObject("query", query);
-		return mv;
 	}
 	
 	private String reformatQuery(String query){
